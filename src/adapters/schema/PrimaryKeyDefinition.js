@@ -1,4 +1,4 @@
-export default PrimaryKeyDefinition {
+export default class PrimaryKeyDefinition {
   constructor(name) {
     this.name = name;
   }

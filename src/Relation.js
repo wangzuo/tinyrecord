@@ -43,6 +43,8 @@ export const VALUE_METHODS = [
   ...CLAUSE_METHODS
 ];
 
+export const ONE_AS_ONE = '1 AS one';
+
 export default class Relation {
   // todo: delegation
   static create(klass, ...args) {
@@ -363,4 +365,37 @@ export default class Relation {
 
     return [];
   }
+
+  find(...args) {}
+  findBy(arg, ...args) {}
+  take(limit = null) {}
+  first(limit = null) {}
+  last(limit = null) {}
+  second() {}
+  third() {}
+  fourth() {}
+  fifth() {}
+  forthTwo() {}
+  thirdToLast() {}
+  secondToLast() {}
+  exists(conditions = 'none') {}
+  raiseRecordNotFoundException() {}
+  offsetIndex() {}
+  findWithAssocations() {}
+  constructRelationForExists() {}
+  constructJoinDependency() {}
+  constructRelationForAssociationCalculations() {}
+  applyJoinDependency(relation, joinDependency) {}
+  limitedIdsFor(relation) {}
+  usingLimitableReflections() {}
+  findWithIds(...ids) {}
+  findOne(id) {}
+  findSome(ids) {}
+  findSomeOrdered(ids) {}
+  findTake() {}
+  findTakeWithLimit(limit) {}
+  findNth(index) {}
+  findNthWithLimit() {}
+  findNthFromLast() {}
+  findLast(limit) {}
 }
