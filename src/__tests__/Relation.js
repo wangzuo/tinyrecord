@@ -1,0 +1,1 @@
+import Relation from '../Relation';

@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sqlite3Adapter #columns 1`] = `
+Array [
+  Column {
+    "collation": null,
+    "comment": null,
+    "default": null,
+    "defaultFunction": null,
+    "name": "id",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "primaryKey",
+      "type": null,
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
+    "default": null,
+    "defaultFunction": null,
+    "name": "name",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "varchar",
+      "type": null,
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
+    "default": null,
+    "defaultFunction": null,
+    "name": "email",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "varchar",
+      "type": null,
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
+    "default": null,
+    "defaultFunction": null,
+    "name": "created_at",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "datetime",
+      "type": null,
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
+    "default": null,
+    "defaultFunction": null,
+    "name": "updated_at",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "datetime",
+      "type": null,
+    },
+    "tableName": "users",
+  },
+]
+`;
