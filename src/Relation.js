@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import * as Arel from 'arel';
 import QueryAttribute from './relation/QueryAttribute';
+import WhereClause from './relation/WhereClause';
+import FromClause from './relation/FromClause';
+import WhereClauseFactory from './relation/WhereClauseFactory';
 
 export const MULTI_VALUE_METHODS = [
   'includes',
@@ -24,7 +27,7 @@ export const SINGLE_VALUE_METHODS = [
   'reordering',
   'reverseOrder',
   'distinct',
-  'create_with'
+  'createWith'
 ];
 
 export const CLAUSE_METHODS = ['where', 'having', 'from'];
@@ -76,6 +79,25 @@ export default class Relation {
     this.connection = this.klass.connection;
     // this.ast = this.arel.ast;
     // this.locked = this.are.locked;
+
+    VALUE_METHODS.forEach(name => {
+      const methodName = _.includes(MULTI_VALUE_METHODS, name)
+        ? `${name}Values`
+        : _.includes(SINGLE_VALUE_METHODS, name)
+          ? `${name}Value`
+          : _.includes(CLAUSE_METHODS, name) ? `${name}Clause` : '';
+
+      if (methodName) {
+        Object.defineProperty(this, methodName, {
+          get() {
+            return this.getValue(name);
+          },
+          set(value) {
+            this.setValue(name, value);
+          }
+        });
+      }
+    });
   }
 
   // todo: spawnmethod
@@ -318,16 +340,32 @@ export default class Relation {
     return this._toSql;
   }
 
-  whereValuesHash(relationTableName) {
-    return this.whereClause.toH(relationTableName || this.tableName);
+  whereValuesJSON(relationTableName) {
+    return this.whereClause.toJSON(relationTableName || this.tableName);
   }
 
   get scopeForCreate() {
     if (!this._scopeForCreate) {
-      this._scopeForCreate = this.whereValuesHash.merge(this.createWithValue);
+      this._scopeForCreate = _.merge(
+        this.whereValuesJSON(),
+        this.createWithValue
+      );
     }
 
     return this._scopeForCreate;
+  }
+
+  // todo
+
+  eagerLoading() {
+    if (!this._shouldEagerLoad) {
+      this._shouldEagerLoad =
+        !_.isEmpty(this.eagerLoadValues) ||
+        (!_.isEmpty(this.includesValues) &&
+          (!_.isEmpty(this.joinedIncludesValues) ||
+            this.referencesEagerLoaded_Tables));
+    }
+    return this._shouldEagerLoad;
   }
 
   async needsEagerLoading() {}
@@ -398,4 +436,282 @@ export default class Relation {
   findNthWithLimit() {}
   findNthFromLast() {}
   findLast(limit) {}
+
+  get boundAttributes() {
+    return this.connection.combineBindParameters({
+      whereClause: this.whereClause.binds
+    });
+  }
+
+  includes(...args) {}
+  includes_(...args) {}
+
+  eagerLoad() {}
+  eagerLoad_() {}
+
+  preload() {}
+  preload_() {}
+
+  references(...tableNames) {
+    return this.references_(...tableNames);
+  }
+  references_(...tableNames) {
+    tableNames = _.flatten(tableNames);
+    this.referencesValues = _.uniq([...this.referencesValues, ...tableNames]);
+    return this;
+  }
+
+  select(...fields) {}
+  _select_(...fields) {}
+
+  group(...args) {}
+  group_(...args) {}
+
+  order(...args) {}
+  order_(...args) {}
+
+  reorder(...args) {}
+  reorder_(...args) {}
+
+  unscope(...args) {}
+  unscope_(...args) {}
+
+  joins(...args) {}
+  joins_(...args) {}
+
+  leftOuterJoins(...args) {}
+  leftOuterJoins_(...args) {}
+
+  // alias
+  leftJoins(...args) {
+    return this.leftOuterJoins(...args);
+  }
+
+  where(opts = 'chain', ...rest) {
+    if (opts === 'chain') {
+      return new WhereChain();
+    } else if (isEmpty(opts)) {
+      return this;
+    }
+
+    return this.where_(opts, ...rest);
+  }
+
+  where_(opts, ...rest) {
+    this.whereClause = this.whereClause.add(
+      this.whereClauseFactory.build(opts, rest)
+    );
+    return this;
+  }
+
+  rewhere(conditions) {
+    this.unscope({ where: _.keys(conditions) }).where(conditions);
+  }
+
+  or(other) {
+    if (!other instanceof Relation) {
+      throw new Error(
+        `You have passed ${other.constructor
+          .name} object to #or. Pass an ActiveRecord::Relation object instead.`
+      );
+    }
+
+    return this.spawn.oR(other);
+  }
+
+  or_(other) {}
+
+  having() {}
+  having_() {}
+
+  limit() {}
+  limit_() {}
+
+  offset() {}
+  offset_() {}
+
+  lock(locks = true) {
+    return this.spawn.locK(locks);
+  }
+
+  lock_(locks = true) {}
+
+  none() {}
+  none_() {}
+
+  readonly(value = true) {}
+  readonly_(value = true) {}
+
+  createWith(value) {}
+  createWith_(value) {
+    if (value) {
+      value = this.sanitize_forbidden_attributes(value);
+      this.createWithValue = _.merge(this.createWithValue, value);
+    } else {
+      this.createWithValue = {};
+    }
+
+    return this;
+  }
+
+  from(value, subqueryName = null) {
+    return this.from_(value, subqueryName);
+  }
+
+  from_(value, subqueryName = null) {
+    this.fromClause = new FromClause(value, subqueryName);
+    return this;
+  }
+
+  distinct(value = true) {}
+  distinct_(value = true) {
+    this.distinctValue = value;
+    return this;
+  }
+
+  extending() {
+    return this;
+  }
+
+  extending_() {}
+
+  reverseOrder() {}
+  reverseOrder_() {}
+
+  get arel() {
+    if (!this._arel) {
+      this._arel = this.buildArel();
+    }
+    return this._arel;
+  }
+
+  getValue(name) {
+    return this.values[name] || this.defaultValueFor(name);
+  }
+
+  setValue(name, value) {
+    // assert_mutability!
+    this.values[name] = value;
+  }
+
+  // private
+
+  // assert_mutability!() {}
+
+  buildArel() {
+    const arel = new Arel.SelectManager(this.table);
+
+    // if (!isEmpty(this.joinsValues)) {
+    //   this.buildJoin(arel, flatten(this.joinsValues));
+    // }
+
+    if (!_.isEmpty(this.whereClause)) {
+      arel.where(this.whereClause.ast);
+    }
+
+    this.buildOrder(arel);
+    this.buildSelect(arel);
+
+    arel.distinct(this.distinctValue);
+
+    // if (!_.isEmpty(this.fromClause)) {
+    //   arel.from(this.buildFrom);
+    // }
+
+    // if (this.lockValue) {
+    //   arel.lock(this.lockValue);
+    // }
+
+    return arel;
+  }
+
+  buildFrom() {
+    const opts = this.fromClause.value;
+    let name = this.fromClause.name;
+
+    if (opts instanceof Relation) {
+      name = name || 'subquery';
+      opts.arel.as(name);
+    }
+
+    return opts;
+  }
+
+  buildLeftOuterJoins(manager, outerJoins) {
+    const buckets = _.groupBy(outerJoins, join => {});
+
+    return this.buildJoinQuery(manager, buckets, new Arel.nodes.OuterJoin());
+  }
+
+  buildJoins() {}
+
+  buildJoinQuery(manager, buckets, joinType) {}
+
+  convertJoinStringsToAst(table, joins) {}
+
+  buildSelect(arel) {
+    if (_.isEmpty(this.selectValues)) {
+      arel.project(this.klass.arelTable.column(Arel.star()));
+    } else {
+      arel.project(...this.arelColumns(_.uniq(this.selectValues)));
+    }
+  }
+
+  arelColumns(columns) {
+    return columns.map(field => {
+      return field;
+    });
+  }
+
+  reverseSqlOrder(orderQuery) {}
+
+  doesNotSupportReverse_(order): boolean {}
+
+  buildOrder(arel) {
+    const orders = _(this.orderValues).uniq().filter(x => !x);
+
+    if (!_.isEmpty(orders)) {
+      arel.order(...orders);
+    }
+  }
+
+  validateOrderArgs(args) {}
+  preprocessOrderArgs(args) {}
+
+  checkIfMethodHasArguments_(methodName, args) {}
+  structurallyIncompatibleValuesForOr(other) {}
+
+  get whereClauseFactory() {
+    if (!this._whereClauseFactory) {
+      this._whereClauseFactory = new WhereClauseFactory(
+        this.klass,
+        this.predicateBuilder
+      );
+    }
+
+    return this._whereClauseFactory;
+  }
+
+  // alias
+  get havingClauseFactory() {
+    return this.whereClauseFactory;
+  }
+
+  defaultValueFor(name) {
+    if (name === 'createWith') {
+      return {};
+    } else if (name === 'readonly') {
+      return false;
+    } else if (name === 'where' || name === 'having') {
+      return WhereClause.empty;
+    } else if (name === 'from') {
+      return FromClause.empty;
+    } else if (_.includes(MULTI_VALUE_METHODS, name)) {
+      return [];
+    } else if (_.includes(SINGLE_VALUE_METHODS, name)) {
+      return null;
+    }
+
+    throw new Error(`unknown relation value ${name}`);
+  }
 }

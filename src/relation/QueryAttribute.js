@@ -6,8 +6,9 @@ export default class QueryAttribute extends Attribute {
   }
 
   get valueForDatabase() {
-    if (this._valueForDatabase) return this._valueForDatabase;
-    this._valueForDatabase = super.valueForDatabase;
+    if (!this._valueForDatabase) {
+      this._valueForDatabase = super.valueForDatabase;
+    }
     return this._valueForDatabase;
   }
 

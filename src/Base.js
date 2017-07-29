@@ -5,6 +5,8 @@ import Mysql2Adapter from './adapters/Mysql2Adapter';
 import * as TypeCaster from './TypeCaster';
 import AttributeSet from './AttributeSet';
 import Attribute from './Attribute';
+import PredicateBuilder from './relation/PredicateBuilder';
+import TableMetadata from './TableMetadata';
 
 // todo
 const NO_DEFAULT_PROVIDED = 'NO_DEFAULT_PROVIDED';
@@ -13,11 +15,31 @@ export default class Base {
   static establishConnection(config) {
     this.connection = new Sqlite3Adapter();
     // this.connection = new Mysql2Adapter();
-    this.typeCaster = new TypeCaster.Map(this);
-    this.arelTable = new Arel.Table(this.tableName, {
-      typeCaster: this.typeCaster
-    });
     return this.connection;
+  }
+
+  static get arelTable() {
+    if (!this._arelTable) {
+      this._arelTable = new Arel.Table(this.tableName, {
+        typeCaster: this.typeCaster
+      });
+    }
+    return this._arelTable;
+  }
+
+  static get typeCaster() {
+    return new TypeCaster.Map(this);
+  }
+
+  static get predicateBuilder() {
+    if (!this._predicateBuilder) {
+      this._predicateBuilder = new PredicateBuilder(this.tableMetadata);
+    }
+    return this._predicateBuilder;
+  }
+
+  static get tableMetadata() {
+    return new TableMetadata(this, this.arelTable);
   }
 
   static arelAttribute(name, table) {

@@ -46,7 +46,7 @@ export default class WhereClause {
     );
   }
 
-  toH(tableName = null) {
+  toJSON(tableName = null) {
     let equalities = this.predicates.filter(
       x => x instanceof Arel.nodes.Equality
     );
@@ -62,15 +62,16 @@ export default class WhereClause {
     return _.fromPairs(
       equalities.map(node => {
         const { name } = node.left;
+
         return [
           name,
           binds[name]
             ? binds[name]
             : _.isArray(node.right)
-              ? node.right(x => x.val)
+              ? node.right.map(x => x.val)
               : node.right instanceof Arel.nodes.Casted ||
                 node.right instanceof Arel.nodes.Quoted
-                ? node.right.value
+                ? node.right.val
                 : null
         ];
       })

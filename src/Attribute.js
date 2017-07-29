@@ -128,19 +128,35 @@ class Null extends Attribute {
     return null;
   }
 
-  withType(type) {}
+  withType(type) {
+    return this.constructor.withCastValue(name, null, type);
+  }
 
   withValueFromDatabase(value) {
     throw new Error(`can't write unknown attribe ${this.name}`);
   }
 }
 
+const UNINITIALIZED_ORIGINAL_VALUE = {};
+
 class Uninitialized extends Attribute {
   constructor(name, type) {
     super(name, null, type);
   }
 
-  // get value(block) {
-  //   if(block) return block(this.name);
-  // }
+  value(block) {
+    if (block) return block(name);
+  }
+
+  get originalValue() {
+    return UNINITIALIZED_ORIGINAL_VALUE;
+  }
+
+  get initialized() {
+    return false;
+  }
+
+  withType(type) {
+    return new this(name, type);
+  }
 }
