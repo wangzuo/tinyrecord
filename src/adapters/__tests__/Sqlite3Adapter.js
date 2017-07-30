@@ -38,4 +38,10 @@ describe('Sqlite3Adapter', () => {
     expect(await TinyRecord.Base.connection.tableExists('users')).toBe(true);
     expect(await TinyRecord.Base.connection.tableExists('people')).toBe(false);
   });
+
+  it('#create', async () => {
+    const user = await User.create({ name: 'test', email: 'test@example.com' });
+
+    console.log(user);
+  });
 });

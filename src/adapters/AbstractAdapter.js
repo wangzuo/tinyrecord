@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as Arel from 'arel';
 import AlterTable from './schema/AlterTable';
 import SchemaCreation from './schema/SchemaCreation';
 import TableDefinition from './schema/TableDefinition';
@@ -8,6 +9,21 @@ import Relation from '../Relation';
 import TypeMap from '../type/TypeMap';
 import * as Type from '../Type';
 import SqlTypeMetadata from './SqlTypeMetadata';
+
+class Version {}
+
+class BindCollector extends Arel.collectors.Bind {
+  compile(bvs, conn) {
+    const castedBinds = bvs.map(x => x.valueForDatabase);
+    return super.compile(castedBinds.map(value => onn.quote(value)));
+  }
+}
+
+class SQLString extends Arel.collectors.SQLString {
+  compile(bvs, conn) {
+    return super.compile(bvs);
+  }
+}
 
 export default class AbstractAdapter {
   static ADAPTER_NAME = 'Abstract';
@@ -22,6 +38,21 @@ export default class AbstractAdapter {
     this.initializeTypeMap(this.typeMap);
     // todo
     this.preparedStatements = false;
+
+    this.visitor = this.arelVisitor;
+  }
+
+  get arelVisitor() {
+    return new Arel.visitors.ToSql(this);
+  }
+
+  get collector() {
+    // if (this.preparedStatements()) {
+    //   return new SQLString();
+    // }
+    // return new BindCollector();
+    // return new Arel.collectors.SQLString();
+    return new SQLString();
   }
 
   initializeTypeMap(m) {
@@ -126,6 +157,58 @@ export default class AbstractAdapter {
 
   async execute(sql, name = null) {}
 
+  async insert(
+    arel,
+    name = null,
+    pk = null,
+    idValue = null,
+    sequenceName = null,
+    binds = []
+  ) {
+    const value = await this.execInsert(
+      this.toSql(arel, binds),
+      name,
+      binds,
+      pk,
+      sequenceName
+    );
+
+    return idValue || this.lastInsertedId(value);
+  }
+
+  sqlForInsert(sql, pk, idValue, sequenceName, binds) {
+    return [sql, binds];
+  }
+
+  async update(arel, name = null, binds = []) {
+    return this.execUpdate(this.toSql(arel, binds), name, binds);
+  }
+
+  async delete(arel, name = null, binds = []) {
+    return this.execDelete(thi.toSql(arel, binds), name, binds);
+  }
+
+  async execInsert(
+    sql,
+    name = null,
+    binds = [],
+    pk = null,
+    sequenceName = null
+  ) {
+    const result = this.sqlForInsert(sql, pk, null, sequenceName, binds);
+    return this.execQuery(result[0], name, result[1]);
+  }
+
+  async execDelete(sql, name = null, binds = []) {
+    return this.execQuery(sql, name, binds);
+  }
+
+  async truncate(tableName, name = null) {}
+
+  async execUpdate(sql, name = null, binds = []) {
+    return this.execQuery(sql, name, binds);
+  }
+
   async execQuery(sql, name = 'SQL', binds = []) {
     throw new Error('Not implemented error');
   }
@@ -136,6 +219,22 @@ export default class AbstractAdapter {
 
   quotedScope(name = null, options = {}) {
     throw new Error('Not implemented error');
+  }
+
+  async dataSources() {
+    try {
+      return await this.selectValues(this.dataSourceSql(), 'SCHEMA');
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async dataSourceExists() {
+    try {
+      return await this.selectValues(this.dataSourceSql(name), 'SCHEMA');
+    } catch (e) {
+      throw e;
+    }
   }
 
   async tables() {
@@ -165,6 +264,7 @@ export default class AbstractAdapter {
       'SCHEMA'
     );
   }
+
   async indexes() {
     throw new Error('#indexes is not implemented');
   }
@@ -312,6 +412,22 @@ export default class AbstractAdapter {
   // todo
   quote(value) {
     return `'${value}'`;
+  }
+
+  typeCast(value, column = null) {
+    // const value = idValueForDatabase(value);
+
+    return this._typeCast(value);
+  }
+
+  _typeCast(value) {
+    if (_.isString(value)) {
+      return value;
+    } else if (value === true) {
+      return this.unquotedTrue;
+    } else if (value === false) {
+      return this.unquotedFalse;
+    }
   }
 
   quoteTableName(tableName) {

@@ -7,6 +7,7 @@ import AttributeSet from './AttributeSet';
 import Attribute from './Attribute';
 import PredicateBuilder from './relation/PredicateBuilder';
 import TableMetadata from './TableMetadata';
+import Relation from './Relation';
 
 // todo
 const NO_DEFAULT_PROVIDED = 'NO_DEFAULT_PROVIDED';
@@ -16,6 +17,16 @@ export default class Base {
     this.connection = new Sqlite3Adapter();
     // this.connection = new Mysql2Adapter();
     return this.connection;
+  }
+
+  static get relation() {
+    const relation = Relation.create(
+      this,
+      this.arelTable,
+      this.predicateBuilder
+    );
+
+    return relation;
   }
 
   static get arelTable() {
@@ -47,6 +58,107 @@ export default class Base {
     return table.column(name);
   }
 
+  static get tableName() {
+    if (!this._tableName) {
+      return this.resetTableName();
+    }
+    return this._tableName;
+  }
+
+  static set tableName(value) {
+    this._tableName = value;
+    // this._quotedTableName = null;
+    // this.arelTable = null;
+    // this.sequenceName = null;
+    // this.predicateBuilder = null;
+  }
+
+  static get quotedTableName() {
+    if (this._quotedTableName) return this._quotedTableName;
+    return this.connection.quotedTableName(this.tableName);
+  }
+
+  static resetTableName() {
+    return this.computeTableName();
+  }
+
+  static fullTableNamePrefix() {}
+
+  static fullTableNameSuffix() {}
+
+  get inheritanceColumn() {}
+  set inheritanceColumn(value) {
+    return value;
+  }
+
+  get sequenceName() {}
+  resetSequenceName() {}
+  set sequenceName(value) {
+    return value;
+  }
+
+  prefetchPrimaryKey() {}
+  nextSequenceValue() {}
+
+  static async tableExists() {
+    return await this.connection.schemaCache.dataSourceExists(this.tableName);
+  }
+
+  static async attributesBuilder() {
+    if (!this._attributesBuilder) {
+      const attributeTypes = await this.attributeTypes();
+      const columnsHash = await this.columnsHash();
+
+      this._attributesBuilder = new Builder(
+        attributeTypes,
+        this.primaryKey,
+        name => {
+          if (!columnsHash[name]) {
+            return this._defaultAttributes(name);
+          }
+        }
+      );
+    }
+
+    return this._attributesBuilder;
+  }
+
+  static async columnsHash() {
+    await this.loadSchema();
+    return this._columnsHash;
+  }
+
+  static async columns() {
+    await this.loadSchema();
+    if (!this._columns) {
+      this._columns = _.values(await this.columnsHash());
+    }
+    return this._columns;
+  }
+
+  static async attributeTypes() {
+    if (!this._attributeTypes) this._attributeTypes = {}; // todo
+    await this.loadSchema();
+    if (this._attributeTypes) return this._attributeTypes;
+  }
+
+  async yamlEncoder() {}
+
+  static async typeForAttribute(attrName, block) {
+    const attributeTypes = await this.attributeTypes();
+    if (block) return block(attributeTypes[attrName]);
+    return attributeTypes[attrName];
+  }
+
+  static _defaultAttributes() {
+    if (!this.__defaultAttributes) {
+      this.__defaultAttributes = new AttributeSet({});
+    }
+    return this.__defaultAttributes;
+  }
+
+  // private
+
   static async loadSchema() {
     if (this._schemaLoaded) return;
 
@@ -66,6 +178,10 @@ export default class Base {
     });
 
     this._schemaLoaded = true;
+  }
+
+  static computeTableName() {
+    return pluralize(this.name).toLowerCase();
   }
 
   static attribute(name, castType, ...args) {
@@ -131,30 +247,207 @@ export default class Base {
 
   static async create(attributes = null, block) {
     if (_.isArray(attributes)) {
-      const objects = [];
-      for (const attr of attributes) {
-        objects.push(await this.new(attr, block));
-      }
+      // create multiple
     } else {
-      const object = await this.new(attributes, block);
-      await object.save();
-      return object;
+      const obj = new this(attributes, block);
+      await obj.save();
+      return obj;
     }
   }
 
-  async save() {
-    await this.createOrUpdate();
+  static async create_(attributeNames = null, block) {}
+
+  static async instantiate(attributes, columnTypes = {}, block) {
+    const klass = this;
+    const attributesBuilder = await klass.attributesBuilder();
+    attributes = attributesBuilder.buildFromDatabase(attributes, columnTypes);
+    return klass.allocate().initWith({ attributes, newRecord: false }, block);
   }
 
-  async update() {}
+  isNewRecord() {
+    return true;
+  }
+
+  isDestroyed() {}
+
+  isPersisted() {}
+
+  async save(args, block) {
+    try {
+      return this.createOrUpdate(args, block);
+    } catch (e) {
+      // todo: error
+      return false;
+    }
+  }
 
   async delete() {}
-
   async destroy() {}
+  async becomes() {}
 
-  async createOrUpdate() {
-    await this._createRecord();
+  async updateAttribute(name, value) {}
+
+  async update(attributes) {}
+
+  async updateAttributes(...args) {
+    return this.update(...args);
   }
 
-  async _createRecord() {}
+  async updateColumn(name, value) {
+    return this.updateColumns({ [name]: value });
+  }
+
+  async updateColumns(attributes) {}
+
+  increment(attribute, by = 1) {
+    this[attribute] = this[attribute] || 0;
+    this[attribute] += by;
+    return this;
+  }
+
+  decrement(attribute, by = 1) {
+    return this.increment(attribute, -by);
+  }
+
+  toggle(attribute) {}
+
+  async reload(options = null) {}
+  async touch(...args) {}
+
+  // private
+
+  destroyAssociations() {}
+  destroyRow() {}
+  relationForDestroy() {}
+
+  async createOrUpdate(args, block) {
+    const result = this.isNewRecord()
+      ? await this._createRecord(block)
+      : await this._updateRecord(args, block);
+    return result !== false;
+  }
+
+  async _updateRecord(attributeNames, block) {
+    attributeNames = attributeNames || (await this.attributeNames());
+
+    const rowsAffected = 0;
+
+    if (block) block(this);
+
+    return rowsAffected;
+  }
+
+  async _createRecord(attributeNames, block) {
+    attributeNames = attributeNames || (await this.attributeNames());
+    const attributesValues = this.arelAttributesWithValuesForCreate(
+      attributeNames
+    );
+
+    const newId = await this.constructor.unscoped().insert(attributesValues);
+
+    // if (this.contructor.primarykey) {
+    this.id = this.id || newId;
+    // }
+
+    this.newRecord = false;
+
+    if (block) block(this);
+
+    return this.id;
+  }
+
+  verifyReadonlyAttribute(name) {}
+
+  _raiseRecordNotDestroyed() {}
+
+  belongsToTouchMethod() {
+    return 'touch';
+  }
+
+  _raiseReadonlyRecordError() {}
+
+  static defineAttributeMethods() {
+    if (this._attributeMethodsGenerated) return false;
+  }
+
+  static undefineAttributeMethods() {}
+  static instanceMethodAlreadyImplemented(methodName) {}
+  static dangerousAttributeMethod(name) {}
+  static methodDefinedWithin() {}
+  static dangerousClassMethod(methodName) {}
+
+  static attributeMethod(attribute) {
+    // super() || (this.tableExists() && this.columnNames.)
+  }
+
+  static async attributeNames() {
+    if (!this._attributeNames) {
+      this._attributeNames =
+        !this.abstractClass() && (await this.tableExists())
+          ? _.keys(await this.attributeTypes())
+          : [];
+    }
+
+    return this._attributeNames;
+  }
+
+  async attributeNames() {
+    return await this.constructor.attributeNames();
+  }
+
+  static hasAttribute(attrName) {
+    // this.attributeTypes;
+  }
+
+  static columnForAttribute(name) {
+    // this.columnsHash
+  }
+
+  respondTo(name) {}
+  hasAttribute(attrName) {}
+  attributes() {}
+  attributeForInspect(attrName) {}
+  attributePresent(attribute) {}
+
+  arelAttributesWithValuesForCreate(attributeNames) {
+    return this.arelAttributesWithValues(
+      this.attributesForCreate(attributeNames)
+    );
+  }
+
+  arelAttributesWithValues(attributeNames) {
+    const attrs = new Map();
+    const arelTable = this.constructor.arelTable;
+
+    attributeNames.forEach(name => {
+      attrs.set(arelTable.column(name), this.typecastedAttributeValue(name));
+    });
+
+    return attrs;
+  }
+
+  attributesForCreate(attributeNames) {
+    return attributeNames;
+  }
+
+  typecastedAttributeValue(name) {
+    return this._readAttribute(name);
+  }
+
+  _readAttribute(name) {
+    return this[name];
+  }
+
+  static abstractClass() {
+    return false;
+  }
+
+  // scoping
+
+  static unscoped(block) {
+    if (block) {
+      return this.relation.scoping(block());
+    }
+    return this.relation;
+  }
 }
