@@ -61,7 +61,14 @@ export default class Attribute {
 
   withCastValue(value) {}
 
-  withType(type) {}
+  withType(type) {
+    return new this.constructor(
+      this.name,
+      this.valueBeforeTypeCast,
+      this.type,
+      this.originalAttribute
+    );
+  }
 
   typeCast() {
     throw new Error('not implemented error');

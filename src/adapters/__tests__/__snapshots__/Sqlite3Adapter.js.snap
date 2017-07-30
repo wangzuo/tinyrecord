@@ -1,6 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sqlite3Adapter #columns 1`] = `
+exports[`#attributeTypes 1`] = `
+Object {
+  "created_at": Value {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
+  "email": Value {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
+  "id": Value {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
+  "name": Value {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
+  "updated_at": Value {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
+}
+`;
+
+exports[`#columns 1`] = `
 Array [
   Column {
     "collation": null,
@@ -83,4 +113,69 @@ Array [
     "tableName": "users",
   },
 ]
+`;
+
+exports[`#new 1`] = `
+Object {
+  "created_at": FromDatabase {
+    "name": "created_at",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
+  "email": FromDatabase {
+    "name": "email",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
+  "id": FromDatabase {
+    "name": "id",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
+  "name": FromDatabase {
+    "name": "name",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
+  "updated_at": FromDatabase {
+    "name": "updated_at",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
+}
+`;
+
+exports[`#new 2`] = `
+Object {
+  "created_at": undefined,
+  "email": undefined,
+  "id": undefined,
+  "name": undefined,
+  "updated_at": undefined,
+}
 `;

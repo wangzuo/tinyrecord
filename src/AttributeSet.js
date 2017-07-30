@@ -4,15 +4,14 @@ import Attribute from './Attribute';
 export default class AttributeSet {
   constructor(attributes) {
     this.attributes = attributes;
-
-    // alias
-    this.toH = this.toHash;
   }
 
   // todo
   get(name) {
     return (
-      this.attributes[name] || this.attributes.get(name) || Attribute.null(name)
+      this.attributes[name] ||
+      (this.attributes.get && this.attributes.get(name)) ||
+      Attribute.null(name)
     );
   }
 
@@ -28,7 +27,12 @@ export default class AttributeSet {
     // return this.attributes.
   }
 
-  toHash() {}
+  toJSON() {
+    return _.mapValues(this.initializedAttributes, attr => {
+      console.log(attr);
+      return attr.value;
+    });
+  }
 
   key(name) {}
 
@@ -50,7 +54,9 @@ export default class AttributeSet {
 
   eql() {}
 
-  initializedAttributes() {}
+  get initializedAttributes() {
+    return _.pickBy(this.attributes, attr => attr.initialized);
+  }
 }
 
 export class Builder {

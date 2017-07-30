@@ -409,8 +409,25 @@ export default class AbstractAdapter {
   }
   assume_migrated_upto_version() {}
 
-  // todo
   quote(value) {
+    return this._quote(value);
+  }
+
+  quoteString(s) {
+    return s;
+  }
+
+  _quote(value) {
+    if (_.isString(value)) {
+      return `'${this.quoteString(value)}'`;
+    } else if (value === true) {
+      return this.quotedTrue;
+    } else if (value == false) {
+      return this.quotedFalse;
+    } else if (isNull(value)) {
+      return 'NULL';
+    }
+
     return `'${value}'`;
   }
 

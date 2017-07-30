@@ -10,7 +10,7 @@ import TableMetadata from './TableMetadata';
 import Relation from './Relation';
 
 // todo
-const NO_DEFAULT_PROVIDED = 'NO_DEFAULT_PROVIDED';
+const NO_DEFAULT_PROVIDED = {};
 
 export default class Base {
   static establishConnection(config) {
@@ -137,9 +137,12 @@ export default class Base {
   }
 
   static async attributeTypes() {
-    if (!this._attributeTypes) this._attributeTypes = {}; // todo
-    await this.loadSchema();
-    if (this._attributeTypes) return this._attributeTypes;
+    if (!this._attributeTypes) {
+      this._attributeTypes = {}; // todo
+      await this.loadSchema();
+    }
+
+    return this._attributeTypes;
   }
 
   async yamlEncoder() {}
@@ -150,18 +153,13 @@ export default class Base {
     return attributeTypes[attrName];
   }
 
-  static _defaultAttributes() {
-    if (!this.__defaultAttributes) {
-      this.__defaultAttributes = new AttributeSet({});
-    }
-    return this.__defaultAttributes;
-  }
-
-  // private
-
   static async loadSchema() {
     if (this._schemaLoaded) return;
+    await this.loadSchema_();
+    this._schemaLoaded = true;
+  }
 
+  static async loadSchema_() {
     this._columnsHash = await this.connection.schemaCache.columnsHash(
       this.tableName
     );
@@ -177,7 +175,10 @@ export default class Base {
       );
     });
 
-    this._schemaLoaded = true;
+    // attribute decorator
+    _.forEach(await this.attributeTypes(), (type, name) => {
+      this.defineAttribute(name, type);
+    });
   }
 
   static computeTableName() {
@@ -190,32 +191,33 @@ export default class Base {
   }
 
   static defineAttribute(name, castType, options = {}) {
-    // const _default =
+    options = Object.assign(
+      { default: NO_DEFAULT_PROVIDED, userProvidedDefault: true },
+      options
+    );
 
     if (!this._attributeTypes) this._attributeTypes = {};
-
     this._attributeTypes[name] = castType;
-    this.defineDefaultAttribute(
-      name,
-      options.default || NO_DEFAULT_PROVIDED,
-      castType,
-      {
-        fromUser: options.userProvidedDefault || true
-      }
-    );
+
+    this.defineDefaultAttribute(name, options.default, castType, {
+      fromUser: options.userProvidedDefault
+    });
   }
 
   static defineDefaultAttribute(name, value, type, { fromUser }) {
-    let defineAttribute = Attribute.fromDatabase(name, value, type);
-    // if (value === NO_DEFAULT_PROVIDED) {
-    // } else if (fromUser) {
-    // } else {
-    // }
+    let defineAttribute;
 
-    this._defaultAttributes().set(name, defineAttribute);
+    if (value == NO_DEFAULT_PROVIDED) {
+      defineAttribute = this._defaultAttributes.get(name).withType(type);
+    } else if (fromUser) {
+    } else {
+      defineAttribute = Attribute.fromDatabase(name, value, type);
+    }
+
+    this._defaultAttributes.set(name, defineAttribute);
   }
 
-  static _defaultAttributes() {
+  static get _defaultAttributes() {
     if (!this.__defaultAttributes) {
       this.__defaultAttributes = new AttributeSet({});
     }
@@ -225,8 +227,13 @@ export default class Base {
   static async new(attributes, block) {
     await this.loadSchema();
 
+    this.defineAttributeMethods();
+
     const object = new this();
-    object.attributes = this.defaultAttributes;
+    object.attributes = _.cloneDeep(this._defaultAttributes);
+
+    object.initInternals();
+    object.initializeInternalsCallback();
 
     if (attributes) {
       object.assignAttributes(attributes);
@@ -234,8 +241,22 @@ export default class Base {
 
     if (block) block(object);
 
+    // object._runInitializeCallbacks();
+
     return object;
   }
+
+  initInternals() {
+    this.readonly = false;
+    this.destroyed = false;
+    this.markedForDestruction = false;
+    this.destroyedByAssociation = null;
+    this.newRecord = true;
+    this._startTransactionState = {};
+    this.transactionState = null;
+  }
+
+  initializeInternalsCallback() {}
 
   assignAttributes(attributes) {
     _.forEach(attributes, (v, k) => {

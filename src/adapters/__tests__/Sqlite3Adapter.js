@@ -14,34 +14,55 @@ beforeAll(() => {
   });
 });
 
-describe('Sqlite3Adapter', () => {
-  it('#loadSchema', async () => {
-    await User.loadSchema();
-  });
+test('#loadSchema', async () => {
+  await User.loadSchema();
+});
 
-  it('#columns', async () => {
-    const columns = await TinyRecord.Base.connection.columns('users');
-    expect(columns).toMatchSnapshot();
-  });
+test('#columns', async () => {
+  const columns = await TinyRecord.Base.connection.columns('users');
+  expect(columns).toMatchSnapshot();
+});
 
-  it('#tables', async () => {
-    const tables = await TinyRecord.Base.connection.tables();
-    expect(tables).toEqual(['users']);
-  });
+test('#tables', async () => {
+  const tables = await TinyRecord.Base.connection.tables();
+  expect(tables).toEqual(['users']);
+});
 
-  it('#views', async () => {
-    const views = await TinyRecord.Base.connection.views();
-    expect(views).toEqual([]);
-  });
+test('#views', async () => {
+  const views = await TinyRecord.Base.connection.views();
+  expect(views).toEqual([]);
+});
 
-  it('#tableExists', async () => {
-    expect(await TinyRecord.Base.connection.tableExists('users')).toBe(true);
-    expect(await TinyRecord.Base.connection.tableExists('people')).toBe(false);
-  });
+test('#tableExists', async () => {
+  expect(await TinyRecord.Base.connection.tableExists('users')).toBe(true);
+  expect(await TinyRecord.Base.connection.tableExists('people')).toBe(false);
+});
 
-  it('#create', async () => {
-    const user = await User.create({ name: 'test', email: 'test@example.com' });
+test('#attributeNames', async () => {
+  expect(await User.attributeNames()).toEqual([
+    'id',
+    'name',
+    'email',
+    'created_at',
+    'updated_at'
+  ]);
+});
 
-    console.log(user);
-  });
+// todo: type cast fix
+test('#attributeTypes', async () => {
+  expect(await User.attributeTypes()).toMatchSnapshot();
+});
+
+test('#new', async () => {
+  const user = await User.new({ name: 'test', email: 'test@example.com' });
+  expect(user.attributes.attributes).toMatchSnapshot();
+  expect(user.attributes).toMatchSnapshot();
+});
+
+test('#create', async () => {
+  const user = await User.create({ name: 'test', email: 'test@example.com' });
+
+  expect(user.id).toBe(1);
+  // expect(user.name).toBe('test');
+  // expect(user.email).toBe('email');
 });

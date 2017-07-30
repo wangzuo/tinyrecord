@@ -2,7 +2,6 @@ import TinyRecord from '../TinyRecord';
 import Relation from '../Relation';
 
 class FakeClass {}
-
 const Post = TinyRecord.createClass({ tableName: 'posts' });
 
 test('initialize', () => {
