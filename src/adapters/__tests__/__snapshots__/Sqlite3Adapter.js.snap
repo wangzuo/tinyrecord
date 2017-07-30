@@ -38,12 +38,12 @@ Array [
     "default": null,
     "defaultFunction": null,
     "name": "id",
-    "nil": true,
+    "nil": false,
     "sqlTypeMetaData": SqlTypeMetadata {
       "limit": null,
       "precision": null,
       "scale": null,
-      "sqlType": "primaryKey",
+      "sqlType": "INTEGER",
       "type": null,
     },
     "tableName": "users",
@@ -177,5 +177,74 @@ Object {
   "id": undefined,
   "name": undefined,
   "updated_at": undefined,
+}
+`;
+
+exports[`#tableStructure 1`] = `
+Array [
+  Object {
+    "cid": 0,
+    "dflt_value": null,
+    "name": "id",
+    "notnull": 1,
+    "pk": 1,
+    "type": "INTEGER",
+  },
+  Object {
+    "cid": 1,
+    "dflt_value": null,
+    "name": "name",
+    "notnull": 0,
+    "pk": 0,
+    "type": "varchar",
+  },
+  Object {
+    "cid": 2,
+    "dflt_value": null,
+    "name": "email",
+    "notnull": 0,
+    "pk": 0,
+    "type": "varchar",
+  },
+  Object {
+    "cid": 3,
+    "dflt_value": null,
+    "name": "created_at",
+    "notnull": 0,
+    "pk": 0,
+    "type": "datetime",
+  },
+  Object {
+    "cid": 4,
+    "dflt_value": null,
+    "name": "updated_at",
+    "notnull": 0,
+    "pk": 0,
+    "type": "datetime",
+  },
+]
+`;
+
+exports[`typeMap 1`] = `
+TypeMap {
+  "cache": Object {},
+  "mapping": Map {
+    /boolean/i => [Function],
+    /char/i => [Function],
+    /binary/i => [Function],
+    /text/i => [Function],
+    /date/i => [Function],
+    /time/i => [Function],
+    /datetime/i => [Function],
+    /float/i => [Function],
+    /int/i => [Function],
+    /blob/i => [Function],
+    /clob/i => [Function],
+    /timestamp/i => [Function],
+    /numeric/i => [Function],
+    /number/i => [Function],
+    /double/i => [Function],
+    /decimal/i => [Function],
+  },
 }
 `;

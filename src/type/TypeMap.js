@@ -9,6 +9,8 @@ export default class TypeMap {
   }
 
   lookup(lookupKey: string, ...args) {
+    console.log('TypeMap.lookup', lookupKey);
+
     let result = null;
 
     this.mapping.forEach((v, k) => {

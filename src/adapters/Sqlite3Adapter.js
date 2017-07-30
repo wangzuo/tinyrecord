@@ -4,13 +4,13 @@ import Result from '../Result';
 import Column from './Column';
 
 const NATIVE_DATABASE_TYPES = {
-  primary_key: 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL',
+  primaryKey: 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL',
   string: { name: 'varchar' },
   text: { name: 'text' },
   integer: { name: 'integer' },
   float: { name: 'float' },
   decimal: { name: 'decimal' },
-  datetime: { name: 'datetime' },
+  datetime: { name: 'datetime' }, // todo: datetime not null
   time: { name: 'time' },
   date: { name: 'date' },
   binary: { name: 'blob' },
