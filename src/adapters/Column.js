@@ -34,4 +34,25 @@ export default class Column {
   encodeWith(coder) {
     coder['name'] = this.name;
   }
+
+  // delegation
+  get precision() {
+    return this.sqlTypeMetaData.precision;
+  }
+
+  get scale() {
+    return this.sqlTypeMetaData.scale;
+  }
+
+  get limit() {
+    return this.sqlTypeMetaData.limit;
+  }
+
+  get type() {
+    return this.sqlTypeMetaData.type;
+  }
+
+  get sqlType() {
+    return this.sqlTypeMetaData.sqlType;
+  }
 }

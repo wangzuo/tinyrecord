@@ -2,27 +2,27 @@
 
 exports[`#attributeTypes 1`] = `
 Object {
-  "created_at": Value {
+  "created_at": DateTime {
     "limit": null,
     "precision": null,
     "scale": null,
   },
-  "email": Value {
+  "email": String {
     "limit": null,
     "precision": null,
     "scale": null,
   },
-  "id": Value {
+  "id": Integer {
     "limit": null,
     "precision": null,
     "scale": null,
   },
-  "name": Value {
+  "name": String {
     "limit": null,
     "precision": null,
     "scale": null,
   },
-  "updated_at": Value {
+  "updated_at": DateTime {
     "limit": null,
     "precision": null,
     "scale": null,
@@ -44,7 +44,7 @@ Array [
       "precision": null,
       "scale": null,
       "sqlType": "INTEGER",
-      "type": null,
+      "type": "integer",
     },
     "tableName": "users",
   },
@@ -115,12 +115,20 @@ Array [
 ]
 `;
 
+exports[`#lookupCastType 1`] = `
+Integer {
+  "limit": null,
+  "precision": null,
+  "scale": null,
+}
+`;
+
 exports[`#new 1`] = `
 Object {
   "created_at": FromDatabase {
     "name": "created_at",
     "originalAttribute": Object {},
-    "type": Value {
+    "type": DateTime {
       "limit": null,
       "precision": null,
       "scale": null,
@@ -130,7 +138,7 @@ Object {
   "email": FromDatabase {
     "name": "email",
     "originalAttribute": Object {},
-    "type": Value {
+    "type": String {
       "limit": null,
       "precision": null,
       "scale": null,
@@ -140,7 +148,7 @@ Object {
   "id": FromDatabase {
     "name": "id",
     "originalAttribute": Object {},
-    "type": Value {
+    "type": Integer {
       "limit": null,
       "precision": null,
       "scale": null,
@@ -150,7 +158,7 @@ Object {
   "name": FromDatabase {
     "name": "name",
     "originalAttribute": Object {},
-    "type": Value {
+    "type": String {
       "limit": null,
       "precision": null,
       "scale": null,
@@ -160,7 +168,7 @@ Object {
   "updated_at": FromDatabase {
     "name": "updated_at",
     "originalAttribute": Object {},
-    "type": Value {
+    "type": DateTime {
       "limit": null,
       "precision": null,
       "scale": null,
@@ -223,28 +231,4 @@ Array [
     "type": "datetime",
   },
 ]
-`;
-
-exports[`typeMap 1`] = `
-TypeMap {
-  "cache": Object {},
-  "mapping": Map {
-    /boolean/i => [Function],
-    /char/i => [Function],
-    /binary/i => [Function],
-    /text/i => [Function],
-    /date/i => [Function],
-    /time/i => [Function],
-    /datetime/i => [Function],
-    /float/i => [Function],
-    /int/i => [Function],
-    /blob/i => [Function],
-    /clob/i => [Function],
-    /timestamp/i => [Function],
-    /numeric/i => [Function],
-    /number/i => [Function],
-    /double/i => [Function],
-    /decimal/i => [Function],
-  },
-}
 `;

@@ -5,11 +5,11 @@ import Type from '../Type';
 export default class TypeMap {
   constructor() {
     this.mapping = new Map();
-    this.cache = {}; // todo
+    this.cache = new Map();
   }
 
   lookup(lookupKey: string, ...args) {
-    console.log('TypeMap.lookup', lookupKey);
+    if (this.cache.get(lookupKey)) return this.cache.get(lookupKey);
 
     let result = null;
 
@@ -19,16 +19,20 @@ export default class TypeMap {
       }
     });
 
-    if (!result) return () => Type.defaultValue;
+    let value = result ? result(lookupKey, ...args) : Type.defaultValue;
 
-    return result;
+    this.cache.set(lookupKey, value);
+    return value;
   }
 
   fetch(lookupKey, ...args) {}
 
-  registerType(key, value = null, fn) {
-    if (fn) {
-      this.mapping.set(key, fn);
+  registerType(key, value = null, block) {
+    if (!value && !block) throw new Error('Argument Error');
+    this.cache.clear();
+
+    if (block) {
+      this.mapping.set(key, block);
     } else {
       this.mapping.set(key, () => value);
     }
@@ -36,8 +40,9 @@ export default class TypeMap {
 
   aliasType(key, targetKey) {
     this.registerType(key, null, (sqlType, ...args) => {
-      const metadata = sqlType || '';
-      return this.lookup(`${targetKey}${metadata}`, ...args)();
+      // const metadata = sqlType || '';
+      // return this.lookup(`${targetKey}${metadata}`, ...args);
+      return this.lookup(targetKey, ...args);
     });
   }
 

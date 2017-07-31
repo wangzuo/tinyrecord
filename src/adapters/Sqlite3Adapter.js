@@ -218,12 +218,9 @@ export default class Sqlite3Adapter extends AbstractAdapter {
 
   async tableStructureWithCollation(tableName, basicStructure) {
     const collationHash = {};
-    const sql = `
-      SELECT sql FROM
-        (SELECT * FROM sqlite_master UNION ALL
-         SELECT * FROM sqlite_temp_master)
-      WHERE type = 'table' AND name = ${this.quote(tableName)}
-    `;
+    const sql = `SELECT sql FROM (SELECT * FROM sqlite_master UNION ALL SELECT * FROM sqlite_temp_master) WHERE type = 'table' AND name = ${this.quote(
+      tableName
+    )}`;
 
     const result = (await this.execQuery(sql, 'SCHEMA')).first();
 

@@ -60,9 +60,9 @@ export default class AbstractAdapter {
     this.registerClassWithLimit(m, /char/i, Type.String);
     this.registerClassWithLimit(m, /binary/i, Type.Binary);
     this.registerClassWithLimit(m, /text/i, Type.Text);
-    this.registerClassWithLimit(m, /date/i, Type.Date);
-    this.registerClassWithLimit(m, /time/i, Type.Time);
-    this.registerClassWithLimit(m, /datetime/i, Type.Datetime);
+    this.registerClassWithPrecision(m, /date/i, Type.Date);
+    this.registerClassWithPrecision(m, /time/i, Type.Time);
+    this.registerClassWithPrecision(m, /datetime/i, Type.DateTime);
     this.registerClassWithLimit(m, /float/i, Type.Float);
     this.registerClassWithLimit(m, /int/i, Type.Integer);
 
@@ -73,7 +73,7 @@ export default class AbstractAdapter {
     m.aliasType(/number/i, 'decimal');
     m.aliasType(/double/i, 'float');
 
-    m.registerType(/decimal/i, sqlType => {
+    m.registerType(/decimal/i, null, sqlType => {
       const scale = this.extractScale(sqlType);
       const precision = this.extractPrecision(sqlType);
 
@@ -87,11 +87,29 @@ export default class AbstractAdapter {
     return m;
   }
 
-  registerClassWithLimit(mapping, key, kclass) {
-    return mapping.registerType(key, (...args) => {
+  registerClassWithLimit(mapping, key, klass) {
+    mapping.registerType(key, null, (...args) => {
       const limit = this.extractLimit(_.last(args));
-      return new kclass({ limit });
+      return new klass({ limit });
     });
+  }
+
+  registerClassWithPrecision(mapping, key, klass) {
+    mapping.registerType(key, null, (...args) => {
+      const precision = this.extractPrecision(_.last(args));
+      return new klass({ precision });
+    });
+  }
+
+  extractPrecision(sqlType) {
+    const m = sqlType.match(/\((\d+)(,\d+)?\)/);
+    if (m) return _.toInteger(m[1]);
+  }
+
+  extractLimit(sqlType) {
+    if (sqlType.match(/^bigint/i)) return 8;
+    const m = sqlType.match(/\((.*)\)/);
+    if (m) return m[1];
   }
 
   withoutPreparedStatement(binds) {
@@ -524,6 +542,6 @@ export default class AbstractAdapter {
   }
 
   lookupCastType(sqlType) {
-    return this.typeMap.lookup(sqlType)();
+    return this.typeMap.lookup(sqlType);
   }
 }

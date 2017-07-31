@@ -29,7 +29,6 @@ export default class AttributeSet {
 
   toJSON() {
     return _.mapValues(this.initializedAttributes, attr => {
-      console.log(attr);
       return attr.value;
     });
   }

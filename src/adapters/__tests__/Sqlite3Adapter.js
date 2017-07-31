@@ -48,18 +48,12 @@ test('#attributeNames', async () => {
   ]);
 });
 
-// todo: type cast fix
 test('#attributeTypes', async () => {
   expect(await User.attributeTypes()).toMatchSnapshot();
-  console.log(User.connection.typeMap);
-  console.log(await User.attributeTypes());
 });
 
-test('typeMap', () => {
-  const { typeMap } = User.connection;
-
-  expect(typeMap).toMatchSnapshot();
-  console.log(typeMap.lookup('INTEGER')());
+test('#lookupCastType', () => {
+  expect(User.connection.lookupCastType('INTEGER')).toMatchSnapshot();
 });
 
 test('#tableStructure', async () => {
