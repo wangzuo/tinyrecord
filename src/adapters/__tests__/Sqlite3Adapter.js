@@ -70,6 +70,6 @@ test('#create', async () => {
   const user = await User.create({ name: 'test', email: 'test@example.com' });
 
   expect(user.id).toBe(1);
-  // expect(user.name).toBe('test');
-  // expect(user.email).toBe('email');
+  expect(user.name).toBe('test');
+  expect(user.email).toBe('test@example.com');
 });

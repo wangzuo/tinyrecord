@@ -270,7 +270,7 @@ export default class Base {
     if (_.isArray(attributes)) {
       // create multiple
     } else {
-      const obj = new this(attributes, block);
+      const obj = await this.new(attributes, block);
       await obj.save();
       return obj;
     }
