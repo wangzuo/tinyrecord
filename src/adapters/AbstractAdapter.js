@@ -544,4 +544,37 @@ export default class AbstractAdapter {
   lookupCastType(sqlType) {
     return this.typeMap.lookup(sqlType);
   }
+
+  combineBindParameters(options = {}) {
+    const {
+      fromClause,
+      joinClause,
+      whereClause,
+      havingClause,
+      limit,
+      offset
+    } = Object.assign(
+      {
+        fromClause: [],
+        joinClause: [],
+        whereClause: [],
+        havingClause: [],
+        limit: null,
+        offset: null
+      },
+      options
+    );
+
+    const result = [
+      ...fromClause,
+      ...joinClause,
+      ...whereClause,
+      ...havingClause
+    ];
+
+    if (limit) result.push(limit);
+    if (offset) result.push(offset);
+
+    return result;
+  }
 }

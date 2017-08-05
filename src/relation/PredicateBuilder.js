@@ -6,6 +6,9 @@ export default class PredicateBuilder {
   constructor(table) {
     this.table = table;
     this.handlers = [];
+
+    // delegate;
+    this.resolveColumnAliases = ::this.table.resolveColumnAliases;
   }
 
   buildFromHash(attributes) {
@@ -48,6 +51,7 @@ export default class PredicateBuilder {
   // private
 
   buildBindAttribute(columnName, value) {
+    // todo resolve type promise
     return new QueryAttribute(columnName, value, this.table.type(columnName));
   }
 }

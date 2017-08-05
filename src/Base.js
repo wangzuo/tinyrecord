@@ -264,8 +264,6 @@ export default class Base {
     });
   }
 
-  static arelAttribute(name, table) {}
-
   static async create(attributes = null, block) {
     if (_.isArray(attributes)) {
       // create multiple
@@ -463,7 +461,35 @@ export default class Base {
     return false;
   }
 
+  // quering
+
+  static where(...args) {
+    return this.all.where(...args);
+  }
+
   // scoping
+
+  static get all() {
+    if (this.currentScope) {
+      return this.currentScope.clone();
+    }
+
+    return this.defaultScoped;
+  }
+
+  static get defaultScoped() {
+    const scope = this.relation;
+    return scope;
+  }
+
+  // todo
+  static buildDefaultScope() {}
+
+  static defaultExtensions() {}
+
+  static scope(name, body, block) {}
+
+  static validScopeName(name) {}
 
   static unscoped(block) {
     if (block) {

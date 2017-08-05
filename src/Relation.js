@@ -226,7 +226,7 @@ export default class Relation {
   }
 
   async updateAll(updates) {
-    if (isEmpty(updates)) {
+    if (_.isEmpty(updates)) {
       throw new Error('Empty list of attributes to change');
     }
 
@@ -330,11 +330,11 @@ export default class Relation {
     return this;
   }
 
-  async toSql() {
+  toSql() {
     if (!this._toSql) {
       const relation = this;
       const conn = this.klass.connection;
-      this._toSql = await conn.toSql(relation.arel, relation.boundAttributes);
+      this._toSql = conn.toSql(relation.arel, relation.boundAttributes);
     }
 
     return this._toSql;
@@ -438,8 +438,17 @@ export default class Relation {
   findLast(limit) {}
 
   get boundAttributes() {
+    // todo: limit
+
+    // todo: offset
+
     return this.connection.combineBindParameters({
+      // fromClause: this.fromClause.binds,
+      // joinClause: this.arel.bind_values,
       whereClause: this.whereClause.binds
+      // havingClause: this.havingClause.binds,
+      // limit: this.limitBind,
+      // offset: this.offsetBind
     });
   }
 
@@ -490,7 +499,7 @@ export default class Relation {
   where(opts = 'chain', ...rest) {
     if (opts === 'chain') {
       return new WhereChain();
-    } else if (isEmpty(opts)) {
+    } else if (_.isEmpty(opts)) {
       return this;
     }
 

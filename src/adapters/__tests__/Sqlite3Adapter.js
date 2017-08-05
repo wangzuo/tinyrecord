@@ -73,3 +73,13 @@ test('#create', async () => {
   expect(user.name).toBe('test');
   expect(user.email).toBe('test@example.com');
 });
+
+test('#where', async () => {
+  const users = User.where({ name: 'test' }).where({
+    email: 'test@example.com'
+  });
+
+  expect(users.toSql()).toBe(
+    `SELECT "users".* FROM "users" WHERE "users"."name" = ? AND "users"."email" = ?`
+  );
+});
