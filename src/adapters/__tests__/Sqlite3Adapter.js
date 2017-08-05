@@ -66,10 +66,16 @@ test('#new', async () => {
   expect(user.attributes).toMatchSnapshot();
 });
 
+test('#records', async () => {
+  expect(await User.all.records()).toMatchSnapshot();
+  await User.create({ name: 'test', email: 'test@example.com' });
+  expect(await User.all.records()).toMatchSnapshot();
+});
+
 test('#create', async () => {
   const user = await User.create({ name: 'test', email: 'test@example.com' });
 
-  expect(user.id).toBe(1);
+  expect(user.id).not.toBeNull();
   expect(user.name).toBe('test');
   expect(user.email).toBe('test@example.com');
 });
@@ -84,10 +90,4 @@ test('#where', async () => {
   expect(users.toSql()).toBe(
     `SELECT "users".* FROM "users" WHERE "users"."name" = ? AND "users"."email" = ?`
   );
-});
-
-test('#records', async () => {
-  expect(await User.all.records()).toMatchSnapshot();
-  await User.create({ name: 'test', email: 'test@example.com' });
-  expect(await User.all.records()).toMatchSnapshot();
 });
