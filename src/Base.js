@@ -8,6 +8,7 @@ import Attribute from './Attribute';
 import PredicateBuilder from './relation/PredicateBuilder';
 import TableMetadata from './TableMetadata';
 import Relation from './Relation';
+import StatementCache from './StatementCache';
 
 // todo
 const NO_DEFAULT_PROVIDED = {};
@@ -27,6 +28,28 @@ export default class Base {
     );
 
     return relation;
+  }
+
+  static async find(...ids) {
+    const id = ids[0];
+
+    const statement = this.cachedFindByStatement('id', params =>
+      this.where({ key: params.bind() }).limit(1)
+    );
+
+    console.log(statement);
+
+    // const record = await statement.execute([id], this, this.connection).first();
+
+    // if (!record) {
+    //   throw new Error(`Couldn't find with 'id' = ${id}`);
+    // }
+    // return record;
+  }
+
+  // todo
+  static cachedFindByStatement(key, block) {
+    return StatementCache.create(this.connection, block);
   }
 
   static get arelTable() {
@@ -306,8 +329,12 @@ export default class Base {
 
   async updateAttribute(name, value) {}
 
-  async update(attributes) {}
+  async update(attributes) {
+    this.assignAttributes(attributes);
+    return await this.save();
+  }
 
+  // alias
   async updateAttributes(...args) {
     return this.update(...args);
   }

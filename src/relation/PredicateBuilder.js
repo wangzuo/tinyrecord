@@ -51,7 +51,6 @@ export default class PredicateBuilder {
   // private
 
   buildBindAttribute(columnName, value) {
-    // todo resolve type promise
     return new QueryAttribute(columnName, value, this.table.type(columnName));
   }
 }

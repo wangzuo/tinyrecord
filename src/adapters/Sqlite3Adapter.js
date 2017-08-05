@@ -36,7 +36,7 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   }
 
   async explain(arel, binds = []) {
-    sql = `EXPLAIN QUERY PLAN ${this.toSql(arel, binds)}`;
+    sql = `EXPLAIN QUERY PLAN ${await this.toSql(arel, binds)}`;
     return new ExplainPrettyPrinter().pp(
       await this.execQuery(sql, 'EXPLAIN', [])
     );
@@ -56,7 +56,6 @@ export default class Sqlite3Adapter extends AbstractAdapter {
 
       return new Promise((resolve, reject) => {
         stmt.all((err, rows) => {
-          console.log('execQuery', sql);
           if (err) return reject(err);
 
           // todo: empty when result empty

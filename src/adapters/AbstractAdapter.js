@@ -9,13 +9,14 @@ import Relation from '../Relation';
 import TypeMap from '../type/TypeMap';
 import * as Type from '../Type';
 import SqlTypeMetadata from './SqlTypeMetadata';
+import QueryAttribute from '../relation/QueryAttribute';
 
 class Version {}
 
 class BindCollector extends Arel.collectors.Bind {
   compile(bvs, conn) {
     const castedBinds = bvs.map(x => x.valueForDatabase);
-    return super.compile(castedBinds.map(value => onn.quote(value)));
+    return super.compile(castedBinds.map(value => conn.quote(value)));
   }
 }
 
@@ -37,7 +38,7 @@ export default class AbstractAdapter {
     this.typeMap = new TypeMap();
     this.initializeTypeMap(this.typeMap);
     // todo
-    this.preparedStatements = false;
+    this.preparedStatements = true;
 
     this.visitor = this.arelVisitor;
   }
@@ -47,12 +48,30 @@ export default class AbstractAdapter {
   }
 
   get collector() {
-    // if (this.preparedStatements()) {
-    //   return new SQLString();
-    // }
-    // return new BindCollector();
-    // return new Arel.collectors.SQLString();
-    return new SQLString();
+    if (this.preparedStatements) {
+      return new SQLString();
+    }
+
+    return new BindCollector();
+  }
+
+  async unpreparedStatement(block) {
+    const oldPreparedStatements = this.preparedStatements;
+    await block();
+
+    return new Promise((resolve, reject) => {
+      this.preparedStatements = false;
+
+      block()
+        .then(res => {
+          this.preparedStatements = oldPreparedStatements;
+          resolve(res);
+        })
+        .catch(err => {
+          this.preparedStatements = oldPreparedStatements;
+          reject(err);
+        });
+    });
   }
 
   initializeTypeMap(m) {
@@ -116,12 +135,30 @@ export default class AbstractAdapter {
     return !this.preparedStatements || _.isEmpty(binds);
   }
 
-  toSql(arel, binds = []) {
+  async toSql(arel, binds = []) {
     if (arel.ast) {
+      // TODO resolve QueryAttribute type
+      for (const bind of binds) {
+        if (bind instanceof QueryAttribute) {
+          bind.type = await bind.type;
+        }
+      }
+
       const collected = this.visitor.accept(arel.ast, this.collector);
       return collected.compile(binds, this);
     }
+
     return arel;
+  }
+
+  cacheableQuery(klass, arel) {
+    const collected = this.visitor.accept(arel.ast, new SQLString());
+    // if (this.preparedStatements) {
+    //   return klass.query(collected.value);
+    // }
+    // return klass.partialQuery(collected.value);
+
+    return klass.query(collected.value);
   }
 
   async select(sql, name = null, binds = []) {
@@ -135,14 +172,14 @@ export default class AbstractAdapter {
   async selectAll(arel, name = null, binds = [], options = {}) {
     let { preparable } = options || null;
     [arel, binds] = this.bindsFromRelation(arel, binds);
-    const sql = this.toSql(arel, binds);
+    const sql = await this.toSql(arel, binds);
     if (
       !this.preparedStatements ||
       (_.isString(arel) && _.isNull(preparable))
     ) {
       preparable = false;
     } else {
-      preparable = visitor.preparable;
+      preparable = this.visitor.preparable;
     }
 
     if (this.preparedStatements && preparable) {
@@ -184,7 +221,7 @@ export default class AbstractAdapter {
     binds = []
   ) {
     const value = await this.execInsert(
-      this.toSql(arel, binds),
+      await this.toSql(arel, binds),
       name,
       binds,
       pk,
@@ -199,11 +236,11 @@ export default class AbstractAdapter {
   }
 
   async update(arel, name = null, binds = []) {
-    return this.execUpdate(this.toSql(arel, binds), name, binds);
+    return this.execUpdate(await this.toSql(arel, binds), name, binds);
   }
 
   async delete(arel, name = null, binds = []) {
-    return this.execDelete(thi.toSql(arel, binds), name, binds);
+    return this.execDelete(await this.toSql(arel, binds), name, binds);
   }
 
   async execInsert(
@@ -442,11 +479,12 @@ export default class AbstractAdapter {
       return this.quotedTrue;
     } else if (value == false) {
       return this.quotedFalse;
-    } else if (isNull(value)) {
+    } else if (_.isNull(value)) {
       return 'NULL';
     }
 
-    return `'${value}'`;
+    return value;
+    // return `'${value}'`;
   }
 
   typeCast(value, column = null) {
@@ -576,5 +614,10 @@ export default class AbstractAdapter {
     if (offset) result.push(offset);
 
     return result;
+  }
+
+  sanitizeLimit(limit) {
+    // todo
+    return _.toNumber(limit);
   }
 }

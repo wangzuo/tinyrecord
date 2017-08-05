@@ -14,6 +14,11 @@ beforeAll(() => {
   });
 });
 
+test('tableMetadata', async () => {
+  expect(await User.tableMetadata.type('name')).toMatchSnapshot();
+  expect(await User.tableMetadata.type('email')).toMatchSnapshot();
+});
+
 test('#loadSchema', async () => {
   await User.loadSchema();
 });
@@ -80,14 +85,45 @@ test('#create', async () => {
   expect(user.email).toBe('test@example.com');
 });
 
-test('#where', async () => {
-  expect(User.all.toSql()).toBe(`SELECT "users".* FROM "users"`);
+// test('find', async () => {
+//   const user = await User.create({ name: 'test', email: 'test@example.com' });
+//   const data = await User.find(user.id);
 
-  const users = User.where({ name: 'test' }).where({
-    email: 'test@example.com'
-  });
+//   expect(data.id).toBe(user.id);
+//   expect(data.name).toBe(user.name);
+//   expect(data.email).toBe(user.email);
+// });
 
-  expect(users.toSql()).toBe(
-    `SELECT "users".* FROM "users" WHERE "users"."name" = ? AND "users"."email" = ?`
+test('#update', async () => {
+  const user = await User.create({ name: 'test', email: 'test@example.com' });
+  await user.update({ name: 'test1' });
+  expect(user.name).toBe('test1');
+});
+
+test('where', async () => {
+  expect(await User.all.toSql()).toBe(`SELECT "users".* FROM "users"`);
+
+  expect(await User.where({ name: 'test' }).toSql()).toBe(
+    `SELECT "users".* FROM "users" WHERE "users"."name" = 'test'`
+  );
+
+  expect(
+    await User.where({ name: 'test' })
+      .where({ email: 'test@example.com' })
+      .toSql()
+  ).toBe(
+    `SELECT "users".* FROM "users" WHERE "users"."name" = 'test' AND "users"."email" = 'test@example.com'`
+  );
+
+  expect(
+    await User.where({ name: 'test', email: 'test@example.com' }).toSql()
+  ).toBe(
+    `SELECT "users".* FROM "users" WHERE "users"."name" = 'test' AND "users"."email" = 'test@example.com'`
+  );
+});
+
+test('limit', async () => {
+  expect(await User.where({ name: 'test' }).limit(1).toSql()).toBe(
+    `SELECT  "users".* FROM "users" WHERE "users"."name" = 'test' LIMIT 1`
   );
 });

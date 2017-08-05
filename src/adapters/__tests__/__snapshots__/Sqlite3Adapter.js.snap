@@ -249,3 +249,19 @@ Array [
   },
 ]
 `;
+
+exports[`tableMetadata 1`] = `
+String {
+  "limit": null,
+  "precision": null,
+  "scale": null,
+}
+`;
+
+exports[`tableMetadata 2`] = `
+String {
+  "limit": null,
+  "precision": null,
+  "scale": null,
+}
+`;

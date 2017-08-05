@@ -4,6 +4,8 @@ import QueryAttribute from './relation/QueryAttribute';
 import WhereClause from './relation/WhereClause';
 import FromClause from './relation/FromClause';
 import WhereClauseFactory from './relation/WhereClauseFactory';
+import Attribute from './Attribute';
+import Type from './Type';
 
 export const MULTI_VALUE_METHODS = [
   'includes',
@@ -330,11 +332,13 @@ export default class Relation {
     return this;
   }
 
-  toSql() {
+  async toSql() {
     if (!this._toSql) {
       const relation = this;
       const conn = this.klass.connection;
-      this._toSql = conn.toSql(relation.arel, relation.boundAttributes);
+      this._toSql = await conn.unpreparedStatement(() =>
+        conn.toSql(relation.arel, relation.boundAttributes)
+      );
     }
 
     return this._toSql;
@@ -438,16 +442,22 @@ export default class Relation {
   findLast(limit) {}
 
   get boundAttributes() {
-    // todo: limit
+    const limitBind = this.limitValue
+      ? Attribute.withCastValue(
+          'LIMIT',
+          this.connection.sanitizeLimit(this.limitValue),
+          Type.defaultValue
+        )
+      : null;
 
     // todo: offset
 
     return this.connection.combineBindParameters({
       // fromClause: this.fromClause.binds,
       // joinClause: this.arel.bind_values,
-      whereClause: this.whereClause.binds
+      whereClause: this.whereClause.binds,
       // havingClause: this.havingClause.binds,
-      // limit: this.limitBind,
+      limit: limitBind
       // offset: this.offsetBind
     });
   }
@@ -533,8 +543,14 @@ export default class Relation {
   having() {}
   having_() {}
 
-  limit() {}
-  limit_() {}
+  limit(value) {
+    return this.limit_(value);
+  }
+
+  limit_(value) {
+    this.limitValue = value;
+    return this;
+  }
 
   offset() {}
   offset_() {}
@@ -616,6 +632,10 @@ export default class Relation {
 
     if (!this.whereClause.empty()) {
       arel.where(this.whereClause.ast);
+    }
+
+    if (this.limitValue) {
+      arel.take(new Arel.nodes.BindParam());
     }
 
     this.buildOrder(arel);
