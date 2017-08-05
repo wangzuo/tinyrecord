@@ -75,6 +75,8 @@ test('#create', async () => {
 });
 
 test('#where', async () => {
+  expect(User.all.toSql()).toBe(`SELECT "users".* FROM "users"`);
+
   const users = User.where({ name: 'test' }).where({
     email: 'test@example.com'
   });
@@ -82,4 +84,10 @@ test('#where', async () => {
   expect(users.toSql()).toBe(
     `SELECT "users".* FROM "users" WHERE "users"."name" = ? AND "users"."email" = ?`
   );
+});
+
+test('#records', async () => {
+  expect(await User.all.records()).toMatchSnapshot();
+  await User.create({ name: 'test', email: 'test@example.com' });
+  expect(await User.all.records()).toMatchSnapshot();
 });

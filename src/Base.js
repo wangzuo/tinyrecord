@@ -3,7 +3,7 @@ import * as Arel from 'arel';
 import Sqlite3Adapter from './adapters/Sqlite3Adapter';
 import Mysql2Adapter from './adapters/Mysql2Adapter';
 import * as TypeCaster from './TypeCaster';
-import AttributeSet from './AttributeSet';
+import AttributeSet, { Builder } from './AttributeSet';
 import Attribute from './Attribute';
 import PredicateBuilder from './relation/PredicateBuilder';
 import TableMetadata from './TableMetadata';
@@ -280,7 +280,7 @@ export default class Base {
     const klass = this;
     const attributesBuilder = await klass.attributesBuilder();
     attributes = attributesBuilder.buildFromDatabase(attributes, columnTypes);
-    return klass.allocate().initWith({ attributes, newRecord: false }, block);
+    return await this.new({ attributes, newRecord: false });
   }
 
   isNewRecord() {
@@ -461,7 +461,48 @@ export default class Base {
     return false;
   }
 
+  // sanitization
+
+  static sanitizeSqlForConditions(condition) {
+    return condition;
+  }
+
+  static sanitizeSqlForAssignment() {}
+  static sanitizeSqlForOrder() {}
+
+  static sanitizeSql(...args) {
+    return this.sanitizeSqlForConditions(...args);
+  }
+
+  static expandHashConditionsForAggregates() {}
+  static sanitizeSqlHashForAssignment() {}
+  static sanitizeSqlLike() {}
+  static sanitizeSqlArray() {}
+  static replaceBindVariables() {}
+  static replaceBindVariable() {}
+  static replaceNamedBindVariables() {}
+  static quoteBoundValue() {}
+  static raiseIfBindArityMismatch() {}
+
   // quering
+
+  static async findBySql(sql, binds = [], options = {}, block) {
+    const preparable = options.preparable || null;
+    const resultSet = await this.connection.selectAll(
+      this.sanitizeSql(sql),
+      'Load',
+      binds,
+      { preparable }
+    );
+    const columnTypes = _.clone(resultSet.columnTypes);
+
+    const records = [];
+    for (const record of resultSet.hashRows) {
+      records.push(await this.instantiate(record, columnTypes, block));
+    }
+
+    return records;
+  }
 
   static where(...args) {
     return this.all.where(...args);

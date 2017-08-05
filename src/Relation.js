@@ -614,7 +614,7 @@ export default class Relation {
     //   this.buildJoin(arel, flatten(this.joinsValues));
     // }
 
-    if (!_.isEmpty(this.whereClause)) {
+    if (!this.whereClause.empty()) {
       arel.where(this.whereClause.ast);
     }
 

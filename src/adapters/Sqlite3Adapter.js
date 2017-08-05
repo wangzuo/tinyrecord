@@ -59,6 +59,7 @@ export default class Sqlite3Adapter extends AbstractAdapter {
           console.log('execQuery', sql);
           if (err) return reject(err);
 
+          // todo: empty when result empty
           const cols = rows.map(row => _.keys(row))[0];
           const records = rows.map(row => _.values(row));
 

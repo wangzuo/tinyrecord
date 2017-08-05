@@ -188,6 +188,23 @@ Object {
 }
 `;
 
+exports[`#records 1`] = `Array []`;
+
+exports[`#records 2`] = `
+Array [
+  klass {
+    "_startTransactionState": Object {},
+    "attributes": Object {},
+    "destroyed": false,
+    "destroyedByAssociation": null,
+    "markedForDestruction": false,
+    "newRecord": false,
+    "readonly": false,
+    "transactionState": null,
+  },
+]
+`;
+
 exports[`#tableStructure 1`] = `
 Array [
   Object {
