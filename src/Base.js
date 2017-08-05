@@ -15,6 +15,7 @@ const NO_DEFAULT_PROVIDED = {};
 
 export default class Base {
   static establishConnection(config) {
+    // TODO: resolve connection spec
     this.connection = new Sqlite3Adapter();
     // this.connection = new Mysql2Adapter();
     return this.connection;
@@ -33,18 +34,19 @@ export default class Base {
   static async find(...ids) {
     const id = ids[0];
 
+    // todo: this.primaryKey
     const statement = this.cachedFindByStatement('id', params =>
-      this.where({ key: params.bind() }).limit(1)
+      this.where({ id: params.bind() }).limit(1)
     );
 
-    console.log(statement);
+    const records = await statement.execute([id], this, this.connection);
+    const record = records[0];
 
-    // const record = await statement.execute([id], this, this.connection).first();
+    if (!record) {
+      throw new Error(`Couldn't find with 'id' = ${id}`);
+    }
 
-    // if (!record) {
-    //   throw new Error(`Couldn't find with 'id' = ${id}`);
-    // }
-    // return record;
+    return record;
   }
 
   // todo
@@ -299,11 +301,23 @@ export default class Base {
 
   static async create_(attributeNames = null, block) {}
 
+  static allocate() {
+    return new this();
+  }
+
   static async instantiate(attributes, columnTypes = {}, block) {
+    await this.defineAttributeMethods();
+
     const klass = this;
     const attributesBuilder = await klass.attributesBuilder();
     attributes = attributesBuilder.buildFromDatabase(attributes, columnTypes);
-    return await this.new({ attributes, newRecord: false });
+    const object = new this();
+    return object.initWith({ attributes, newRecord: false }, block);
+  }
+
+  initWith(coder) {
+    this.attributes = coder.attributes;
+    return this;
   }
 
   isNewRecord() {
@@ -412,8 +426,34 @@ export default class Base {
 
   _raiseReadonlyRecordError() {}
 
-  static defineAttributeMethods() {
+  // TODO
+  // attribute methods
+
+  static async defineAttributeMethods() {
     if (this._attributeMethodsGenerated) return false;
+
+    const attributeNames = await this.attributeNames();
+    for (const attrName of attributeNames) {
+      this.defineAttributeMethod(attrName);
+    }
+
+    this._attributeMethodsGenerated = true;
+  }
+
+  static defineAttributeMethod(attrName) {
+    this.defineMethodAttribute(attrName);
+  }
+
+  static defineMethodAttribute(attrName) {
+    Object.defineProperty(this.prototype, attrName, {
+      get() {
+        return this.attributes.fetchValue(attrName);
+      },
+      set(value) {
+        // todo
+        this.attributes.writeFromUser(attrName, value);
+      }
+    });
   }
 
   static undefineAttributeMethods() {}

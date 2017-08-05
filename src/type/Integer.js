@@ -15,7 +15,9 @@ export default class Integer extends Value {
     return parseInt(value, 10);
   }
 
-  serialize(value) {}
+  serialize(value) {
+    return this.cast(value);
+  }
 
   // private
 

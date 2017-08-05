@@ -55,7 +55,14 @@ export default class Attribute {
 
   forgettingAssignment() {}
 
-  withValueFromUser(value) {}
+  withValueFromUser(value) {
+    return this.constructor.fromUser(
+      this.name,
+      value,
+      this.type,
+      this.originalAttribute || this
+    );
+  }
 
   withValueFromDatabase(value) {}
 

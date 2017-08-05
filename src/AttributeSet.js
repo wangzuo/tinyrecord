@@ -37,11 +37,15 @@ export default class AttributeSet {
 
   keys() {}
 
-  fetchValue(name) {}
+  fetchValue(name) {
+    return this.get(name).value;
+  }
 
   writeFromDatabase(name, value) {}
 
-  writeFromUser(name, value) {}
+  writeFromUser(name, value) {
+    this.set(name, this.get(name).withValueFromUser(value));
+  }
 
   writeCastValue(name, value) {}
 

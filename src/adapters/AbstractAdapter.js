@@ -464,6 +464,8 @@ export default class AbstractAdapter {
   }
   assume_migrated_upto_version() {}
 
+  // quoting
+
   quote(value) {
     return this._quote(value);
   }
@@ -487,6 +489,13 @@ export default class AbstractAdapter {
     // return `'${value}'`;
   }
 
+  typeCastedBinds(binds) {
+    if (_.isArray(binds[0])) {
+      return binds.map(([column, value]) => this.typeCast(value, column));
+    }
+    return binds.map(attr => this.typeCast(attr.valueForDatabase));
+  }
+
   typeCast(value, column = null) {
     // const value = idValueForDatabase(value);
 
@@ -501,6 +510,8 @@ export default class AbstractAdapter {
     } else if (value === false) {
       return this.unquotedFalse;
     }
+
+    return value;
   }
 
   quoteTableName(tableName) {

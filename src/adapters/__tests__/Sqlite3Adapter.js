@@ -14,6 +14,10 @@ beforeAll(() => {
   });
 });
 
+// test('defineAttributeMethods', async () => {
+//   await User.defineAttributeMethods();
+// });
+
 test('tableMetadata', async () => {
   expect(await User.tableMetadata.type('name')).toMatchSnapshot();
   expect(await User.tableMetadata.type('email')).toMatchSnapshot();
@@ -85,20 +89,20 @@ test('#create', async () => {
   expect(user.email).toBe('test@example.com');
 });
 
-// test('find', async () => {
-//   const user = await User.create({ name: 'test', email: 'test@example.com' });
-//   const data = await User.find(user.id);
-
-//   expect(data.id).toBe(user.id);
-//   expect(data.name).toBe(user.name);
-//   expect(data.email).toBe(user.email);
-// });
-
-test('#update', async () => {
+test('find', async () => {
   const user = await User.create({ name: 'test', email: 'test@example.com' });
-  await user.update({ name: 'test1' });
-  expect(user.name).toBe('test1');
+  const data = await User.find(user.id);
+
+  expect(data.id).toBe(user.id);
+  expect(data.name).toBe(user.name);
+  expect(data.email).toBe(user.email);
 });
+
+// test('#update', async () => {
+//   const user = await User.create({ name: 'test', email: 'test@example.com' });
+//   await user.update({ name: 'test1' });
+//   expect(user.name).toBe('test1');
+// });
 
 test('where', async () => {
   expect(await User.all.toSql()).toBe(`SELECT "users".* FROM "users"`);

@@ -42,14 +42,16 @@ export default class Sqlite3Adapter extends AbstractAdapter {
     );
   }
 
+  // todo: try {} catch {}
   async execQuery(sql, name = null, binds = [], options = {}) {
     const prepare = options.prepare || false;
     const typeCastedBinds = this.typeCastedBinds(binds);
 
+    console.log('execQuery', sql, typeCastedBinds);
+
     if (!prepare) {
       const stmt = this.connection.prepare(sql);
 
-      // try {
       if (!this.withoutPreparedStatement(binds)) {
         stmt.bind(typeCastedBinds);
       }
@@ -67,9 +69,6 @@ export default class Sqlite3Adapter extends AbstractAdapter {
 
         stmt.finalize();
       });
-      // } catch (e) {
-      //   stmt.finalize();
-      // }
     } else {
     }
   }
@@ -193,14 +192,6 @@ export default class Sqlite3Adapter extends AbstractAdapter {
     if (type) scope.type = type;
 
     return scope;
-  }
-
-  typeCastedBinds(binds) {
-    if (_.isArray(binds[0])) {
-      return binds.map(([column, value]) => this.typeCast(value, column));
-    }
-
-    return binds.map(attr => this.typeCast(attr.valueForDatabase));
   }
 
   async tableStructure(tableName) {
