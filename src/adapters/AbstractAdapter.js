@@ -236,7 +236,8 @@ export default class AbstractAdapter {
   }
 
   async update(arel, name = null, binds = []) {
-    return this.execUpdate(await this.toSql(arel, binds), name, binds);
+    const sql = await this.toSql(arel, binds);
+    return await this.execUpdate(sql, name, binds);
   }
 
   async delete(arel, name = null, binds = []) {
@@ -261,7 +262,7 @@ export default class AbstractAdapter {
   async truncate(tableName, name = null) {}
 
   async execUpdate(sql, name = null, binds = []) {
-    return this.execQuery(sql, name, binds);
+    return await this.execQuery(sql, name, binds);
   }
 
   async execQuery(sql, name = 'SQL', binds = []) {

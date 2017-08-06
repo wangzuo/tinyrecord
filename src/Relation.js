@@ -131,11 +131,12 @@ export default class Relation {
 
   async _updateRecord(values, id, idWas) {
     const [substitutes, binds] = await this.substituteValues(values);
-    const scope = this.klass.unscoped;
+    // todo: primary key
+    const relation = this.where({ id: id });
+    const bvs = [...binds, ...relation.boundAttributes];
+    const um = relation.arel.compileUpdate(substitutes, 'id');
 
-    // const relation =scope.where(this.k)
-
-    return this.klass.connection.update(um, 'SQL', bvs);
+    return await this.klass.connection.update(um, 'SQL', bvs);
   }
 
   async substituteValues(values) {

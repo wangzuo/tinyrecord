@@ -252,7 +252,7 @@ export default class Base {
   static async new(attributes, block) {
     await this.loadSchema();
 
-    this.defineAttributeMethods();
+    await this.defineAttributeMethods();
 
     const object = new this();
     object.attributes = _.cloneDeep(this._defaultAttributes);
@@ -276,7 +276,7 @@ export default class Base {
     this.destroyed = false;
     this.markedForDestruction = false;
     this.destroyedByAssociation = null;
-    this.newRecord = true;
+    this._newRecord = true;
     this._startTransactionState = {};
     this.transactionState = null;
   }
@@ -284,9 +284,7 @@ export default class Base {
   initializeInternalsCallback() {}
 
   assignAttributes(attributes) {
-    _.forEach(attributes, (v, k) => {
-      this[k] = v; // todo
-    });
+    Object.assign(this, attributes);
   }
 
   static async create(attributes = null, block) {
@@ -320,8 +318,8 @@ export default class Base {
     return this;
   }
 
-  isNewRecord() {
-    return true;
+  newRecord() {
+    return this._newRecord;
   }
 
   isDestroyed() {}
@@ -329,12 +327,12 @@ export default class Base {
   isPersisted() {}
 
   async save(args, block) {
-    try {
-      return this.createOrUpdate(args, block);
-    } catch (e) {
-      // todo: error
-      return false;
-    }
+    // try {
+    //   return this.createOrUpdate(args, block);
+    // } catch (e) {
+    // }
+
+    return await this.createOrUpdate(args, block);
   }
 
   async delete() {}
@@ -381,7 +379,7 @@ export default class Base {
   relationForDestroy() {}
 
   async createOrUpdate(args, block) {
-    const result = this.isNewRecord()
+    const result = this.newRecord()
       ? await this._createRecord(block)
       : await this._updateRecord(args, block);
     return result !== false;
@@ -389,12 +387,14 @@ export default class Base {
 
   async _updateRecord(attributeNames, block) {
     attributeNames = attributeNames || (await this.attributeNames());
-
-    const rowsAffected = 0;
-
-    if (block) block(this);
-
-    return rowsAffected;
+    const attributesValues = this.arelAttributesWithValuesForUpdate(
+      attributeNames
+    );
+    const rowsAffected = await this.constructor
+      .unscoped()
+      ._updateRecord(attributesValues, this.id, this.idInDatabase);
+    // if (block) block(this);
+    // return rowsAffected;
   }
 
   async _createRecord(attributeNames, block) {
@@ -409,7 +409,7 @@ export default class Base {
     this.id = this.id || newId;
     // }
 
-    this.newRecord = false;
+    this._newRecord = false;
 
     if (block) block(this);
 
@@ -447,10 +447,12 @@ export default class Base {
   static defineMethodAttribute(attrName) {
     Object.defineProperty(this.prototype, attrName, {
       get() {
+        // console.log('get', attrName);
         return this.attributes.fetchValue(attrName);
       },
       set(value) {
         // todo
+        // console.log('set', attrName, value);
         this.attributes.writeFromUser(attrName, value);
       }
     });
@@ -501,6 +503,12 @@ export default class Base {
     );
   }
 
+  arelAttributesWithValuesForUpdate(attributeNames) {
+    return this.arelAttributesWithValues(
+      this.attributesForUpdate(attributeNames)
+    );
+  }
+
   arelAttributesWithValues(attributeNames) {
     const attrs = new Map();
     const arelTable = this.constructor.arelTable;
@@ -513,6 +521,10 @@ export default class Base {
   }
 
   attributesForCreate(attributeNames) {
+    return attributeNames;
+  }
+
+  attributesForUpdate(attributeNames) {
     return attributeNames;
   }
 

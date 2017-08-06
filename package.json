@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "arel": "^0.1.6",
+    "debug": "^2.6.8",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
@@ -23,7 +24,9 @@
     "test": "jest --coverage"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.js"]
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
   },
   "repository": {
     "type": "git",

@@ -30,7 +30,6 @@ export default class Sqlite3Adapter extends AbstractAdapter {
     this.supportSavepoints = true;
 
     // alias
-    this.execUpdate = this.execDelete;
     this.columnDefinitions = this.tableStructure;
     this.addBelongsTo = this.addReference;
   }
@@ -99,7 +98,12 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   }
 
   async execDelete(sql, name = 'SQL', binds = []) {
-    this.execQuery(sql, name, binds);
+    return await this.execQuery(sql, name, binds);
+  }
+
+  async execUpdate(sql, name = 'SQL', binds = []) {
+    console.log(sql, binds);
+    // return await this.execDelete(...args);
   }
 
   lastInsertedId(result) {

@@ -23,31 +23,31 @@ test('tableMetadata', async () => {
   expect(await User.tableMetadata.type('email')).toMatchSnapshot();
 });
 
-test('#loadSchema', async () => {
+test('loadSchema', async () => {
   await User.loadSchema();
 });
 
-test('#columns', async () => {
+test('columns', async () => {
   const columns = await TinyRecord.Base.connection.columns('users');
   expect(columns).toMatchSnapshot();
 });
 
-test('#tables', async () => {
+test('tables', async () => {
   const tables = await TinyRecord.Base.connection.tables();
   expect(tables).toEqual(['users']);
 });
 
-test('#views', async () => {
+test('views', async () => {
   const views = await TinyRecord.Base.connection.views();
   expect(views).toEqual([]);
 });
 
-test('#tableExists', async () => {
+test('tableExists', async () => {
   expect(await TinyRecord.Base.connection.tableExists('users')).toBe(true);
   expect(await TinyRecord.Base.connection.tableExists('people')).toBe(false);
 });
 
-test('#attributeNames', async () => {
+test('attributeNames', async () => {
   expect(await User.attributeNames()).toEqual([
     'id',
     'name',
@@ -57,31 +57,31 @@ test('#attributeNames', async () => {
   ]);
 });
 
-test('#attributeTypes', async () => {
+test('attributeTypes', async () => {
   expect(await User.attributeTypes()).toMatchSnapshot();
 });
 
-test('#lookupCastType', () => {
+test('lookupCastType', () => {
   expect(User.connection.lookupCastType('INTEGER')).toMatchSnapshot();
 });
 
-test('#tableStructure', async () => {
+test('tableStructure', async () => {
   expect(await User.connection.tableStructure('users')).toMatchSnapshot();
 });
 
-test('#new', async () => {
+test('new', async () => {
   const user = await User.new({ name: 'test', email: 'test@example.com' });
   expect(user.attributes.attributes).toMatchSnapshot();
   expect(user.attributes).toMatchSnapshot();
 });
 
-test('#records', async () => {
+test('records', async () => {
   expect(await User.all.records()).toMatchSnapshot();
   await User.create({ name: 'test', email: 'test@example.com' });
   expect(await User.all.records()).toMatchSnapshot();
 });
 
-test('#create', async () => {
+test('create', async () => {
   const user = await User.create({ name: 'test', email: 'test@example.com' });
 
   expect(user.id).not.toBeNull();
@@ -98,11 +98,16 @@ test('find', async () => {
   expect(data.email).toBe(user.email);
 });
 
-// test('#update', async () => {
-//   const user = await User.create({ name: 'test', email: 'test@example.com' });
-//   await user.update({ name: 'test1' });
-//   expect(user.name).toBe('test1');
-// });
+test('update', async () => {
+  const user = await User.create({ name: 'test', email: 'test@example.com' });
+  await user.update({ name: 'test1', email: 'test1@example.com' });
+  expect(user.name).toBe('test1');
+  expect(user.email).toBe('test1@example.com');
+
+  // const data = await User.find(user.id);
+  // expect(data.name).toBe('test1');
+  // expect(data.email).toBe('test1@example.com');
+});
 
 test('where', async () => {
   expect(await User.all.toSql()).toBe(`SELECT "users".* FROM "users"`);
