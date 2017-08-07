@@ -102,8 +102,7 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   }
 
   async execUpdate(sql, name = 'SQL', binds = []) {
-    console.log(sql, binds);
-    // return await this.execDelete(...args);
+    return await this.execQuery(sql, name, binds);
   }
 
   lastInsertedId(result) {

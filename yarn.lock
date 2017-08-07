@@ -89,9 +89,9 @@ are-we-there-yet@~1.1.2:
     delegates "^1.0.0"
     readable-stream "^2.0.6"
 
-arel@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/arel/-/arel-0.1.6.tgz#e08ad3a4f0a0aa4997104f21d80156033b760434"
+arel@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/arel/-/arel-0.1.8.tgz#14428f6a92240e278ebc3306cab6fa25786ab6a3"
 
 argparse@^1.0.7:
   version "1.0.9"

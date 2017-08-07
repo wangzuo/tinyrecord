@@ -134,6 +134,7 @@ export default class Relation {
     // todo: primary key
     const relation = this.where({ id: id });
     const bvs = [...binds, ...relation.boundAttributes];
+
     const um = relation.arel.compileUpdate(substitutes, 'id');
 
     return await this.klass.connection.update(um, 'SQL', bvs);
@@ -324,7 +325,7 @@ export default class Relation {
     this._toSql = null;
     this.orderClause = null;
     this.scopeForCreate = null;
-    this.arel = null;
+    this._arel = null;
     this.loaded = null;
     this.shouldEagerLoad = null;
     this.joinDependency = null;
@@ -605,10 +606,11 @@ export default class Relation {
   reverseOrder_() {}
 
   get arel() {
-    if (!this._arel) {
-      this._arel = this.buildArel();
-    }
-    return this._arel;
+    return this.buildArel();
+    // if (!this._arel) {
+    //   this._arel = this.buildArel();
+    // }
+    // return this._arel;
   }
 
   getValue(name) {
@@ -698,7 +700,7 @@ export default class Relation {
   doesNotSupportReverse_(order): boolean {}
 
   buildOrder(arel) {
-    const orders = _(this.orderValues).uniq().filter(x => !x);
+    const orders = _.uniq(this.orderValues).filter(x => !x);
 
     if (!_.isEmpty(orders)) {
       arel.order(...orders);

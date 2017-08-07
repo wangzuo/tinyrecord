@@ -104,9 +104,9 @@ test('update', async () => {
   expect(user.name).toBe('test1');
   expect(user.email).toBe('test1@example.com');
 
-  // const data = await User.find(user.id);
-  // expect(data.name).toBe('test1');
-  // expect(data.email).toBe('test1@example.com');
+  const data = await User.find(user.id);
+  expect(data.name).toBe('test1');
+  expect(data.email).toBe('test1@example.com');
 });
 
 test('where', async () => {
