@@ -1,7 +1,5 @@
 import _ from 'lodash';
 import * as Arel from 'arel';
-import Sqlite3Adapter from './adapters/Sqlite3Adapter';
-import Mysql2Adapter from './adapters/Mysql2Adapter';
 import * as TypeCaster from './TypeCaster';
 import AttributeSet, { Builder } from './AttributeSet';
 import Attribute from './Attribute';
@@ -9,16 +7,36 @@ import PredicateBuilder from './relation/PredicateBuilder';
 import TableMetadata from './TableMetadata';
 import Relation from './Relation';
 import StatementCache from './StatementCache';
+import { Resolver } from './ConnectionSpecification';
 
 // todo
 const NO_DEFAULT_PROVIDED = {};
 
 export default class Base {
   static establishConnection(config) {
-    // TODO: resolve connection spec
-    this.connection = new Sqlite3Adapter();
-    // this.connection = new Mysql2Adapter();
+    const resolver = new Resolver({});
+    const spec = resolver.spec(config);
+    this.connection = this[spec.adapterMethod](spec.config);
     return this.connection;
+  }
+
+  static sqlite3Connection(config) {
+    if (!config.database) {
+      throw new Error('No database file specified. Missing argument: database');
+    }
+
+    const { default: Sqlite3Adapter } = require('./adapters/Sqlite3Adapter');
+    const sqlite3 = require('sqlite3');
+    sqlite3.verbose();
+
+    const db = new sqlite3.Database(config.database);
+
+    // todo
+    if (config.timeout) {
+    }
+
+    // logger = null
+    return new Sqlite3Adapter(db, null, null, config);
   }
 
   static get relation() {

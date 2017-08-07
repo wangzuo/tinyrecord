@@ -21,10 +21,8 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   static ADAPTER_NAME = 'SQLite';
 
   constructor(connection, logger, connectionOptions, config) {
-    super(connection, logger, config);
-    const sqlite3 = require('sqlite3');
+    super(connection);
 
-    this.connection = new sqlite3.Database(':memory:'); // todo
     this.nativeDatabaseTypes = NATIVE_DATABASE_TYPES;
     this.supportsDdlTransactions = true;
     this.supportSavepoints = true;

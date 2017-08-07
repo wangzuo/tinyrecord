@@ -6,7 +6,10 @@ const User = TinyRecord.createClass({
 });
 
 beforeAll(() => {
-  TinyRecord.Base.establishConnection();
+  TinyRecord.Base.establishConnection({
+    adapter: 'sqlite3',
+    database: ':memory:'
+  });
 
   return TinyRecord.Base.connection.createTable('users', { force: true }, t => {
     t.string('name', 'email');

@@ -2,7 +2,11 @@ import TinyRecord from '../TinyRecord';
 import StatementCache from '../StatementCache';
 
 test('create', async () => {
-  TinyRecord.Base.establishConnection();
+  TinyRecord.Base.establishConnection({
+    adapter: 'sqlite3',
+    database: ':memory:'
+  });
+
   await TinyRecord.Base.connection.createTable('users', { force: true }, t => {
     t.string('name', 'email');
     t.timestamps();

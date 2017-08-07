@@ -54,10 +54,10 @@ export class Resolver {
       throw new Error('database configuration does not specify adapter');
     }
 
-    const pathToAdapter = `./${_.capitalize(spec.adapter)}Adapter`;
+    // const pathToAdapter = `./adapters/${_.capitalize(spec.adapter)}Adapter`;
 
     // todo: error
-    const adapter = require(pathToAdapter);
+    // const adapter = require(pathToAdapter);
     const adapterMethod = `${spec.adapter}Connection`;
 
     // Object.assign(this, {
