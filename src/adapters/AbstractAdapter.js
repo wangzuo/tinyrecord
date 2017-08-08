@@ -210,7 +210,9 @@ export default class AbstractAdapter {
     return this.selectAll(arel, name, binds);
   }
 
-  async execute(sql, name = null) {}
+  async execute(sql, name = null) {
+    throw new Error('Not implemented error');
+  }
 
   async insert(
     arel,

@@ -39,6 +39,13 @@ export default class Base {
     return new Sqlite3Adapter(db, null, null, config);
   }
 
+  static mysql2Connection(config) {
+    const { default: Mysql2Adapter } = require('./adapters/Mysql2Adapter');
+    const mysql = require('mysql2');
+    const connection = mysql.createConnection(config);
+    return new Mysql2Adapter(connection, null, null, config);
+  }
+
   static get relation() {
     const relation = Relation.create(
       this,

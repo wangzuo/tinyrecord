@@ -1,13 +1,29 @@
+import TinyRecord from '../../TinyRecord';
 import Mysql2Adapter from '../Mysql2Adapter';
 
-describe('Mysql2Adapter', () => {
-  it('dataSourceSql', () => {
-    // const adapter = new Mysql2Adapter();
-    // expect(adapter.dataSourceSql('users')).toBe(
-    //   `SELECT table_name FROM information_schema.tables WHERE table_schema = database() AND table_name = 'users'`
-    // );
-    // expect(adapter.dataSourceSql(null, { type: 'BASE TABLE' })).toBe(
-    //   `SELECT table_name FROM information_schema.tables WHERE table_schema = database() AND table_type = 'BASE TABLE'`
-    // );
+const User = TinyRecord.createClass({
+  tableName: 'users'
+});
+
+beforeAll(() => {
+  TinyRecord.Base.establishConnection({
+    adapter: 'mysql2',
+    host: '127.0.0.1',
+    user: 'root',
+    password: '',
+    database: 'tinyrecord'
   });
+
+  return TinyRecord.Base.connection.createTable('users', { force: true }, t => {
+    t.string('name', 'email');
+    t.timestamps();
+  });
+});
+
+afterAll(() => User.connection.disconnect());
+
+test('tables', async () => {
+  expect(1).toBe(1);
+  // const tables = await TinyRecord.Base.connection.tables();
+  // expect(tables).toEqual(['users']);
 });

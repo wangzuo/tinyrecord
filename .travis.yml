@@ -1,6 +1,10 @@
 language: node_js
 node_js:
-  - node 
+  - node
 cache: yarn
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+services:
+  - mysql
+before_install:
+  - mysql -e 'CREATE DATABASE tinyrecord;'
