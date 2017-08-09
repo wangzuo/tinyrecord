@@ -23,7 +23,6 @@ beforeAll(() => {
 afterAll(() => User.connection.disconnect());
 
 test('tables', async () => {
-  expect(1).toBe(1);
-  // const tables = await TinyRecord.Base.connection.tables();
-  // expect(tables).toEqual(['users']);
+  const tables = await TinyRecord.Base.connection.tables();
+  expect(tables).toEqual(['users']);
 });

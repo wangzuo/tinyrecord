@@ -108,8 +108,6 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   }
 
   async execute(sql, name = null) {
-    console.log('execute', sql);
-
     return new Promise((resolve, reject) => {
       this.connection.run(sql, (err, response) => {
         if (err) return reject(err);

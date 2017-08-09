@@ -203,7 +203,11 @@ export default class AbstractAdapter {
 
   async selectValues(arel, name = null, binds = []) {
     const result = await this.selectRows(arel, name, binds);
-    return result.rows.map(row => row[0]);
+    // TODO
+    if (result.rows) {
+      return result.rows.map(row => row[0]);
+    }
+    return result.map(row => row[0]);
   }
 
   async selectRows(arel, name = null, binds = []) {

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import AbstractAdapter from './AbstractAdapter';
 import Result from '../Result';
 
@@ -36,25 +37,28 @@ export default class Mysql2Adapter extends AbstractAdapter {
   }
 
   async execute(sql, name = null) {
-    console.log('execute', sql);
-
     return new Promise((resolve, reject) => {
-      this.connection.query(sql, (err, results, fields) => {
+      this.connection.query(sql, (err, rows, fields) => {
         if (err) return reject(err);
-
-        const result = new Result(); // todo
-
-        resolve(result);
+        resolve(rows);
       });
     });
   }
 
   async execQuery(sql, name = 'SQL', binds = [], options = {}) {
+    console.log('execQuery', sql, binds);
+
     const prepare = options.prepare || false;
     // if (this.withoutPreparedStatement(binds)) {
     // }
 
     return await this.execute(sql, name);
+  }
+
+  async selectRows(arel, name = null, binds = []) {
+    const sql = await this.toSql(arel, binds);
+    const result = await this.execute(sql, name);
+    return result.map(x => _.values(x));
   }
 
   quoteTableName(tableName) {
