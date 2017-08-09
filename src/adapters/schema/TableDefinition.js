@@ -64,6 +64,8 @@ export default class TableDefinition {
 
   newColumnDefinition(name, type, options) {
     type = this.aliasedTypes(type, type);
+    options.primaryKey = options.primaryKey || type === 'primaryKey';
+    if (options.primaryKey) options.null = false;
     return this.createColumnDefinition(name, type, options);
   }
 

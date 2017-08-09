@@ -11,6 +11,10 @@ export default class SchemaCreation {
   }
 
   accept(o) {
+    if (o.constructor.name.match(/TableDefinition/)) {
+      return this.visitTableDefinition(o);
+    }
+
     const m = `visit${o.constructor.name}`;
     return this[m](o);
   }
@@ -48,6 +52,11 @@ export default class SchemaCreation {
       createSql += `(${statements.join(', ')})`;
     }
 
+    createSql = this.addTableOptions(createSql, {
+      comment: o.comment,
+      options: o.options
+    });
+
     return createSql;
   }
 
@@ -65,14 +74,12 @@ export default class SchemaCreation {
     return `DROP CONSTRAINT ${this.quoteColumnName(name)}`;
   }
 
-  tableOptions(o) {
-    return {
-      comment: o.comment,
-      options: o.options
-    };
+  addTableOptions(createSql, options) {
+    if (options.options) {
+      createSql += ` ${options.options}`;
+    }
+    return createSql;
   }
-
-  addTableOptions(createSql, options) {}
 
   columnOptions(o) {
     return { ...o, column: o };

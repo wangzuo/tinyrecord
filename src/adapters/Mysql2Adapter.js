@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import AbstractAdapter from './AbstractAdapter';
 import Result from '../Result';
+import Mysql2TableDefinition from './Mysql2TableDefinition';
 
 const NATIVE_DATABASE_TYPES = {
   primaryKey: 'bigint auto_increment PRIMARY KEY',
@@ -37,6 +38,8 @@ export default class Mysql2Adapter extends AbstractAdapter {
   }
 
   async execute(sql, name = null) {
+    console.log('execute', sql);
+
     return new Promise((resolve, reject) => {
       this.connection.query(sql, (err, rows, fields) => {
         if (err) return reject(err);
@@ -77,6 +80,10 @@ export default class Mysql2Adapter extends AbstractAdapter {
     );
   }
 
+  createTableDefinition(...args) {
+    return new Mysql2TableDefinition(...args);
+  }
+
   async dropTable(tableName, options = {}) {
     const sql = `DROP${options.temporary
       ? ' TEMPORARY'
@@ -107,6 +114,22 @@ export default class Mysql2Adapter extends AbstractAdapter {
     }
 
     return sql;
+  }
+
+  integerToSql(limit) {
+    if (limit === 1) {
+      return 'tinyint';
+    } else if (limit === 2) {
+      return 'smallint';
+    } else if (_.isNull(limit) || limit === 4) {
+      return 'init';
+    } else if (limit >= 5 && limit <= 8) {
+      return 'bigint';
+    }
+
+    throw new Errror(
+      `No integer type has byte size ${limit}. Use a decimal with scale 0 instead.`
+    );
   }
 
   dataSourceSql(name = null, options = {}) {
