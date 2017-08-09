@@ -352,10 +352,9 @@ export default class Base {
   isPersisted() {}
 
   async save(args, block) {
-    // try {
-    //   return this.createOrUpdate(args, block);
-    // } catch (e) {
-    // }
+    // dirty
+
+    // validations
 
     return await this.createOrUpdate(args, block);
   }
@@ -404,6 +403,9 @@ export default class Base {
   relationForDestroy() {}
 
   async createOrUpdate(args, block) {
+    // run save callbacks
+    await this._runSaveCallbacks();
+
     const result = this.newRecord()
       ? await this._createRecord(block)
       : await this._updateRecord(args, block);
@@ -411,6 +413,8 @@ export default class Base {
   }
 
   async _updateRecord(attributeNames, block) {
+    // todo: timestamps
+
     attributeNames = attributeNames || (await this.attributeNames());
     const attributesValues = this.arelAttributesWithValuesForUpdate(
       attributeNames
@@ -423,6 +427,14 @@ export default class Base {
   }
 
   async _createRecord(attributeNames, block) {
+    // todo: timestamps
+    if (this.constructor.recordTimestamps) {
+      const currentTime = new Date();
+      ['createdAt', 'updatedAt'].forEach(column => {
+        this[column] = currentTime;
+      });
+    }
+
     attributeNames = attributeNames || (await this.attributeNames());
     const attributesValues = this.arelAttributesWithValuesForCreate(
       attributeNames
@@ -450,6 +462,16 @@ export default class Base {
   }
 
   _raiseReadonlyRecordError() {}
+
+  // callbacks
+
+  static beforeSave() {}
+
+  async _runSaveCallbacks() {}
+
+  async _runCreateCallbacks() {}
+
+  async _runUpdateCallbacks() {}
 
   // TODO
   // attribute methods

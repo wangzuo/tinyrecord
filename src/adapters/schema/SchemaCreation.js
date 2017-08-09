@@ -25,8 +25,11 @@ export default class SchemaCreation {
 
   visitColumnDefinition(o) {
     o.sqlType = this.typeToSql(o.type, o.options);
-    const columnSql = `${this.quoteColumnName(o.name)} ${o.sqlType}`;
-    // this.add_column_options(column_sql, column_options(o)) unless o.type == :primary_key
+    let columnSql = `${this.quoteColumnName(o.name)} ${o.sqlType}`;
+    if (o.type !== 'primaryKey') {
+      columnSql = this.addColumnOptions(columnSql, o.options);
+    }
+
     return columnSql;
   }
 
@@ -75,7 +78,23 @@ export default class SchemaCreation {
     return { ...o, column: o };
   }
 
-  addColumnOptions() {}
+  addColumnOptions(sql, options) {
+    // TODO: default
+
+    if (options.null === false) {
+      sql += ' NOT NULL';
+    }
+
+    if (options.autoIncrement === true) {
+      sql += ' AUTO_INCREMENT';
+    }
+
+    if (options.primaryKey === true) {
+      sql += ' PRIMARY KEY';
+    }
+
+    return sql;
+  }
 
   toSql(sql) {
     if (sql.toSql) return sql.toSql();

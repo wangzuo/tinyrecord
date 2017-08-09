@@ -83,6 +83,8 @@ export default class Sqlite3Adapter extends AbstractAdapter {
     const typeCastedBinds = this.typeCastedBinds(binds);
     stmt.bind(typeCastedBinds);
 
+    console.log('execInsert', sql, typeCastedBinds);
+
     return new Promise((resolve, reject) => {
       stmt.run(function(err) {
         if (err) return reject(err); // todo: error
@@ -108,6 +110,8 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   }
 
   async execute(sql, name = null) {
+    console.log('execute', sql);
+
     return new Promise((resolve, reject) => {
       this.connection.run(sql, (err, response) => {
         if (err) return reject(err);

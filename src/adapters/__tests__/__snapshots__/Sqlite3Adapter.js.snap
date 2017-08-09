@@ -2,7 +2,7 @@
 
 exports[`attributeTypes 1`] = `
 Object {
-  "created_at": DateTime {
+  "createdAt": DateTime {
     "limit": null,
     "precision": null,
     "scale": null,
@@ -22,7 +22,7 @@ Object {
     "precision": null,
     "scale": null,
   },
-  "updated_at": DateTime {
+  "updatedAt": DateTime {
     "limit": null,
     "precision": null,
     "scale": null,
@@ -85,8 +85,8 @@ Array [
     "comment": null,
     "default": null,
     "defaultFunction": null,
-    "name": "created_at",
-    "nil": true,
+    "name": "createdAt",
+    "nil": false,
     "sqlTypeMetaData": SqlTypeMetadata {
       "limit": null,
       "precision": null,
@@ -101,8 +101,8 @@ Array [
     "comment": null,
     "default": null,
     "defaultFunction": null,
-    "name": "updated_at",
-    "nil": true,
+    "name": "updatedAt",
+    "nil": false,
     "sqlTypeMetaData": SqlTypeMetadata {
       "limit": null,
       "precision": null,
@@ -125,8 +125,8 @@ Integer {
 
 exports[`new 1`] = `
 Object {
-  "created_at": FromDatabase {
-    "name": "created_at",
+  "createdAt": FromDatabase {
+    "name": "createdAt",
     "originalAttribute": Object {},
     "type": DateTime {
       "limit": null,
@@ -165,8 +165,8 @@ Object {
     },
     "valueBeforeTypeCast": "test",
   },
-  "updated_at": FromDatabase {
-    "name": "updated_at",
+  "updatedAt": FromDatabase {
+    "name": "updatedAt",
     "originalAttribute": Object {},
     "type": DateTime {
       "limit": null,
@@ -180,11 +180,11 @@ Object {
 
 exports[`new 2`] = `
 Object {
-  "created_at": undefined,
+  "createdAt": undefined,
   "email": "test@example.com",
   "id": undefined,
   "name": "test",
-  "updated_at": undefined,
+  "updatedAt": undefined,
 }
 `;
 
@@ -243,16 +243,16 @@ Array [
   Object {
     "cid": 3,
     "dflt_value": null,
-    "name": "created_at",
-    "notnull": 0,
+    "name": "createdAt",
+    "notnull": 1,
     "pk": 0,
     "type": "datetime",
   },
   Object {
     "cid": 4,
     "dflt_value": null,
-    "name": "updated_at",
-    "notnull": 0,
+    "name": "updatedAt",
+    "notnull": 1,
     "pk": 0,
     "type": "datetime",
   },

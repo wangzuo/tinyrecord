@@ -1,6 +1,8 @@
 import Base from './Base';
 import Relation from './Relation';
 
+Base.recordTimestamps = true;
+
 const TinyRecord = {
   Base,
   // todo: extends Base instead

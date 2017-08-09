@@ -50,11 +50,13 @@ export default class TableDefinition {
 
   foreignKey(tableName, options = {}) {}
 
-  timestamps(options) {
-    // if (options.null)
+  timestamps(options = {}) {
+    if (_.isUndefined(options.null)) {
+      options.null = false;
+    }
 
-    this.column('created_at', 'datetime', options);
-    this.column('updated_at', 'datetime', options);
+    this.column('createdAt', 'datetime', options);
+    this.column('updatedAt', 'datetime', options);
     return this;
   }
 
