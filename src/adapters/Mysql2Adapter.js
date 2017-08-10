@@ -23,7 +23,7 @@ export default class Mysql2Adapter extends AbstractAdapter {
   ADAPTER_NAME = 'Mysql2';
 
   constructor(connection, logger, connectionOptions, config) {
-    super(connection);
+    super(connection, logger, config);
     this.nativeDatabaseTypes = NATIVE_DATABASE_TYPES;
   }
 
@@ -38,19 +38,19 @@ export default class Mysql2Adapter extends AbstractAdapter {
   }
 
   async execute(sql, name = null) {
-    console.log('execute', sql);
-
-    return new Promise((resolve, reject) => {
-      this.connection.query(sql, (err, rows, fields) => {
-        if (err) return reject(err);
-        resolve(rows);
-      });
-    });
+    return await this.log(
+      { sql, name },
+      () =>
+        new Promise((resolve, reject) => {
+          this.connection.query(sql, (err, rows, fields) => {
+            if (err) return reject(err);
+            resolve(rows);
+          });
+        })
+    );
   }
 
   async execQuery(sql, name = 'SQL', binds = [], options = {}) {
-    console.log('execQuery', sql, binds);
-
     const prepare = options.prepare || false;
     // if (this.withoutPreparedStatement(binds)) {
     // }

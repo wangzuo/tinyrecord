@@ -43,7 +43,7 @@ export default class Base {
     const { default: Mysql2Adapter } = require('./adapters/Mysql2Adapter');
     const mysql = require('mysql2');
     const connection = mysql.createConnection(config);
-    return new Mysql2Adapter(connection, null, null, config);
+    return new Mysql2Adapter(connection, this.logger, null, config);
   }
 
   static get relation() {
