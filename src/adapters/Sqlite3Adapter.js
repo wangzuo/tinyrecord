@@ -21,7 +21,7 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   static ADAPTER_NAME = 'SQLite';
 
   constructor(connection, logger, connectionOptions, config) {
-    super(connection);
+    super(connection, logger, config);
 
     this.nativeDatabaseTypes = NATIVE_DATABASE_TYPES;
     this.supportsDdlTransactions = true;
@@ -44,30 +44,30 @@ export default class Sqlite3Adapter extends AbstractAdapter {
     const prepare = options.prepare || false;
     const typeCastedBinds = this.typeCastedBinds(binds);
 
-    console.log('execQuery', sql, typeCastedBinds);
+    return await this.log({ sql, name, binds, typeCastedBinds }, () => {
+      if (!prepare) {
+        const stmt = this.connection.prepare(sql);
 
-    if (!prepare) {
-      const stmt = this.connection.prepare(sql);
+        if (!this.withoutPreparedStatement(binds)) {
+          stmt.bind(typeCastedBinds);
+        }
 
-      if (!this.withoutPreparedStatement(binds)) {
-        stmt.bind(typeCastedBinds);
-      }
+        return new Promise((resolve, reject) => {
+          stmt.all((err, rows) => {
+            if (err) return reject(err);
 
-      return new Promise((resolve, reject) => {
-        stmt.all((err, rows) => {
-          if (err) return reject(err);
+            // todo: empty when result empty
+            const cols = rows.map(row => _.keys(row))[0];
+            const records = rows.map(row => _.values(row));
 
-          // todo: empty when result empty
-          const cols = rows.map(row => _.keys(row))[0];
-          const records = rows.map(row => _.values(row));
+            return resolve(new Result(cols, records));
+          });
 
-          return resolve(new Result(cols, records));
+          stmt.finalize();
         });
-
-        stmt.finalize();
-      });
-    } else {
-    }
+      } else {
+      }
+    });
   }
 
   async execInsert(
@@ -83,18 +83,20 @@ export default class Sqlite3Adapter extends AbstractAdapter {
     const typeCastedBinds = this.typeCastedBinds(binds);
     stmt.bind(typeCastedBinds);
 
-    console.log('execInsert', sql, typeCastedBinds);
+    return await this.log(
+      { sql, binds, typeCastedBinds },
+      () =>
+        new Promise((resolve, reject) => {
+          stmt.run(function(err) {
+            if (err) return reject(err); // todo: error
 
-    return new Promise((resolve, reject) => {
-      stmt.run(function(err) {
-        if (err) return reject(err); // todo: error
+            const result = new Result();
+            result.lastInsertRowId = this.lastID;
 
-        const result = new Result();
-        result.lastInsertRowId = this.lastID;
-
-        return resolve(result);
-      });
-    });
+            return resolve(result);
+          });
+        })
+    );
   }
 
   async execDelete(sql, name = 'SQL', binds = []) {
@@ -110,14 +112,16 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   }
 
   async execute(sql, name = null) {
-    console.log('execute', sql);
-
-    return new Promise((resolve, reject) => {
-      this.connection.run(sql, (err, response) => {
-        if (err) return reject(err);
-        return resolve(response);
-      });
-    });
+    await this.log(
+      { sql, name },
+      () =>
+        new Promise((resolve, reject) => {
+          this.connection.run(sql, (err, response) => {
+            if (err) return reject(err);
+            return resolve(response);
+          });
+        })
+    );
   }
 
   beginDbTransaction() {

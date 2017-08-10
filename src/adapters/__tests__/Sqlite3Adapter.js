@@ -21,6 +21,10 @@ beforeAll(() => {
 //   await User.defineAttributeMethods();
 // });
 
+test('logger', () => {
+  expect(User.connection.logger).not.toBeNull();
+});
+
 test('tableMetadata', async () => {
   expect(await User.tableMetadata.type('name')).toMatchSnapshot();
   expect(await User.tableMetadata.type('email')).toMatchSnapshot();

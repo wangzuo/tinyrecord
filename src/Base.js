@@ -36,7 +36,7 @@ export default class Base {
     }
 
     // logger = null
-    return new Sqlite3Adapter(db, null, null, config);
+    return new Sqlite3Adapter(db, this.logger, null, config);
   }
 
   static mysql2Connection(config) {

@@ -29,8 +29,10 @@ class SQLString extends Arel.collectors.SQLString {
 export default class AbstractAdapter {
   static ADAPTER_NAME = 'Abstract';
 
-  constructor(connection) {
+  constructor(connection, logger = null, config = {}) {
     this.connection = connection;
+    this.logger = logger;
+    this.config = config;
     this.schemaCreation = new SchemaCreation(this);
     this.nativeDatabaseTypes = {};
     this.schemaCache = new SchemaCache(this);
@@ -41,6 +43,26 @@ export default class AbstractAdapter {
     this.preparedStatements = true;
 
     this.visitor = this.arelVisitor;
+  }
+
+  async log(options = {}, block) {
+    // const { sql } = options;
+    // const name = options.name || 'SQL';
+    // const binds = options.binds || [];
+    // const typeCastedBinds = options.typeCastedBinds || [];
+    // const statementName = options.statementName || null;
+
+    if (!this.logger) {
+      return await block();
+    }
+
+    const start = process.hrtime();
+    const result = await block();
+    const diff = process.hrtime(start);
+    const duration = (diff[0] * 1e9 + diff[1]) / 1e6;
+
+    this.logger.sql(options, duration);
+    return result;
   }
 
   get arelVisitor() {

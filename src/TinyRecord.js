@@ -1,7 +1,9 @@
+import Logger from './Logger';
 import Base from './Base';
 import Relation from './Relation';
 
 Base.recordTimestamps = true;
+Base.logger = new Logger();
 
 const TinyRecord = {
   Base,
