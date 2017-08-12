@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loadMigrations 1`] = `
+Array [
+  MigrationProxy {
+    "filename": "20170812120950-CreatePosts.js",
+    "name": "CreatePosts",
+    "scope": undefined,
+    "version": "20170812120950",
+  },
+]
+`;
