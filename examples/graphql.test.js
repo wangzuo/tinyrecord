@@ -1,4 +1,3 @@
-import assert from 'assert';
 import {
   graphql,
   GraphQLSchema,
@@ -42,7 +41,7 @@ const schema = new GraphQLSchema({
   })
 });
 
-(async function() {
+test('resolve user', async () => {
   await TinyRecord.Base.connection.createTable('users', { force: true }, t => {
     t.string('name', 'email');
     t.timestamps();
@@ -59,11 +58,9 @@ const schema = new GraphQLSchema({
     }`
   );
 
-  console.log(result);
-
   const { user } = result.data;
 
-  assert.equal(user.id, 1);
-  assert.equal(user.name, 'test');
-  assert.equal(user.email, 'test@example.com');
-})();
+  expect(user.id).toBe(1);
+  expect(user.name).toBe('test');
+  expect(user.email).toBe('test@example.com');
+});
