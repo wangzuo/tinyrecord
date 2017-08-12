@@ -1,9 +1,9 @@
 import TinyRecord from '../../TinyRecord';
 import Mysql2Adapter from '../Mysql2Adapter';
 
-const User = TinyRecord.createClass({
-  tableName: 'users'
-});
+class User extends TinyRecord.Base {
+  static tableName = 'users';
+}
 
 beforeAll(() => {
   TinyRecord.Base.establishConnection({

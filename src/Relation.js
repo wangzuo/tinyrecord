@@ -53,7 +53,7 @@ export const ONE_AS_ONE = '1 AS one';
 export default class Relation {
   // todo: delegation
   static create(klass, ...args) {
-    return new klass.Relation(klass, ...args);
+    return new this(klass, ...args);
   }
 
   constructor(klass, table, predicateBuilder, values = {}) {
@@ -488,8 +488,13 @@ export default class Relation {
   group(...args) {}
   group_(...args) {}
 
-  order(...args) {}
-  order_(...args) {}
+  order(...args) {
+    return this.order_(...args);
+  }
+  order_(...args) {
+    this.orderValues = [...this.orderValues, ...this.preprocessOrderArgs(args)];
+    return this;
+  }
 
   reorder(...args) {}
   reorder_(...args) {}
@@ -700,7 +705,9 @@ export default class Relation {
   doesNotSupportReverse_(order): boolean {}
 
   buildOrder(arel) {
-    const orders = _.uniq(this.orderValues).filter(x => !x);
+    // TODO
+    // const orders = _.uniq(this.orderValues).filter(x => !x);
+    const orders = this.orderValues;
 
     if (!_.isEmpty(orders)) {
       arel.order(...orders);
@@ -708,7 +715,10 @@ export default class Relation {
   }
 
   validateOrderArgs(args) {}
-  preprocessOrderArgs(args) {}
+  preprocessOrderArgs(args) {
+    // todo
+    return args.map(arg => this.arelAttribute(arg).asc());
+  }
 
   checkIfMethodHasArguments_(methodName, args) {}
   structurallyIncompatibleValuesForOr(other) {}

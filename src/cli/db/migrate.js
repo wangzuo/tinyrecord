@@ -1,6 +1,4 @@
-export const up = () => {
-  console.log('migrate:up');
-};
+export const up = () => {};
 
 export const down = () => {
   console.log('migrate:down');

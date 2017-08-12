@@ -192,7 +192,7 @@ exports[`records 1`] = `Array []`;
 
 exports[`records 2`] = `
 Array [
-  klass {
+  User {
     "attributes": Object {},
   },
 ]

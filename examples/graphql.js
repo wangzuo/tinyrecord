@@ -13,9 +13,9 @@ TinyRecord.Base.establishConnection({
   database: ':memory:'
 });
 
-const User = TinyRecord.createClass({
-  tableName: 'users'
-});
+class User extends TinyRecord.Base {
+  static tableName = 'users';
+}
 
 const UserType = new GraphQLObjectType({
   name: 'User',

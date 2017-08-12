@@ -12,9 +12,9 @@ test('create', async () => {
     t.timestamps();
   });
 
-  const User = TinyRecord.createClass({
-    tableName: 'users'
-  });
+  class User extends TinyRecord.Base {
+    static tableName = 'users';
+  }
 
   const cache = StatementCache.create(TinyRecord.Base.connection, params =>
     User.where({ name: 'test' })

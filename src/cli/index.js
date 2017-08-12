@@ -3,6 +3,7 @@
 import program from 'commander';
 import packageJSON from '../../package.json';
 import * as db from './db';
+import * as migration from './migration';
 
 program.version(packageJSON.version);
 
@@ -15,6 +16,11 @@ program
   .command('db:drop')
   .description('Drop the database')
   .action(db.drop.default);
+
+program
+  .command('migration:create <filename> [attributes...]')
+  .description('create new migration')
+  .action(migration.create);
 
 program
   .command('db:migrate')

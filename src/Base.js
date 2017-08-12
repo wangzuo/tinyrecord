@@ -634,9 +634,14 @@ export default class Base {
     return this.all.where(...args);
   }
 
+  static order(...args) {
+    return this.all.order(...args);
+  }
+
   // scoping
 
   static get all() {
+    // TODO: getter?
     if (this.currentScope) {
       return this.currentScope.clone();
     }

@@ -1,9 +1,9 @@
 import TinyRecord from '../../TinyRecord';
 import Sqlite3Adapter from '../Sqlite3Adapter';
 
-const User = TinyRecord.createClass({
-  tableName: 'users'
-});
+class User extends TinyRecord.Base {
+  static tableName = 'users';
+}
 
 beforeAll(() => {
   TinyRecord.Base.establishConnection({
@@ -150,3 +150,10 @@ test('limit', async () => {
     `SELECT  "users".* FROM "users" WHERE "users"."name" = 'test' LIMIT 1`
   );
 });
+
+// TOOD
+// test('order', async () => {
+//   expect(await User.order('name').toSql()).toBe(
+//     `SELECT "users".* FROM "users" ORDER BY name`
+//   );
+// });
