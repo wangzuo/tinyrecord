@@ -14,11 +14,17 @@ test('loadMigrations', async () => {
   const migrations = await Migrator.loadMigrations([
     path.join(__dirname, '../../db/migrate')
   ]);
-  const migration = migrations[0];
 
-  expect(migrations).toMatchSnapshot();
-  expect(migration.name).toMatchSnapshot();
-  expect(migration.version).toMatchSnapshot();
+  const m1 = migrations[0].migration;
+  const m2 = migrations[1].migration;
+
+  expect(migrations.length).toBe(2);
+
+  expect(m1.name).toBe('CreatePosts');
+  expect(m1.version).toBe('20170812120950');
+
+  expect(m2.name).toBe('CreateUsers');
+  expect(m2.version).toBe('20170812191702');
 });
 
 test('versions', async () => {
