@@ -1,9 +1,9 @@
-import TinyRecord from '../TinyRecord';
+import Base from '../Base';
 import Relation from '../Relation';
 
 class FakeClass {}
 
-class Post extends TinyRecord.Base {
+class Post extends Base {
   static tableName = 'posts';
 }
 

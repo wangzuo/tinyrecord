@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as Arel from 'arel';
+import Logger from './Logger';
 import * as TypeCaster from './TypeCaster';
 import AttributeSet, { Builder } from './AttributeSet';
 import Attribute from './Attribute';
@@ -13,6 +14,9 @@ import { Resolver } from './ConnectionSpecification';
 const NO_DEFAULT_PROVIDED = {};
 
 export default class Base {
+  static recordTimestamps = true;
+  static logger = new Logger();
+
   static establishConnection(config) {
     const resolver = new Resolver({});
     const spec = resolver.spec(config);

@@ -1,12 +1,12 @@
-import TinyRecord from '../../TinyRecord';
+import Base from '../../Base';
 import Mysql2Adapter from '../Mysql2Adapter';
 
-class User extends TinyRecord.Base {
+class User extends Base {
   static tableName = 'users';
 }
 
 beforeAll(() => {
-  TinyRecord.Base.establishConnection({
+  Base.establishConnection({
     adapter: 'mysql2',
     host: '127.0.0.1',
     user: 'root',
@@ -14,7 +14,7 @@ beforeAll(() => {
     database: 'tinyrecord'
   });
 
-  return TinyRecord.Base.connection.createTable('users', { force: true }, t => {
+  return Base.connection.createTable('users', { force: true }, t => {
     t.string('name', 'email');
     t.timestamps();
   });
@@ -23,6 +23,6 @@ beforeAll(() => {
 afterAll(() => User.connection.disconnect());
 
 test('tables', async () => {
-  const tables = await TinyRecord.Base.connection.tables();
+  const tables = await Base.connection.tables();
   expect(tables).toEqual(['users']);
 });

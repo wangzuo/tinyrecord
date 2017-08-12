@@ -1,4 +1,4 @@
-import TinyRecord from '../TinyRecord';
+import Base from '../Base';
 import Migration from '../Migration';
 
 class CreatePosts extends Migration {
@@ -10,12 +10,12 @@ class CreatePosts extends Migration {
   }
 }
 
-class Post extends TinyRecord.Base {
+class Post extends Base {
   static tableName = 'posts';
 }
 
 beforeAll(() => {
-  TinyRecord.Base.establishConnection({
+  Base.establishConnection({
     adapter: 'sqlite3',
     database: ':memory:'
   });

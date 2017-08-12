@@ -1,10 +1,10 @@
-import TinyRecord from './TinyRecord';
+import Base from './Base';
 
 export default class Migration {
   constructor(name, version = null) {
     this.name = name || this.constructor.name;
     this.version = version;
-    this.connection = TinyRecord.Base.connection;
+    this.connection = Base.connection;
   }
 
   revert() {}

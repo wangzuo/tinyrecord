@@ -1,3 +1,5 @@
+import Migration from '../../Migration';
+
 class CreatePosts extends Migration {
   async change() {
     await this.createTable('posts', t => {

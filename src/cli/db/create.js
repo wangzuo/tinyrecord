@@ -1,13 +1,11 @@
 import _ from 'lodash';
 import path from 'path';
-import TinyRecord from '../../TinyRecord';
+import Base from '../../Bae';
 
 export default async () => {
   // TOOD: load config
   const config = require(path.join(process.cwd(), './db/config')).development;
-  const connection = TinyRecord.Base.establishConnection(
-    _.omit(config, ['database'])
-  );
+  const connection = Base.establishConnection(_.omit(config, ['database']));
 
   try {
     await connection.createDatabase(config.database);

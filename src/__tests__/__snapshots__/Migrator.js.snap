@@ -8,5 +8,11 @@ Array [
     "scope": undefined,
     "version": "20170812120950",
   },
+  MigrationProxy {
+    "filename": "20170812191702-CreateUsers.js",
+    "name": "CreateUsers",
+    "scope": undefined,
+    "version": "20170812191702",
+  },
 ]
 `;

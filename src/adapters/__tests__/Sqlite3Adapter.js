@@ -1,17 +1,17 @@
-import TinyRecord from '../../TinyRecord';
+import Base from '../../Base';
 import Sqlite3Adapter from '../Sqlite3Adapter';
 
-class User extends TinyRecord.Base {
+class User extends Base {
   static tableName = 'users';
 }
 
 beforeAll(() => {
-  TinyRecord.Base.establishConnection({
+  Base.establishConnection({
     adapter: 'sqlite3',
     database: ':memory:'
   });
 
-  return TinyRecord.Base.connection.createTable('users', { force: true }, t => {
+  return Base.connection.createTable('users', { force: true }, t => {
     t.string('name', 'email');
     t.timestamps();
   });
@@ -35,23 +35,23 @@ test('loadSchema', async () => {
 });
 
 test('columns', async () => {
-  const columns = await TinyRecord.Base.connection.columns('users');
+  const columns = await Base.connection.columns('users');
   expect(columns).toMatchSnapshot();
 });
 
 test('tables', async () => {
-  const tables = await TinyRecord.Base.connection.tables();
+  const tables = await Base.connection.tables();
   expect(tables).toEqual(['users']);
 });
 
 test('views', async () => {
-  const views = await TinyRecord.Base.connection.views();
+  const views = await Base.connection.views();
   expect(views).toEqual([]);
 });
 
 test('tableExists', async () => {
-  expect(await TinyRecord.Base.connection.tableExists('users')).toBe(true);
-  expect(await TinyRecord.Base.connection.tableExists('people')).toBe(false);
+  expect(await Base.connection.tableExists('users')).toBe(true);
+  expect(await Base.connection.tableExists('people')).toBe(false);
 });
 
 test('attributeNames', async () => {

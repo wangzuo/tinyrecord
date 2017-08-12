@@ -1,22 +1,22 @@
-import TinyRecord from '../TinyRecord';
+import Base from '../Base';
 import StatementCache from '../StatementCache';
 
 test('create', async () => {
-  TinyRecord.Base.establishConnection({
+  Base.establishConnection({
     adapter: 'sqlite3',
     database: ':memory:'
   });
 
-  await TinyRecord.Base.connection.createTable('users', { force: true }, t => {
+  await Base.connection.createTable('users', { force: true }, t => {
     t.string('name', 'email');
     t.timestamps();
   });
 
-  class User extends TinyRecord.Base {
+  class User extends Base {
     static tableName = 'users';
   }
 
-  const cache = StatementCache.create(TinyRecord.Base.connection, params =>
+  const cache = StatementCache.create(Base.connection, params =>
     User.where({ name: 'test' })
   );
 

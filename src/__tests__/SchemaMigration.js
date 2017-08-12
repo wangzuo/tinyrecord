@@ -1,8 +1,8 @@
-import TinyRecord from '../TinyRecord';
+import Base from '../Base';
 import SchemaMigration from '../SchemaMigration';
 
 beforeAll(() => {
-  TinyRecord.Base.establishConnection({
+  Base.establishConnection({
     adapter: 'sqlite3',
     database: ':memory:'
   });

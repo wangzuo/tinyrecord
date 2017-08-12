@@ -1,18 +1,18 @@
 import path from 'path';
-import TinyRecord from '../TinyRecord';
+import Base from '../Base';
 import Migrator from '../Migrator';
 import SchemaMigration from '../SchemaMigration';
 
-class Post extends TinyRecord.Base {
+class Post extends Base {
   static tableName = 'posts';
 }
 
-class User extends TinyRecord.Base {
+class User extends Base {
   static tableName = 'users';
 }
 
 beforeAll(() => {
-  TinyRecord.Base.establishConnection({
+  Base.establishConnection({
     adapter: 'sqlite3',
     database: ':memory:'
   });
@@ -20,7 +20,7 @@ beforeAll(() => {
 
 test('loadMigrations', async () => {
   const migrations = await Migrator.loadMigrations([
-    path.join(__dirname, './migrate')
+    path.join(__dirname, '../../db/migrate')
   ]);
 
   expect(migrations).toMatchSnapshot();
