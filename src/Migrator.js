@@ -14,8 +14,7 @@ class MigrationProxy {
   get migration() {
     if (!this._migration) {
       const klass = require(filepath);
-      return new klass(this.name, this.version);
-      // this._migration =
+      this._migration = new klass(this.name, this.version);
     }
 
     return this._migration;
@@ -24,13 +23,27 @@ class MigrationProxy {
 
 export default class Migrator {
   static async migrate(migrationPaths, targetVersion = null, block) {
-    const migrations = await this.load(migrationPaths);
+    const migrations = await this.loadMigrations(migrationPaths);
+    console.log(migrations);
   }
 
   static async rollback(migrationPaths, steps = 1) {}
   static async forward(migrationPaths, steps = 1) {}
   static async up(migrationPaths, targetVersion = null) {}
   static async down(migrationPaths, targetVersion = null) {}
+
+  static async getAllVersions() {
+    const exists = await SchemaMigration.tableExists();
+    if (!exists) return [];
+
+    const versions = await SchemaMigration.allVersions();
+    return versions.map(x => parseInt(x, 10));
+  }
+
+  static async currentVersion() {
+    const versions = await this.getAllVersions();
+    return _.max(versions) || 0;
+  }
 
   static async loadMigrations(paths) {
     let files = [];
