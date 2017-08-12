@@ -2,42 +2,42 @@
 
 import program from 'commander';
 import packageJSON from '../../package.json';
-import * as db from './db';
-import * as migration from './migration';
+import DatabaseTasks from './DatabaseTasks';
+import MigrationTasks from './MigrationTasks';
 
 program.version(packageJSON.version);
 
 program
   .command('db:create')
   .description('Create the database')
-  .action(db.create.default);
+  .action(() => DatabaseTasks.create());
 
 program
   .command('db:drop')
   .description('Drop the database')
-  .action(db.drop.default);
+  .action(() => DatabaseTasks.drop());
 
 program
   .command('migration:create <filename> [attributes...]')
   .description('create new migration')
-  .action(migration.create);
+  .action(() => MigrationTasks.create());
 
 program
   .command('db:migrate')
   .description(
     'Migrate the database (options: VERSION=x, VERBOSE=false, SCOPE=blog).'
   )
-  .action(db.migrate.default);
+  .action(() => DatabaseTasks.migrate());
 
 program
   .command('db:migrate:up')
   .description(`Runs the "up" for a given migration VERSION.`)
-  .action(db.migrate.up);
+  .action();
 
 program
   .command('db:migrate:down')
   .description(`Runs the "up" for a given migration VERSION.`)
-  .action(db.migrate.down);
+  .action();
 
 program
   .command('db:migrate:redo')
