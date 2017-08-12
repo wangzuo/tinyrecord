@@ -3,14 +3,6 @@ import Base from '../Base';
 import Migrator from '../Migrator';
 import SchemaMigration from '../SchemaMigration';
 
-class Post extends Base {
-  static tableName = 'posts';
-}
-
-class User extends Base {
-  static tableName = 'users';
-}
-
 beforeAll(() => {
   Base.establishConnection({
     adapter: 'sqlite3',
@@ -22,8 +14,11 @@ test('loadMigrations', async () => {
   const migrations = await Migrator.loadMigrations([
     path.join(__dirname, '../../db/migrate')
   ]);
+  const migration = migrations[0];
 
   expect(migrations).toMatchSnapshot();
+  expect(migration.name).toMatchSnapshot();
+  expect(migration.version).toMatchSnapshot();
 });
 
 test('versions', async () => {
@@ -37,5 +32,9 @@ test('versions', async () => {
 });
 
 test('migrate', async () => {
-  await Migrator.migrate([path.join(__dirname, './migrate')]);
+  await SchemaMigration.dropTable();
+  await Migrator.migrate([path.join(__dirname, '../../db/migrate')]);
+
+  const tables = await Base.connection.tables();
+  expect(tables).toEqual(['schema_migrations', 'posts', 'users']);
 });

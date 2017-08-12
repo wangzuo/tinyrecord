@@ -3,16 +3,20 @@
 exports[`loadMigrations 1`] = `
 Array [
   MigrationProxy {
-    "filename": "20170812120950-CreatePosts.js",
+    "filepath": "/Users/cr/Codes/tinyrecord/db/migrate/20170812120950-CreatePosts.js",
     "name": "CreatePosts",
     "scope": undefined,
     "version": "20170812120950",
   },
   MigrationProxy {
-    "filename": "20170812191702-CreateUsers.js",
+    "filepath": "/Users/cr/Codes/tinyrecord/db/migrate/20170812191702-CreateUsers.js",
     "name": "CreateUsers",
     "scope": undefined,
     "version": "20170812191702",
   },
 ]
 `;
+
+exports[`loadMigrations 2`] = `"CreatePosts"`;
+
+exports[`loadMigrations 3`] = `"20170812120950"`;

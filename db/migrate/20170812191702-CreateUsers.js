@@ -1,9 +1,9 @@
-import Migration from '../../Migration';
+import Migration from '../../src/Migration';
 
-class CreateUsers extends Migration {
+export default class CreateUsers extends Migration {
   async change() {
-    await this.createTable('posts', t => {
-      t.string('title');
+    await this.createTable('users', t => {
+      t.string('name');
       t.timestamps();
     });
   }

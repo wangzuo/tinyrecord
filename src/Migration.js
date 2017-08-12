@@ -14,8 +14,8 @@ export default class Migration {
   down() {}
 
   async migrate(direction) {
-    if (direction === 'up') console.log('migrating');
-    else if (direction === 'down') console.log('reverting');
+    // if (direction === 'up') console.log('migrating');
+    // else if (direction === 'down') console.log('reverting');
 
     await this.execMigration(this.connection, direction);
   }

@@ -4,33 +4,56 @@ import glob from 'glob-async';
 import SchemaMigration from './SchemaMigration';
 
 class MigrationProxy {
-  constructor(name, version, filename, scope) {
+  constructor(name, version, filepath, scope) {
     this.name = name;
     this.version = version;
-    this.filename = filename;
+    this.filepath = filepath;
     this.scope = scope;
   }
 
   get migration() {
     if (!this._migration) {
-      const klass = require(filepath);
+      const klass = require(this.filepath).default; // TODO
       this._migration = new klass(this.name, this.version);
     }
 
     return this._migration;
   }
+
+  async migrate(...args) {
+    return await this.migration.migrate(...args);
+  }
 }
 
 export default class Migrator {
   static async migrate(migrationPaths, targetVersion = null, block) {
-    const migrations = await this.loadMigrations(migrationPaths);
-    console.log(migrations);
+    const currentVersion = await this.currentVersion();
+
+    if (_.isNull(targetVersion)) {
+      return await this.up(migrationPaths, targetVersion, block);
+    } else if (currentVersion === 0 && targetVersion === 0) {
+      return [];
+    } else if (currentVersion > targetVersion) {
+      return await this.down(migrationPaths, targetVersion, block);
+    } else {
+      return await this.up(migrationPaths, targetVersion, block);
+    }
   }
 
   static async rollback(migrationPaths, steps = 1) {}
   static async forward(migrationPaths, steps = 1) {}
-  static async up(migrationPaths, targetVersion = null) {}
-  static async down(migrationPaths, targetVersion = null) {}
+
+  static async up(migrationPaths, targetVersion = null, block) {
+    const migrations = await this.loadMigrations(migrationPaths);
+    const migrator = await this.new('up', migrations, targetVersion);
+    return await migrator.migrate();
+  }
+
+  static async down(migrationPaths, targetVersion = null, block) {
+    const migrations = await this.loadMigrations(migrationPaths);
+    const migrator = await this.new('down', migrations, targetVersion);
+    return await migrator.migrate();
+  }
 
   static async getAllVersions() {
     const exists = await SchemaMigration.tableExists();
@@ -60,7 +83,7 @@ export default class Migrator {
       const name = m[2];
       // TODO: scope
 
-      return new MigrationProxy(name, version, filename);
+      return new MigrationProxy(name, version, filepath);
     });
 
     return migrations;
@@ -76,5 +99,11 @@ export default class Migrator {
     this.direction = direction;
     this.migrations = migrations;
     this.targetVersion = targetVersion;
+  }
+
+  async migrate() {
+    for (const migration of this.migrations) {
+      await migration.migrate('up');
+    }
   }
 }
