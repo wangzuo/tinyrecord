@@ -3,7 +3,7 @@
     "arel": "^0.1.8",
     "colors": "^1.1.2",
     "commander": "^2.11.0",
-    "glob": "^7.1.2",
+    "glob-async": "^0.1.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "winston": "^2.3.1"

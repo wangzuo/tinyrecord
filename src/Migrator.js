@@ -1,15 +1,7 @@
 import _ from 'lodash';
 import path from 'path';
-import glob from 'glob';
+import glob from 'glob-async';
 import SchemaMigration from './SchemaMigration';
-
-const globAysnc = async pattern =>
-  new Promise((resolve, reject) => {
-    glob(pattern, (err, files) => {
-      if (err) return reject(err);
-      resolve(files);
-    });
-  });
 
 class MigrationProxy {
   constructor(name, version, filename, scope) {
@@ -44,8 +36,8 @@ export default class Migrator {
     let files = [];
     for (const path of paths) {
       // TODO
-      // const files = await globAysnc(`${path}/**/[0-9]*_*.js`);
-      files = [...files, ...(await globAysnc(`${path}/**/*.js`))];
+      // const files = await glob(`${path}/**/[0-9]*_*.js`);
+      files = [...files, ...(await glob(`${path}/**/*.js`))];
     }
 
     const migrations = files.map(filepath => {
