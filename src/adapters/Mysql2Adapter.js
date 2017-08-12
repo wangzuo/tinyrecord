@@ -37,6 +37,35 @@ export default class Mysql2Adapter extends AbstractAdapter {
     });
   }
 
+  async createDatabase(name, options = {}) {
+    if (options.collation) {
+      await this.execute(
+        `CREATE DATABASE ${this.quoteTableName(
+          name
+        )} DEFAULT CHARACTER SET ${this.quoteTableName(
+          options.charset || 'utf8'
+        )} COLLATE #{quoteTableName(options.collation)}`
+      );
+    } else {
+      await this.execute(
+        `CREATE DATABASE ${this.quoteTableName(
+          name
+        )} DEFAULT CHARACTER SET ${this.quoteTableName(
+          options.charset || 'utf8'
+        )}`
+      );
+    }
+  }
+
+  async dropDatabase(name) {
+    await this.execute(`DROP DATABASE IF EXISTS ${this.quoteTableName(name)}`);
+  }
+
+  async recreateDatabase(name, options = {}) {
+    await this.dropDatabase(name);
+    await this.createDatabase(name, options);
+  }
+
   async execute(sql, name = null) {
     return await this.log(
       { sql, name },
