@@ -94,7 +94,7 @@ class LazyAttributeHash {
     this.default = _default || (() => {});
   }
 
-  key(key): boolean {}
+  key(key) {}
 
   get(key) {
     return this.delegateHash[key] || this.assignDefaultValue(key);

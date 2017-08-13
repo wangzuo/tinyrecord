@@ -8,7 +8,7 @@ export default class TypeMap {
     this.cache = new Map();
   }
 
-  lookup(lookupKey: string, ...args) {
+  lookup(lookupKey, ...args) {
     if (this.cache.get(lookupKey)) return this.cache.get(lookupKey);
 
     let result = null;

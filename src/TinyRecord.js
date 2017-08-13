@@ -6,4 +6,4 @@ const TinyRecord = {
   Migration
 };
 
-export default TinyRecord;
+module.exports = TinyRecord;

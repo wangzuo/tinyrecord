@@ -702,7 +702,7 @@ export default class Relation {
 
   reverseSqlOrder(orderQuery) {}
 
-  doesNotSupportReverse_(order): boolean {}
+  doesNotSupportReverse_(order) {}
 
   buildOrder(arel) {
     // TODO

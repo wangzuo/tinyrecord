@@ -1,5 +1,6 @@
 import Base from '../Base';
 import Migration from '../Migration';
+import SchemaMigration from '../SchemaMigration';
 
 class CreatePosts extends Migration {
   async change() {
@@ -19,6 +20,8 @@ beforeAll(() => {
     adapter: 'sqlite3',
     database: ':memory:'
   });
+
+  return SchemaMigration.createTable();
 });
 
 test('migrate', async () => {

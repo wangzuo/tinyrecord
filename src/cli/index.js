@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import program from 'commander';
-import packageJSON from '../../package.json';
+import pkg from '../../package.json';
 import DatabaseTasks from './DatabaseTasks';
 import MigrationTasks from './MigrationTasks';
 
-program.version(packageJSON.version);
+program.version(pkg.version);
 
 program
   .command('db:create')

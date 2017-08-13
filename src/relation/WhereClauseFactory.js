@@ -31,7 +31,7 @@ export default class WhereClauseFactory {
 
   // private
 
-  performCaseSensitive(options): boolean {
+  performCaseSensitive(options) {
     return options && options.caseSensitive;
   }
 

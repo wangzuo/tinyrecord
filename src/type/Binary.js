@@ -36,7 +36,7 @@ export class Binary extends Value {
     return new Data(super.serialize(value));
   }
 
-  changedInPlace(rawOldValue, value): boolean {
+  changedInPlace(rawOldValue, value) {
     oldvalue = this.deserialize(rawOldValue);
     return oldvalue !== value; // todo: eql
   }

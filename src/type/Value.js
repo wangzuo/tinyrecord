@@ -21,11 +21,11 @@ export default class Value {
 
   typeCastForSchema(value) {}
 
-  binary(): Boolean {
+  binary() {
     return false;
   }
 
-  changed(oldValue, newValue, _newValueBeforeTypeCast): Boolean {
+  changed(oldValue, newValue, _newValueBeforeTypeCast) {
     return oldValue !== newValue;
   }
 

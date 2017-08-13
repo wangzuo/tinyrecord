@@ -2,7 +2,7 @@ import isString from 'lodash/isString';
 import Value from './Value';
 
 export default class String extends Value {
-  changedInPlace(rawOldValue, newValue): boolean {
+  changedInPlace(rawOldValue, newValue) {
     if (isString(newValue)) {
       return rawOldValue !== newValue;
     }

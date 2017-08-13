@@ -40,17 +40,17 @@ export default class TableMetadata {
     return Type.defaultValue;
   }
 
-  hasColumn(columnName): boolean {
+  hasColumn(columnName) {
     return this.klass && this.klass.columnsHash[columnName];
   }
 
-  associatedWith(associationName): boolean {
+  associatedWith(associationName) {
     return this.klass && this.klass._reflectOnAssociation(associationName);
   }
 
   associatedTable(tableName) {}
 
-  polymorphicAssociation(): boolean {
+  polymorphicAssociation() {
     return assocation && assocation.polymorphic;
   }
 }
