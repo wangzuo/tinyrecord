@@ -10,10 +10,13 @@ describe('Sqlite3Adapter', () => {
 
     td.primaryKey('id');
     td.string('name', 'email');
+    td.integer('age');
+    td.text('bio');
+    td.boolean('active');
     td.timestamps();
 
     expect(conn.schemaCreation.accept(td)).toBe(
-      `CREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "createdAt" datetime NOT NULL, "updatedAt" datetime NOT NULL)`
+      `CREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "age" integer, "bio" text, "active" boolean, "createdAt" datetime NOT NULL, "updatedAt" datetime NOT NULL)`
     );
   });
 });
@@ -26,6 +29,8 @@ describe('Mysql2Adapter', () => {
 
     td.primaryKey('id');
     td.string('name', 'email');
+    // td.integer('age');
+    // td.text('bio')
     td.timestamps();
 
     expect(conn.schemaCreation.accept(td)).toBe(

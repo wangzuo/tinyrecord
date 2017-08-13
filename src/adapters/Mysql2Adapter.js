@@ -81,12 +81,32 @@ export default class Mysql2Adapter extends AbstractAdapter {
     );
   }
 
+  async executeStmt(sql, name, binds) {
+    const typeCastedBinds = this.typeCastedBinds(binds);
+
+    return await this.log(
+      { sql, name, binds },
+      () =>
+        new Promise((resolve, reject) => {
+          this.connection.execute(sql, typeCastedBinds, (err, rows, fields) => {
+            if (err) return reject(err);
+            resolve(rows);
+          });
+        })
+    );
+  }
+
   async execQuery(sql, name = 'SQL', binds = [], options = {}) {
     const prepare = options.prepare || false;
     // if (this.withoutPreparedStatement(binds)) {
     // }
 
-    return await this.execute(sql, name);
+    // TODO: without_prepared_statement?
+    if (!binds.length) {
+      return await this.execute(sql, name);
+    } else {
+      return await this.executeStmt(sql, name, binds);
+    }
   }
 
   async selectRows(arel, name = null, binds = []) {

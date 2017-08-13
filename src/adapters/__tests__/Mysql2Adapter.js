@@ -31,3 +31,16 @@ test('columns', async () => {
   const columns = await Base.connection.columns('users');
   expect(columns).toMatchSnapshot();
 });
+
+// test('create', async () => {
+//   expect(User.recordTimestamps).toBe(true);
+
+//   const user = await User.create({ name: 'test', email: 'test@example.com' });
+
+//   expect(user.id).not.toBeNull();
+//   expect(user.name).toBe('test');
+//   expect(user.email).toBe('test@example.com');
+
+//   expect(user.createdAt).not.toBeNull();
+//   expect(user.updatedAt).not.toBeNull();
+// });
