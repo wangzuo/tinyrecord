@@ -2,6 +2,8 @@ import _ from 'lodash';
 import AbstractAdapter from './AbstractAdapter';
 import Result from '../Result';
 import Mysql2TableDefinition from './Mysql2TableDefinition';
+import Mysql2Column from './Mysql2Column';
+import Mysql2TypeMetadata from './Mysql2TypeMetadata';
 
 const NATIVE_DATABASE_TYPES = {
   primaryKey: 'bigint auto_increment PRIMARY KEY',
@@ -191,5 +193,34 @@ export default class Mysql2Adapter extends AbstractAdapter {
       schema = null;
     }
     return [schema, name];
+  }
+
+  async columnDefinitions(tableName) {
+    const result = await this.execute(
+      `SHOW FULL FIELDS FROM ${this.quoteTableName(tableName)}`,
+      'SCHEMA'
+    );
+
+    return result;
+  }
+
+  newColumnFromField(tableName, field) {
+    let _default = null; // todo
+
+    const typeMetadata = this.fetchTypeMetadata(field.type);
+    return new Mysql2Column(
+      field.Field,
+      _default,
+      typeMetadata,
+      field.Null === 'YES',
+      tableName,
+      null,
+      field.Collation,
+      { comment: !_.isEmpty(field.Comment) }
+    );
+  }
+
+  fetchTypeMetadata(sqlType, extra = '') {
+    return new Mysql2TypeMetadata(super.fetchTypeMetadata(sqlType), { extra });
   }
 }

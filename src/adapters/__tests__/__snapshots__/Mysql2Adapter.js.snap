@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`columns 1`] = `
+Array [
+  Mysql2Column {
+    "collation": null,
+    "comment": Object {
+      "comment": false,
+    },
+    "default": null,
+    "defaultFunction": null,
+    "name": "id",
+    "nil": false,
+    "sqlTypeMetaData": Mysql2SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": null,
+      "type": null,
+    },
+    "tableName": "users",
+  },
+  Mysql2Column {
+    "collation": "utf8_general_ci",
+    "comment": Object {
+      "comment": false,
+    },
+    "default": null,
+    "defaultFunction": null,
+    "name": "name",
+    "nil": true,
+    "sqlTypeMetaData": Mysql2SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": null,
+      "type": null,
+    },
+    "tableName": "users",
+  },
+  Mysql2Column {
+    "collation": "utf8_general_ci",
+    "comment": Object {
+      "comment": false,
+    },
+    "default": null,
+    "defaultFunction": null,
+    "name": "email",
+    "nil": true,
+    "sqlTypeMetaData": Mysql2SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": null,
+      "type": null,
+    },
+    "tableName": "users",
+  },
+  Mysql2Column {
+    "collation": null,
+    "comment": Object {
+      "comment": false,
+    },
+    "default": null,
+    "defaultFunction": null,
+    "name": "createdAt",
+    "nil": false,
+    "sqlTypeMetaData": Mysql2SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": null,
+      "type": null,
+    },
+    "tableName": "users",
+  },
+  Mysql2Column {
+    "collation": null,
+    "comment": Object {
+      "comment": false,
+    },
+    "default": null,
+    "defaultFunction": null,
+    "name": "updatedAt",
+    "nil": false,
+    "sqlTypeMetaData": Mysql2SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": null,
+      "type": null,
+    },
+    "tableName": "users",
+  },
+]
+`;

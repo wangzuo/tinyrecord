@@ -26,3 +26,8 @@ test('tables', async () => {
   const tables = await Base.connection.tables();
   expect(tables).toEqual(['users']);
 });
+
+test('columns', async () => {
+  const columns = await Base.connection.columns('users');
+  expect(columns).toMatchSnapshot();
+});
