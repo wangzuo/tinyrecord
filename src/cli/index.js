@@ -20,7 +20,9 @@ program
 program
   .command('migration:create <filename> [attributes...]')
   .description('create new migration')
-  .action(() => MigrationTasks.create());
+  .action((filename, attributes) =>
+    MigrationTasks.create(filename, attributes)
+  );
 
 program
   .command('db:migrate')
