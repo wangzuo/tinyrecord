@@ -18,6 +18,13 @@ program
   .action(() => DatabaseTasks.drop());
 
 program
+  .command('db:migrate:reset')
+  .description(
+    `Resets your database using your migrations for the current environment`
+  )
+  .action(() => DatabaseTasks.migrateReset());
+
+program
   .command('migration:create <filename> [attributes...]')
   .description('create new migration')
   .action((filename, attributes) =>

@@ -48,4 +48,10 @@ export default class DatabaseTasks {
     await Migrator.migrate([path.join(process.cwd(), './db/migrate')]);
     await Base.connection.disconnect();
   }
+
+  static async migrateReset() {
+    await this.drop();
+    await this.create();
+    await this.migrate();
+  }
 }
