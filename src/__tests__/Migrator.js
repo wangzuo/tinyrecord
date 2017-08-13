@@ -43,4 +43,7 @@ test('migrate', async () => {
 
   const tables = await Base.connection.tables();
   expect(tables).toEqual(['schema_migrations', 'posts', 'users']);
+
+  const versions = await Migrator.getAllVersions();
+  expect(versions).toEqual([20170812120950, 20170812191702]);
 });

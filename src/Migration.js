@@ -1,4 +1,5 @@
 import Base from './Base';
+import SchemaMigration from './SchemaMigration';
 
 export default class Migration {
   constructor(name, version = null) {
@@ -24,6 +25,8 @@ export default class Migration {
     if (this.change) {
       if (direction === 'up') {
         await this.change();
+        // TODO: record
+        await SchemaMigration.create({ version: this.version });
       } else if (direction === 'down') {
         await this.revert(this.change);
       }
