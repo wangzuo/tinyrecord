@@ -89,9 +89,13 @@ are-we-there-yet@~1.1.2:
     delegates "^1.0.0"
     readable-stream "^2.0.6"
 
-arel@^0.1.8:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/arel/-/arel-0.1.8.tgz#14428f6a92240e278ebc3306cab6fa25786ab6a3"
+arel@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/arel/-/arel-0.2.1.tgz#b094294c50dc7e6d0e85327eb44d1c38531701c4"
+  dependencies:
+    babel-runtime "^6.25.0"
+    blueimp-md5 "^2.8.0"
+    lodash "^4.17.4"
 
 argparse@^1.0.7:
   version "1.0.9"
@@ -852,6 +856,10 @@ block-stream@*:
   resolved "https://registry.yarnpkg.com/block-stream/-/block-stream-0.0.9.tgz#13ebfe778a03205cfe03751481ebb4b3300c126a"
   dependencies:
     inherits "~2.0.0"
+
+blueimp-md5@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/blueimp-md5/-/blueimp-md5-2.8.0.tgz#7011a7703d1ac26c9d2e60b12a843fea09c8bb18"
 
 boom@2.x.x:
   version "2.10.1"

@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "arel": "^0.1.8",
+    "arel": "^0.2.1",
     "babel-runtime": "^6.25.0",
     "colors": "^1.1.2",
     "commander": "^2.11.0",

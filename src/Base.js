@@ -572,7 +572,8 @@ export default class Base {
   }
 
   attributesForCreate(attributeNames) {
-    return attributeNames;
+    // todo: primaryKey
+    return _.reject(attributeNames, name => name === 'id');
   }
 
   attributesForUpdate(attributeNames) {
