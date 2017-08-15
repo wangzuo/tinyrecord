@@ -625,6 +625,7 @@ export default class Base {
       binds,
       { preparable }
     );
+
     const columnTypes = _.clone(resultSet.columnTypes);
 
     const records = [];

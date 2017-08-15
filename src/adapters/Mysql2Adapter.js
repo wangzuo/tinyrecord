@@ -68,14 +68,22 @@ export default class Mysql2Adapter extends AbstractAdapter {
     await this.createDatabase(name, options);
   }
 
+  // TODO:
   async execute(sql, name = null) {
     return await this.log(
       { sql, name },
       () =>
         new Promise((resolve, reject) => {
-          this.connection.query(sql, (err, rows, fields) => {
+          this.connection.query(sql, (err, results, fields) => {
             if (err) return reject(err);
-            resolve(rows);
+            if (err) return reject(err);
+            if (!fields) return resolve(results);
+
+            const result = new Result(
+              fields.map(x => x.name),
+              results.map(x => _.values(x))
+            );
+            resolve(result);
           });
         })
     );
@@ -85,13 +93,23 @@ export default class Mysql2Adapter extends AbstractAdapter {
     const typeCastedBinds = this.typeCastedBinds(binds);
 
     return await this.log(
-      { sql, name, binds },
+      { sql, name, binds, typeCastedBinds },
       () =>
         new Promise((resolve, reject) => {
-          this.connection.execute(sql, typeCastedBinds, (err, rows, fields) => {
-            if (err) return reject(err);
-            resolve(rows);
-          });
+          this.connection.execute(
+            sql,
+            typeCastedBinds,
+            (err, results, fields) => {
+              if (err) return reject(err);
+              if (!fields) return resolve(results);
+
+              const result = new Result(
+                fields.map(x => x.name),
+                results.map(x => _.values(x))
+              );
+              resolve(result);
+            }
+          );
         })
     );
   }
@@ -102,17 +120,15 @@ export default class Mysql2Adapter extends AbstractAdapter {
     // }
 
     // TODO: without_prepared_statement?
-    if (!binds.length) {
-      return await this.execute(sql, name);
-    } else {
-      return await this.executeStmt(sql, name, binds);
-    }
+    const result = binds.length
+      ? await this.executeStmt(sql, name, binds)
+      : await this.execute(sql, name);
+
+    return result;
   }
 
-  async selectRows(arel, name = null, binds = []) {
-    const sql = await this.toSql(arel, binds);
-    const result = await this.execute(sql, name);
-    return result.map(x => _.values(x));
+  lastInsertedId(result) {
+    return result.insertId;
   }
 
   quoteTableName(tableName) {
@@ -221,7 +237,7 @@ export default class Mysql2Adapter extends AbstractAdapter {
       'SCHEMA'
     );
 
-    return result;
+    return result.hashRows;
   }
 
   newColumnFromField(tableName, field) {
