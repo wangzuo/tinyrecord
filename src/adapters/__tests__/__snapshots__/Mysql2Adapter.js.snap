@@ -94,3 +94,68 @@ Array [
   },
 ]
 `;
+
+exports[`new 1`] = `
+Object {
+  "createdAt": FromDatabase {
+    "name": "createdAt",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
+  "email": FromUser {
+    "name": "email",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": "test@example.com",
+  },
+  "id": FromDatabase {
+    "name": "id",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
+  "name": FromUser {
+    "name": "name",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": "test",
+  },
+  "updatedAt": FromDatabase {
+    "name": "updatedAt",
+    "originalAttribute": Object {},
+    "type": Value {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
+}
+`;
+
+exports[`new 2`] = `
+Object {
+  "createdAt": undefined,
+  "email": "test@example.com",
+  "id": undefined,
+  "name": "test",
+  "updatedAt": undefined,
+}
+`;

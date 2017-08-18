@@ -67,27 +67,10 @@ test('tableStructure', async () => {
   expect(await User.connection.tableStructure('users')).toMatchSnapshot();
 });
 
-test('new', async () => {
-  const user = await User.new({ name: 'test', email: 'test@example.com' });
-  expect(user.attributes.attributes).toMatchSnapshot();
-  expect(user.attributes).toMatchSnapshot();
-});
-
 test('records', async () => {
   expect(await User.all.records()).toMatchSnapshot();
   await User.create({ name: 'test', email: 'test@example.com' });
   expect(await User.all.records()).toMatchSnapshot();
-});
-
-test('update', async () => {
-  const user = await User.create({ name: 'test', email: 'test@example.com' });
-  await user.update({ name: 'test1', email: 'test1@example.com' });
-  expect(user.name).toBe('test1');
-  expect(user.email).toBe('test1@example.com');
-
-  const data = await User.find(user.id);
-  expect(data.name).toBe('test1');
-  expect(data.email).toBe('test1@example.com');
 });
 
 test('where', async () => {
