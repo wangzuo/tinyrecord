@@ -118,11 +118,18 @@ test('limit', async () => {
   );
 });
 
-// TOOD
-// test('order', async () => {
-//   expect(await User.order('name').toSql()).toBe(
-//     `SELECT "users".* FROM "users" ORDER BY name`
-//   );
-// });
+test('order', async () => {
+  expect(await User.order('name').toSql()).toBe(
+    `SELECT "users".* FROM "users" ORDER BY "users"."name" ASC`
+  );
+
+  expect(await User.order({ name: 'desc', email: 'asc' }).toSql()).toBe(
+    `SELECT "users".* FROM "users" ORDER BY "users"."name" DESC, "users"."email" ASC`
+  );
+
+  expect(await User.orderBy('name').toSql()).toBe(
+    `SELECT "users".* FROM "users" ORDER BY name`
+  );
+});
 
 testAdapter(Base);

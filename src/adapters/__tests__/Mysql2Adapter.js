@@ -2,6 +2,10 @@ import Base from '../../Base';
 import { testAdapter } from './AbstractAdapter';
 import Mysql2Adapter from '../Mysql2Adapter';
 
+class User extends Base {
+  static tableName = 'users';
+}
+
 beforeAll(() => {
   Base.establishConnection({
     adapter: 'mysql2',
@@ -21,6 +25,20 @@ afterAll(() => Base.connection.disconnect());
 
 test('ADAPTER_NAME', () => {
   expect(Mysql2Adapter.ADAPTER_NAME).toBe('Mysql2');
+});
+
+test('order', async () => {
+  expect(await User.order('name').toSql()).toBe(
+    'SELECT `users`.* FROM `users` ORDER BY `users`.`name` ASC'
+  );
+
+  expect(await User.order({ name: 'desc', email: 'asc' }).toSql()).toBe(
+    'SELECT `users`.* FROM `users` ORDER BY `users`.`name` DESC, `users`.`email` ASC'
+  );
+
+  expect(await User.orderBy('name').toSql()).toBe(
+    'SELECT `users`.* FROM `users` ORDER BY name'
+  );
 });
 
 testAdapter(Base);

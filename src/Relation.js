@@ -496,6 +496,12 @@ export default class Relation {
     return this;
   }
 
+  orderBy(str) {
+    // todo: validate string
+    this.orderValues = [...this.orderValues, str];
+    return this;
+  }
+
   reorder(...args) {}
   reorder_(...args) {}
 
@@ -716,8 +722,18 @@ export default class Relation {
 
   validateOrderArgs(args) {}
   preprocessOrderArgs(args) {
-    // todo
-    return args.map(arg => this.arelAttribute(arg).asc());
+    return _.flatMap(args, arg => {
+      if (_.isString(arg)) {
+        return this.arelAttribute(arg).asc();
+      }
+
+      return _.map(arg, (v, k) => {
+        v = v.toLowerCase();
+        if (v === 'asc' || v === 'desc') {
+          return this.arelAttribute(k)[v]();
+        }
+      });
+    });
   }
 
   checkIfMethodHasArguments_(methodName, args) {}
