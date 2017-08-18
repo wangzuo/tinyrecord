@@ -22,7 +22,7 @@ const NATIVE_DATABASE_TYPES = {
 };
 
 export default class Mysql2Adapter extends AbstractAdapter {
-  ADAPTER_NAME = 'Mysql2';
+  static ADAPTER_NAME = 'Mysql2';
 
   constructor(connection, logger, connectionOptions, config) {
     super(connection, logger, config);

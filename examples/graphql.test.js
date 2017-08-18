@@ -1,13 +1,13 @@
-const {
+import {
   graphql,
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLInt,
   GraphQLList,
   GraphQLString
-} = require('graphql');
-const TinyRecord = require('../lib/TinyRecord');
-const User = require('./models/User');
+} from 'graphql';
+import TinyRecord from '../lib/TinyRecord';
+import User from './models/User';
 
 TinyRecord.Base.establishConnection({
   adapter: 'sqlite3',
