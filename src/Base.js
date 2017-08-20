@@ -689,3 +689,6 @@ export default class Base {
     return this.relation;
   }
 }
+
+// TODO
+Arel.Table.engine = Base;
