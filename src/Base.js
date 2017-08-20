@@ -645,10 +645,6 @@ export default class Base {
     return this.all.order(...args);
   }
 
-  static orderBy(...args) {
-    return this.all.orderBy(...args);
-  }
-
   // scoping
 
   static get all() {

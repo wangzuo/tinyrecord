@@ -56,17 +56,23 @@ test('limit', async () => {
 });
 
 test('order', async () => {
+  expect(await User.order(['name']).toSql()).toBe(
+    `SELECT \`users\`.* FROM \`users\` ORDER BY \`users\`.\`name\` ASC`
+  );
+  expect(await User.order({ email: 'desc' }).toSql()).toBe(
+    `SELECT \`users\`.* FROM \`users\` ORDER BY \`users\`.\`email\` DESC`
+  );
+  expect(await User.order(['name'], { email: 'desc' }).toSql()).toBe(
+    `SELECT \`users\`.* FROM \`users\` ORDER BY \`users\`.\`name\` ASC, \`users\`.\`email\` DESC`
+  );
   expect(await User.order('name').toSql()).toBe(
-    'SELECT `users`.* FROM `users` ORDER BY `users`.`name` ASC'
+    `SELECT \`users\`.* FROM \`users\` ORDER BY name`
   );
-
-  expect(await User.order({ name: 'desc', email: 'asc' }).toSql()).toBe(
-    'SELECT `users`.* FROM `users` ORDER BY `users`.`name` DESC, `users`.`email` ASC'
+  expect(await User.order('name DESC').toSql()).toBe(
+    `SELECT \`users\`.* FROM \`users\` ORDER BY name DESC`
   );
-
-  expect(await User.orderBy('name').toSql()).toBe(
-    'SELECT `users`.* FROM `users` ORDER BY name'
+  expect(await User.order('name DESC, email').toSql()).toBe(
+    `SELECT \`users\`.* FROM \`users\` ORDER BY name DESC, email`
   );
 });
-
 testAdapter(Base);
