@@ -452,15 +452,21 @@ export default class Relation {
         )
       : null;
 
-    // todo: offset
+    const offsetBind = this.offsetValue
+      ? Attribute.withCastValue(
+          'OFFSET',
+          _.toNumber(this.offsetValue),
+          Type.defaultValue
+        )
+      : null;
 
     return this.connection.combineBindParameters({
       // fromClause: this.fromClause.binds,
       // joinClause: this.arel.bind_values,
       whereClause: this.whereClause.binds,
       // havingClause: this.havingClause.binds,
-      limit: limitBind
-      // offset: this.offsetBind
+      limit: limitBind,
+      offset: offsetBind
     });
   }
 
@@ -482,11 +488,23 @@ export default class Relation {
     return this;
   }
 
-  select(...fields) {}
-  _select_(...fields) {}
+  select(...fields) {
+    return this.select_(...fields);
+  }
+  select_(...fields) {
+    this.selectValues = [...this.selectValues, ...fields];
+    return this;
+  }
 
-  group(...args) {}
-  group_(...args) {}
+  group(...args) {
+    this.checkIfMethodHasArguments_('group', args);
+    return this.group_(...args);
+  }
+  group_(...args) {
+    args = _.flatten(args);
+    this.groupValues = [...this.groupValues, ...args];
+    return this;
+  }
 
   order(...args) {
     return this.order_(...args);
@@ -559,8 +577,14 @@ export default class Relation {
     return this;
   }
 
-  offset() {}
-  offset_() {}
+  offset(value) {
+    return this.offset_(value);
+  }
+
+  offset_(value) {
+    this.offsetValue = value;
+    return this;
+  }
 
   lock(locks = true) {
     return this.spawn.locK(locks);
@@ -642,8 +666,20 @@ export default class Relation {
       arel.where(this.whereClause.ast);
     }
 
+    // if (!_.isEmpty(this.havingClause)) {
+    //   arel.having(this.havingClause.ast);
+    // }
+
     if (this.limitValue) {
       arel.take(new Arel.nodes.BindParam());
+    }
+
+    if (this.offsetValue) {
+      arel.skip(new Arel.nodes.BindParam());
+    }
+
+    if (!_.isEmpty(this.groupValues)) {
+      arel.group(...this.arelColumns(_.uniq(this.groupValues)));
     }
 
     this.buildOrder(arel);
@@ -690,13 +726,19 @@ export default class Relation {
     if (_.isEmpty(this.selectValues)) {
       arel.project(this.klass.arelTable.column(Arel.star()));
     } else {
+      // todo: uniq fix (arel)
       arel.project(...this.arelColumns(_.uniq(this.selectValues)));
     }
   }
 
   arelColumns(columns) {
     return columns.map(field => {
-      return field;
+      if (_.isArray(field)) {
+        // todo: hasAttribute check
+        return this.arelAttribute(field[0]);
+      } else {
+        return field;
+      }
     });
   }
 
@@ -733,7 +775,11 @@ export default class Relation {
     });
   }
 
-  checkIfMethodHasArguments_(methodName, args) {}
+  checkIfMethodHasArguments_(methodName, args) {
+    if (_.isEmpty(args)) {
+      throw new Error(`The method .${methodName}() must contain arguments`);
+    }
+  }
   structurallyIncompatibleValuesForOr(other) {}
 
   get whereClauseFactory() {
@@ -769,4 +815,29 @@ export default class Relation {
 
     throw new Error(`unknown relation value ${name}`);
   }
+
+  // calculations
+  count(columnName = null) {
+    return this.calculate('count', columnName);
+  }
+
+  average(columnName) {
+    return this.calculate('average', columnName);
+  }
+
+  minimum(columnName) {
+    return this.calculate('minimum', columnName);
+  }
+
+  maximum(columnName) {
+    return this.calculate('maximum', columnName);
+  }
+
+  sum(columnName) {
+    return this.calculate('sum', columnName);
+  }
+
+  calculate(operation, columnName) {}
+  pluck(...columnNames) {}
+  ids() {}
 }

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as Arel from 'arel';
 import AbstractAdapter from './AbstractAdapter';
 import Result from '../Result';
 import Column from './Column';
@@ -30,6 +31,10 @@ export default class Sqlite3Adapter extends AbstractAdapter {
     // alias
     this.columnDefinitions = this.tableStructure;
     this.addBelongsTo = this.addReference;
+  }
+
+  get arelVisitor() {
+    return new Arel.visitors.SQLite(this);
   }
 
   async explain(arel, binds = []) {

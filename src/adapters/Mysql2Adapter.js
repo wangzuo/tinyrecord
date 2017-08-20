@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as Arel from 'arel';
 import AbstractAdapter from './AbstractAdapter';
 import Result from '../Result';
 import Mysql2TableDefinition from './Mysql2TableDefinition';
@@ -38,6 +39,10 @@ export default class Mysql2Adapter extends AbstractAdapter {
       });
     });
   }
+
+  // get arelVisitor() {
+  //   return new Arel.visitors.MySQL(this);
+  // }
 
   async createDatabase(name, options = {}) {
     if (options.collation) {

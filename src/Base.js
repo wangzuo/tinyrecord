@@ -636,13 +636,25 @@ export default class Base {
     return records;
   }
 
-  // todo: delegation
+  // todo: delegation (method missing)
   static where(...args) {
     return this.all.where(...args);
   }
 
   static order(...args) {
     return this.all.order(...args);
+  }
+
+  static select(...args) {
+    return this.all.select(...args);
+  }
+
+  static group(...args) {
+    return this.all.group(...args);
+  }
+
+  static offset(...args) {
+    return this.all.offset(...args);
   }
 
   // scoping

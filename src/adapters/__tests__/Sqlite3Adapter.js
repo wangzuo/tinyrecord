@@ -122,4 +122,26 @@ test('order', async () => {
   );
 });
 
+test('select', async () => {
+  expect(
+    await User.select(['name'], ['email'], 'email as user_email').toSql()
+  ).toBe(
+    `SELECT "users"."name", "users"."email", email as user_email FROM "users"`
+  );
+});
+
+test('group', async () => {
+  expect(await User.group(['name']).toSql()).toBe(
+    `SELECT "users".* FROM "users" GROUP BY name`
+  );
+});
+
+test('offset', async () => {
+  expect(await User.offset(10).order('name ASC').toSql()).toBe(
+    `SELECT "users".* FROM "users" ORDER BY name ASC LIMIT -1 OFFSET 10`
+  );
+});
+
+// test('having', async () => {});
+
 testAdapter(Base);
