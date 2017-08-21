@@ -89,9 +89,9 @@ are-we-there-yet@~1.1.2:
     delegates "^1.0.0"
     readable-stream "^2.0.6"
 
-arel@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/arel/-/arel-0.2.2.tgz#1111f9dc10043c8b3f27a81ad0a0ee77e4682b2c"
+arel@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/arel/-/arel-0.3.1.tgz#34eded0985c3d6acc7540482381e974ff5040834"
   dependencies:
     babel-runtime "^6.25.0"
     blueimp-md5 "^2.8.0"
