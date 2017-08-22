@@ -26,7 +26,7 @@ program
 
 program
   .command('migration:create <filename> [attributes...]')
-  .description('create new migration')
+  .description('create new migration file')
   .action((filename, attributes) =>
     MigrationTasks.create(filename, attributes)
   );

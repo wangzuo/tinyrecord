@@ -6,7 +6,7 @@ import {
   GraphQLList,
   GraphQLString
 } from 'graphql';
-import TinyRecord from '../lib/TinyRecord';
+import TinyRecord from '../dist/TinyRecord';
 import User from './models/User';
 
 TinyRecord.Base.establishConnection({
