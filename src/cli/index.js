@@ -5,6 +5,10 @@ import pkg from '../../package.json';
 import DatabaseTasks from './DatabaseTasks';
 import MigrationTasks from './MigrationTasks';
 
+process.on('unhandledRejection', err => {
+  console.error(err);
+});
+
 program.version(pkg.version);
 
 program

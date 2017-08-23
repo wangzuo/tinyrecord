@@ -44,6 +44,7 @@ export default class DatabaseTasks {
 
   static async migrate() {
     this.connect();
+
     // todo: env VERSION
     await Migrator.migrate([path.join(process.cwd(), './db/migrate')]);
     await Base.connection.disconnect();

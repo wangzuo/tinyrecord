@@ -14,7 +14,9 @@ class MigrationProxy {
 
   get migration() {
     if (!this._migration) {
-      const klass = require(this.filepath).default; // TODO
+      // TODO
+      const module = require(this.filepath);
+      const klass = module.default || module;
       this._migration = new klass(this.name, this.version);
     }
 
