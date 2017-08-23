@@ -35,6 +35,9 @@ export default class Logger {
       colors: CONFIG.colors
     });
     this.logger.transports.console.level = 'debug';
+
+    // todo
+    this.info = this.logger.info;
   }
 
   sql(options = {}, duration) {

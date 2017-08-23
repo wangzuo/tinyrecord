@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import path from 'path';
 import glob from 'glob-async';
+import Base from './Base';
 import SchemaMigration from './SchemaMigration';
 
 class MigrationProxy {
@@ -44,9 +45,22 @@ export default class Migrator {
   static async forward(migrationPaths, steps = 1) {}
 
   static async up(migrationPaths, targetVersion = null, block) {
+    await SchemaMigration.createTable();
+
     const migrations = await this.loadMigrations(migrationPaths);
-    const migrator = await this.new('up', migrations, targetVersion);
-    return await migrator.migrate();
+    const migrated = await this.getAllVersions();
+    const runnable = _.reject(migrations, x =>
+      _.includes(migrated, _.toNumber(x.version))
+    );
+
+    for (const migration of runnable) {
+      if (Base.logger) {
+        Base.logger.info(
+          `Migrating to ${migration.name} (${migration.version})`
+        );
+      }
+      await migration.migrate('up');
+    }
   }
 
   static async down(migrationPaths, targetVersion = null, block) {
@@ -87,23 +101,5 @@ export default class Migrator {
     });
 
     return migrations;
-  }
-
-  static async new(direction, migrations, targetVersion = null) {
-    await SchemaMigration.createTable();
-
-    return new this(direction, migrations, targetVersion);
-  }
-
-  constructor(direction, migrations, targetVersion) {
-    this.direction = direction;
-    this.migrations = migrations;
-    this.targetVersion = targetVersion;
-  }
-
-  async migrate() {
-    for (const migration of this.migrations) {
-      await migration.migrate('up');
-    }
   }
 }
