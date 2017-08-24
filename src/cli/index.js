@@ -4,7 +4,9 @@ import program from 'commander';
 import pkg from '../../package.json';
 import DatabaseTasks from './DatabaseTasks';
 import MigrationTasks from './MigrationTasks';
+import ModelTasks from './ModelTasks';
 
+// TODO
 process.on('unhandledRejection', err => {
   console.error(err);
 });
@@ -29,13 +31,6 @@ program
   .action(() => DatabaseTasks.migrateReset());
 
 program
-  .command('migration:create <filename> [attributes...]')
-  .description('create new migration file')
-  .action((filename, attributes) =>
-    MigrationTasks.create(filename, attributes)
-  );
-
-program
   .command('db:migrate')
   .description(
     'Migrate the database (options: VERSION=x, VERBOSE=false, SCOPE=blog).'
@@ -58,4 +53,20 @@ program
     'Rollbacks the database one migration and re migrate up (options: STEP=x, VERSION=x).'
   );
 
+program
+  .command('migration:create <filename> [attributes...]')
+  .description('create new migration file')
+  .action((filename, attributes) =>
+    MigrationTasks.create(filename, attributes)
+  );
+
+program
+  .command('model:create <name> [attributes...]')
+  .description('Generates a model and its migration')
+  .action((name, attributes) => ModelTasks.create(name, attributes));
+
 program.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+  program.outputHelp();
+}

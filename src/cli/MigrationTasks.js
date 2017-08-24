@@ -9,23 +9,28 @@ export default class MigrationTasks {
     const ts = moment().format('YYYYMMDDHHmmss');
     const filename = `${ts}-${name}.js`;
 
-    const template = this[options.template](name, attrs, options);
+    const module = this[options.template](name, attrs, options);
     const filepath = path.join(process.cwd(), './db/migrate', filename);
 
-    fs.writeFileSync(filepath, template);
+    fs.writeFileSync(filepath, module);
   }
 
   static createTable(name, attributes, { tableName }) {
-    const template = `export default class ${name} extends TinyRecrod.Migration {
+    const module = `const { Migration } = require('tinyrecord');
+
+class ${name} extends Migration {
   async change() {
     await this.createTable('${tableName}', {}, t => {
 ${attributes.map(({ name, type }) => `      t.${type}('${name}');`).join('\n')}
       t.timestamps();
     });
   }
-}`;
+}
 
-    return template;
+module.exports = ${name};
+`;
+
+    return module;
   }
 
   static migration(name, attributes, { action, tableName }) {
