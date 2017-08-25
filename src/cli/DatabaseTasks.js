@@ -5,7 +5,8 @@ import Migrator from '../Migrator';
 
 export default class DatabaseTasks {
   static loadConfig() {
-    this.config = require(path.join(process.cwd(), './db/config')).development;
+    const env = process.env.NODE_ENV || 'development';
+    this.config = require(path.join(process.cwd(), './db/config'))[env];
   }
 
   static connect() {

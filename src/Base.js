@@ -10,6 +10,11 @@ import Relation from './Relation';
 import StatementCache from './StatementCache';
 import { Resolver } from './ConnectionSpecification';
 
+// TODO
+process.on('unhandledRejection', err => {
+  console.error(err);
+});
+
 // todo
 const NO_DEFAULT_PROVIDED = {};
 

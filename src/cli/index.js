@@ -5,6 +5,7 @@ import pkg from '../../package.json';
 import DatabaseTasks from './DatabaseTasks';
 import MigrationTasks from './MigrationTasks';
 import ModelTasks from './ModelTasks';
+import repl from './repl';
 
 // TODO
 process.on('unhandledRejection', err => {
@@ -55,7 +56,7 @@ program
 
 program
   .command('migration:create <filename> [attributes...]')
-  .description('create new migration file')
+  .description('Generates a new migration file')
   .action((filename, attributes) =>
     MigrationTasks.create(filename, attributes)
   );
@@ -64,6 +65,8 @@ program
   .command('model:create <name> [attributes...]')
   .description('Generates a model and its migration')
   .action((name, attributes) => ModelTasks.create(name, attributes));
+
+program.command('repl').description('Tiny repl').action(() => repl());
 
 program.parse(process.argv);
 

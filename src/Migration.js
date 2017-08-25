@@ -42,4 +42,8 @@ export default class Migration {
   createTable(...args) {
     return this.connection.createTable(...args);
   }
+
+  addColumn(...args) {
+    return this.connection.addColumn(...args);
+  }
 }
