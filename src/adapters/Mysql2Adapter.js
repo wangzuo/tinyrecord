@@ -167,13 +167,18 @@ export default class Mysql2Adapter extends AbstractAdapter {
   }
 
   typeToSql(type, options = {}) {
+    const limit = options.limit || null;
+    const precision = options.precision || null;
+    const scale = options.scope || null;
+    const unsigned = options.unsigned || null;
+
     let sql = do {
       if (type === 'integer') {
-        this.integerToSql(options.limit);
+        this.integerToSql(limit);
       } else if (type === 'text') {
-        this.textToSql(options.limit);
+        this.textToSql(limit);
       } else if (type === 'blob') {
-        this.binaryToSql(optionslimit);
+        this.binaryToSql(limit);
       } else if (type === 'binary') {
         // todo
       } else {
@@ -194,14 +199,23 @@ export default class Mysql2Adapter extends AbstractAdapter {
     } else if (limit === 2) {
       return 'smallint';
     } else if (_.isNull(limit) || limit === 4) {
-      return 'init';
+      return 'int';
     } else if (limit >= 5 && limit <= 8) {
       return 'bigint';
     }
 
-    throw new Errror(
+    throw new Error(
       `No integer type has byte size ${limit}. Use a decimal with scale 0 instead.`
     );
+  }
+
+  // todo
+  textToSql(limit) {
+    if (_.isNull(limit)) {
+      return 'text';
+    }
+
+    throw new Error(`No text type has btye length ${limit}`);
   }
 
   dataSourceSql(name = null, options = {}) {

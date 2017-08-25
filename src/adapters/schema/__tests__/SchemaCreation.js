@@ -29,12 +29,12 @@ describe('Mysql2Adapter', () => {
 
     td.primaryKey('id');
     td.string('name', 'email');
-    // td.integer('age');
-    // td.text('bio')
+    td.integer('age');
+    td.text('bio');
     td.timestamps();
 
     expect(conn.schemaCreation.accept(td)).toBe(
-      'CREATE TABLE `users` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `email` varchar(255), `createdAt` datetime NOT NULL, `updatedAt` datetime NOT NULL) ENGINE=InnoDB'
+      'CREATE TABLE `users` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `email` varchar(255), `age` int, `bio` text, `createdAt` datetime NOT NULL, `updatedAt` datetime NOT NULL) ENGINE=InnoDB'
     );
   });
 });
