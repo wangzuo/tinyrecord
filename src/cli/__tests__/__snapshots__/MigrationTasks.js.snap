@@ -15,3 +15,27 @@ class CreatePosts extends Migration {
 module.exports = CreatePosts;
 "
 `;
+
+exports[`migration 1`] = `
+"const { Migration } = require('tinyrecord');
+
+class AddTitleToPosts extends Migration {
+  async change() {
+    await this.addColumn('posts', 'title', 'string')
+  }
+}
+
+module.exports = AddTitleToPosts;"
+`;
+
+exports[`migration 2`] = `
+"const { Migration } = require('tinyrecord');
+
+class RemoteTitleFromPosts extends Migration {
+  async change() {
+    await this.removeColumn('posts', 'title', 'string')
+  }
+}
+
+module.exports = RemoteTitleFromPosts;"
+`;

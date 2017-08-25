@@ -34,7 +34,35 @@ module.exports = ${name};
   }
 
   static migration(name, attributes, { action, tableName }) {
-    return ``;
+    let module = `const { Migration } = require('tinyrecord');
+
+class ${name} extends Migration {`;
+
+    if (action === 'add') {
+      module += `
+  async change() {
+${attributes
+        .map(
+          ({ name, type }) =>
+            `    await this.addColumn('${tableName}', '${name}', '${type}')`
+        )
+        .join('\n')}
+  }`;
+    } else if (action === 'remove') {
+      module += `
+  async change() {
+${attributes
+        .map(
+          ({ name, type }) =>
+            `    await this.removeColumn('${tableName}', '${name}', '${type}')`
+        )
+        .join('\n')}
+  }`;
+    }
+
+    module += `\n}\n\nmodule.exports = ${name};`;
+
+    return module;
   }
 
   static parseName(name) {

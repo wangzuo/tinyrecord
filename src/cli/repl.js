@@ -22,5 +22,8 @@ export default function() {
 
   TinyRecord.Base.establishConnection(config[env]);
 
-  r.context.TinyRecord = TinyRecord;
+  Object.assign(r.context, {
+    TinyRecord,
+    ...models
+  });
 }

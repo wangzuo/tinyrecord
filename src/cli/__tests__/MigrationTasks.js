@@ -27,15 +27,23 @@ test('createTable', () => {
   ).toMatchSnapshot();
 });
 
-// test('migration', () => {
-//   expect(
-//     MigrationTasks.migration('AddTitleToPosts', 'posts', [
-//       { name: 'title', type: 'string' }
-//     ])
-//   ).toMatchSnapshot();
-//   expect(
-//     MigrationTasks.migration('RemoteTitleToPosts', 'posts', [
-//       { name: 'title', type: 'string' }
-//     ])
-//   ).toMatchSnapshot();
-// });
+test('migration', () => {
+  expect(
+    MigrationTasks.migration(
+      'AddTitleToPosts',
+      [{ name: 'title', type: 'string' }],
+      { action: 'add', tableName: 'posts' }
+    )
+  ).toMatchSnapshot();
+
+  expect(
+    MigrationTasks.migration(
+      'RemoteTitleFromPosts',
+      [{ name: 'title', type: 'string' }],
+      {
+        action: 'remove',
+        tableName: 'posts'
+      }
+    )
+  ).toMatchSnapshot();
+});

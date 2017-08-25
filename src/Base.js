@@ -22,6 +22,15 @@ export default class Base {
   static recordTimestamps = true;
   static logger = new Logger();
 
+  static inspect() {
+    return {
+      tableName: this.tableName
+    };
+  }
+
+  // TODO: output attributeSet
+  inspect() {}
+
   static establishConnection(config) {
     const resolver = new Resolver({});
     const spec = resolver.spec(config);

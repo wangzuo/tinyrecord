@@ -46,4 +46,8 @@ export default class Migration {
   addColumn(...args) {
     return this.connection.addColumn(...args);
   }
+
+  removeColumn(...args) {
+    return this.connection.removeColumn(...args);
+  }
 }
