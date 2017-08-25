@@ -1,12 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`createTable 1`] = `
-"export default class CreatePosts extends TinyRecrod.Migration {
+"const { Migration } = require('tinyrecord');
+
+class CreatePosts extends Migration {
   async change() {
     await this.createTable('posts', {}, t => {
       t.string('title');
       t.timestamps();
     });
   }
-}"
+}
+
+module.exports = CreatePosts;
+"
 `;
