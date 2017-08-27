@@ -38,7 +38,7 @@ test('migration', () => {
 
   expect(
     MigrationTasks.migration(
-      'RemoteTitleFromPosts',
+      'RemoveTitleFromPosts',
       [{ name: 'title', type: 'string' }],
       {
         action: 'remove',

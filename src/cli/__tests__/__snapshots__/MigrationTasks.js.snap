@@ -31,11 +31,11 @@ module.exports = AddTitleToPosts;"
 exports[`migration 2`] = `
 "const { Migration } = require('tinyrecord');
 
-class RemoteTitleFromPosts extends Migration {
+class RemoveTitleFromPosts extends Migration {
   async change() {
     await this.removeColumn('posts', 'title', 'string')
   }
 }
 
-module.exports = RemoteTitleFromPosts;"
+module.exports = RemoveTitleFromPosts;"
 `;
