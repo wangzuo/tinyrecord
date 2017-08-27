@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`createIndex 1`] = `
+"exports.Post = require('./Post')
+exports.User = require('./User')
+"
+`;
+
 exports[`createModel 1`] = `
 "const { Base } = require('tinyrecord');
 
