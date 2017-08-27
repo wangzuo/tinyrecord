@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`createIndex 1`] = `
-"exports.Post = require('./Post')
-exports.User = require('./User')
+"exports.Post = require('./Post');
+exports.User = require('./User');
 "
 `;
 

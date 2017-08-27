@@ -46,7 +46,7 @@ module.exports = ${modelName};
       .sort()
       .map(file => {
         const module = path.basename(file, '.js');
-        return `exports.${module} = require('./${module}')\n`;
+        return `exports.${module} = require('./${module}');\n`;
       })
       .join('');
   }
