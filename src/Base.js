@@ -92,7 +92,25 @@ export default class Base {
     return record;
   }
 
-  // todo
+  static async findBy(args) {
+    const keys = _.keys(args);
+
+    const statement = this.cachedFindByStatement(keys, params => {
+      const wheres = {};
+      keys.forEach(param => (wheres[param] = params.bind()));
+      return this.where(wheres).limit(1);
+    });
+
+    const records = await statement.execute(
+      _.values(args),
+      this,
+      this.connection
+    );
+    const record = records[0];
+    return record;
+  }
+
+  // todo: key
   static cachedFindByStatement(key, block) {
     return StatementCache.create(this.connection, block);
   }

@@ -49,6 +49,23 @@ export function testAdapter(Base) {
     expect(data.updatedAt).not.toBeNull();
   });
 
+  test('findBy', async () => {
+    const user = await User.create({
+      name: 'findBy',
+      email: 'findBy@example.com'
+    });
+    const data = await User.findBy({
+      name: 'findBy',
+      email: 'findBy@example.com'
+    });
+
+    expect(data.id).toBe(user.id);
+    expect(data.name).toBe(user.name);
+    expect(data.email).toBe(user.email);
+    expect(data.createdAt).not.toBeNull();
+    expect(data.updatedAt).not.toBeNull();
+  });
+
   test('update', async () => {
     const user = await User.create({ name: 'test', email: 'test@example.com' });
     await user.update({ name: 'test1', email: 'test1@example.com' });
