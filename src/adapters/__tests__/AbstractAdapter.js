@@ -43,7 +43,17 @@ export function testAdapter(Base) {
     expect(user.id).not.toBeNull();
     expect(user.name).toBe(attrs.name);
     expect(user.email).toBe(attrs.email);
+    expect(user.createdAt).not.toBeNull();
+    expect(user.updatedAt).not.toBeNull();
+  });
 
+  test('create with empty attribute', async () => {
+    const attrs = { name: 'create' };
+    const user = await User.create(attrs);
+
+    expect(user.id).not.toBeNull();
+    expect(user.name).toBe(attrs.name);
+    expect(user.email).toBe(attrs.email);
     expect(user.createdAt).not.toBeNull();
     expect(user.updatedAt).not.toBeNull();
   });
@@ -66,7 +76,7 @@ export function testAdapter(Base) {
     };
 
     // TODO
-    const empty = await User.findBy(attrs);
+    const empty = await User.findBy({ name: attrs.name });
     // expect(empty).toBeNull();
 
     const user = await User.create(attrs);

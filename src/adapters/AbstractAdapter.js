@@ -529,6 +529,7 @@ export default class AbstractAdapter {
     return this._typeCast(value);
   }
 
+  // todo: more type casting
   _typeCast(value) {
     if (_.isString(value)) {
       return value;
@@ -536,9 +537,15 @@ export default class AbstractAdapter {
       return this.unquotedTrue;
     } else if (value === false) {
       return this.unquotedFalse;
+    } else if (_.isUndefined(value)) {
+      return null;
+    } else if (_.isNumber(value)) {
+      return value;
+    } else if (_.isDate(value)) {
+      return value;
     }
 
-    return value;
+    throw new Error('Typecast type error');
   }
 
   quoteTableName(tableName) {

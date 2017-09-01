@@ -107,7 +107,6 @@ export default class Mysql2Adapter extends AbstractAdapter {
             (err, results, fields) => {
               if (err) return reject(err);
               if (!fields) return resolve(results);
-
               const result = new Result(
                 fields.map(x => x.name),
                 results.map(x => _.values(x))
