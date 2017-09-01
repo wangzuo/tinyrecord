@@ -115,6 +115,10 @@ Array [
 ]
 `;
 
+exports[`group 1`] = `"SELECT \\"users\\".* FROM \\"users\\" GROUP BY name"`;
+
+exports[`limit 1`] = `"SELECT  \\"users\\".* FROM \\"users\\" WHERE \\"users\\".\\"name\\" = 'test' LIMIT 1"`;
+
 exports[`lookupCastType 1`] = `
 Integer {
   "limit": null,
@@ -188,6 +192,20 @@ Object {
 }
 `;
 
+exports[`offset 1`] = `"SELECT \\"users\\".* FROM \\"users\\" ORDER BY name ASC LIMIT -1 OFFSET 10"`;
+
+exports[`order 1`] = `"SELECT \\"users\\".* FROM \\"users\\" ORDER BY \\"users\\".\\"name\\" ASC"`;
+
+exports[`order 2`] = `"SELECT \\"users\\".* FROM \\"users\\" ORDER BY \\"users\\".\\"email\\" DESC"`;
+
+exports[`order 3`] = `"SELECT \\"users\\".* FROM \\"users\\" ORDER BY \\"users\\".\\"name\\" ASC, \\"users\\".\\"email\\" DESC"`;
+
+exports[`order 4`] = `"SELECT \\"users\\".* FROM \\"users\\" ORDER BY name"`;
+
+exports[`order 5`] = `"SELECT \\"users\\".* FROM \\"users\\" ORDER BY name DESC"`;
+
+exports[`order 6`] = `"SELECT \\"users\\".* FROM \\"users\\" ORDER BY name DESC, email"`;
+
 exports[`records 1`] = `Array []`;
 
 exports[`records 2`] = `
@@ -197,6 +215,8 @@ Array [
   },
 ]
 `;
+
+exports[`select 1`] = `"SELECT \\"users\\".\\"name\\", \\"users\\".\\"email\\", email as user_email FROM \\"users\\""`;
 
 exports[`table.type 1`] = `
 String {
@@ -258,3 +278,11 @@ Array [
   },
 ]
 `;
+
+exports[`where 1`] = `"SELECT \\"users\\".* FROM \\"users\\""`;
+
+exports[`where 2`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE \\"users\\".\\"name\\" = 'test'"`;
+
+exports[`where 3`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE \\"users\\".\\"name\\" = 'test' AND \\"users\\".\\"email\\" = 'test@example.com'"`;
+
+exports[`where 4`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE \\"users\\".\\"name\\" = 'test' AND \\"users\\".\\"email\\" = 'test@example.com'"`;

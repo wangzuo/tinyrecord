@@ -109,4 +109,51 @@ export function testAdapter(Base) {
     expect(data.name).toBe('update1');
     expect(data.email).toBe('update1@example.com');
   });
+
+  test('where', async () => {
+    expect(await User.all.toSql()).toMatchSnapshot();
+
+    expect(await User.where({ name: 'test' }).toSql()).toMatchSnapshot();
+
+    expect(
+      await User.where({ name: 'test' })
+        .where({ email: 'test@example.com' })
+        .toSql()
+    ).toMatchSnapshot();
+
+    expect(
+      await User.where({ name: 'test', email: 'test@example.com' }).toSql()
+    ).toMatchSnapshot();
+  });
+
+  test('limit', async () => {
+    expect(
+      await User.where({ name: 'test' }).limit(1).toSql()
+    ).toMatchSnapshot();
+  });
+
+  test('order', async () => {
+    expect(await User.order(['name']).toSql()).toMatchSnapshot();
+    expect(await User.order({ email: 'desc' }).toSql()).toMatchSnapshot();
+    expect(
+      await User.order(['name'], { email: 'desc' }).toSql()
+    ).toMatchSnapshot();
+    expect(await User.order('name').toSql()).toMatchSnapshot();
+    expect(await User.order('name DESC').toSql()).toMatchSnapshot();
+    expect(await User.order('name DESC, email').toSql()).toMatchSnapshot();
+  });
+
+  test('select', async () => {
+    expect(
+      await User.select(['name'], ['email'], 'email as user_email').toSql()
+    ).toMatchSnapshot();
+  });
+
+  test('group', async () => {
+    expect(await User.group(['name']).toSql()).toMatchSnapshot();
+  });
+
+  test('offset', async () => {
+    expect(await User.offset(10).order('name ASC').toSql()).toMatchSnapshot();
+  });
 }
