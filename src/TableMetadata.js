@@ -32,12 +32,14 @@ export default class TableMetadata {
     return this.arelTable.columnName(columnName);
   }
 
-  async type(columnName) {
-    if (this.klass) {
-      return await this.klass.typeForAttribute(columnName); // promise
-    }
-    // todo
-    return Type.defaultValue;
+  type(columnName) {
+    return () => {
+      if (this.klass) {
+        return this.klass.typeForAttribute(columnName);
+      }
+      // todo
+      return Type.defaultValue;
+    };
   }
 
   hasColumn(columnName) {

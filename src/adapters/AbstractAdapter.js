@@ -161,9 +161,7 @@ export default class AbstractAdapter {
     if (arel.ast) {
       // TODO resolve QueryAttribute type
       for (const bind of binds) {
-        if (bind instanceof QueryAttribute) {
-          bind.type = await bind.type;
-        }
+        bind.type = _.isFunction(bind.type) ? await bind.type() : bind.type;
       }
 
       const collected = this.visitor.accept(arel.ast, this.collector);

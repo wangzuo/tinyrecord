@@ -9,6 +9,15 @@ export function testAdapter(Base) {
     static tableName = 'users';
   }
 
+  test('table.type', async () => {
+    const table = User.tableMetadata;
+    const name = table.type('name');
+    const email = table.type('email');
+
+    expect(await name()).toMatchSnapshot();
+    expect(await email()).toMatchSnapshot();
+  });
+
   test('tables', async () => {
     const tables = await Base.connection.tables();
     expect(tables).toEqual(['users']);
@@ -28,18 +37,19 @@ export function testAdapter(Base) {
   test('create', async () => {
     expect(User.recordTimestamps).toBe(true);
 
-    const user = await User.create({ name: 'test', email: 'test@example.com' });
+    const attrs = { name: 'create', email: 'create@example.com' };
+    const user = await User.create(attrs);
 
     expect(user.id).not.toBeNull();
-    expect(user.name).toBe('test');
-    expect(user.email).toBe('test@example.com');
+    expect(user.name).toBe(attrs.name);
+    expect(user.email).toBe(attrs.email);
 
     expect(user.createdAt).not.toBeNull();
     expect(user.updatedAt).not.toBeNull();
   });
 
   test('find', async () => {
-    const user = await User.create({ name: 'test', email: 'test@example.com' });
+    const user = await User.create({ name: 'find', email: 'find@example.com' });
     const data = await User.find(user.id);
 
     expect(data.id).toBe(user.id);
@@ -50,30 +60,53 @@ export function testAdapter(Base) {
   });
 
   test('findBy', async () => {
-    const user = await User.create({
+    const attrs = {
       name: 'findBy',
       email: 'findBy@example.com'
-    });
-    const data = await User.findBy({
-      name: 'findBy',
-      email: 'findBy@example.com'
-    });
+    };
+
+    // TODO
+    const empty = await User.findBy(attrs);
+    // expect(empty).toBeNull();
+
+    const user = await User.create(attrs);
+    const data = await User.findBy(attrs);
 
     expect(data.id).toBe(user.id);
-    expect(data.name).toBe(user.name);
-    expect(data.email).toBe(user.email);
+    expect(data.name).toBe(attrs.name);
+    expect(data.email).toBe(attrs.email);
     expect(data.createdAt).not.toBeNull();
     expect(data.updatedAt).not.toBeNull();
   });
 
+  test('findOrCreateBy', async () => {
+    const attrs = {
+      name: 'findOrCreateBy',
+      email: 'findOrCreateBy@example.com'
+    };
+
+    const user1 = await User.findOrCreateBy(attrs);
+    const user2 = await User.findOrCreateBy(attrs);
+
+    expect(user1.id).not.toBeNull();
+    expect(user1.name).toBe(attrs.name);
+    expect(user1.email).toBe(attrs.email);
+    expect(user1.createdAt).not.toBeNull();
+    expect(user1.updatedAt).not.toBeNull();
+    expect(user2.id).toBe(user1.id);
+  });
+
   test('update', async () => {
-    const user = await User.create({ name: 'test', email: 'test@example.com' });
-    await user.update({ name: 'test1', email: 'test1@example.com' });
-    expect(user.name).toBe('test1');
-    expect(user.email).toBe('test1@example.com');
+    const user = await User.create({
+      name: 'update',
+      email: 'update@example.com'
+    });
+    await user.update({ name: 'update1', email: 'update1@example.com' });
+    expect(user.name).toBe('update1');
+    expect(user.email).toBe('update1@example.com');
 
     const data = await User.find(user.id);
-    expect(data.name).toBe('test1');
-    expect(data.email).toBe('test1@example.com');
+    expect(data.name).toBe('update1');
+    expect(data.email).toBe('update1@example.com');
   });
 }

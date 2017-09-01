@@ -76,7 +76,7 @@ export default class StatementCache {
   async execute(params, klass, connection, block) {
     // TODO: resolve type promise
     for (const bind of this.bindMap.boundAttributes) {
-      bind.type = await bind.type;
+      bind.type = _.isFunction(bind.type) ? await bind.type() : bind.type;
     }
 
     const bindValues = this.bindMap.bind(params);

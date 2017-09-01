@@ -530,12 +530,10 @@ export default class Base {
   static defineMethodAttribute(attrName) {
     Object.defineProperty(this.prototype, attrName, {
       get() {
-        // console.log('get', attrName);
         return this.attributes.fetchValue(attrName);
       },
       set(value) {
         // todo
-        // console.log('set', attrName, value);
         this.attributes.writeFromUser(attrName, value);
       }
     });
@@ -648,7 +646,6 @@ export default class Base {
   static raiseIfBindArityMismatch() {}
 
   // quering
-
   static async findBySql(sql, binds = [], options = {}, block) {
     const preparable = options.preparable || null;
     const resultSet = await this.connection.selectAll(
@@ -687,6 +684,10 @@ export default class Base {
 
   static offset(...args) {
     return this.all.offset(...args);
+  }
+
+  static async findOrCreateBy(...args) {
+    return await this.all.findOrCreateBy(...args);
   }
 
   // scoping

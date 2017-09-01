@@ -26,15 +26,11 @@ test('logger', () => {
   expect(User.connection.logger).not.toBeNull();
 });
 
-test('tableMetadata', async () => {
-  expect(await User.tableMetadata.type('name')).toMatchSnapshot();
-  expect(await User.tableMetadata.type('email')).toMatchSnapshot();
-});
-
 test('loadSchema', async () => {
   await User.loadSchema();
 });
 
+// todo: test views
 test('views', async () => {
   const views = await Base.connection.views();
   expect(views).toEqual([]);

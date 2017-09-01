@@ -51,6 +51,7 @@ export default class PredicateBuilder {
   // private
 
   buildBindAttribute(columnName, value) {
-    return new QueryAttribute(columnName, value, this.table.type(columnName));
+    const type = this.table.type(columnName);
+    return new QueryAttribute(columnName, value, type);
   }
 }

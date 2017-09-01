@@ -171,15 +171,25 @@ export default class Relation {
     return this.new(...args);
   }
 
-  create(...args) {}
+  async create(...args) {
+    return await this.klass.create(...args);
+  }
+
   create_(...args) {}
 
-  firstOrCreate(attributes = null, block) {}
-  firstOrCreate_(attributes = null, block) {}
+  async firstOrCreate(attributes = null, block) {}
+  async firstOrCreate_(attributes = null, block) {}
 
   firstOrInitialize(attributes = null, block) {}
 
-  findOrCreateBy() {}
+  async findOrCreateBy(attributes, block) {
+    return (
+      // todo: relation.findBy
+      (await this.klass.findBy(attributes)) ||
+      (await this.create(attributes, block))
+    );
+  }
+
   findOrCreateBy_() {}
 
   findOrInitializeBy() {}
@@ -411,7 +421,9 @@ export default class Relation {
   }
 
   find(...args) {}
+
   findBy(arg, ...args) {}
+
   take(limit = null) {}
   first(limit = null) {}
   last(limit = null) {}

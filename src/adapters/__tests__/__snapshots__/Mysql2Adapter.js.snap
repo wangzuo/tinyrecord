@@ -159,3 +159,19 @@ Object {
   "updatedAt": undefined,
 }
 `;
+
+exports[`table.type 1`] = `
+Value {
+  "limit": null,
+  "precision": null,
+  "scale": null,
+}
+`;
+
+exports[`table.type 2`] = `
+Value {
+  "limit": null,
+  "precision": null,
+  "scale": null,
+}
+`;
