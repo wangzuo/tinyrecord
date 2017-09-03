@@ -10,6 +10,7 @@ import TypeMap from '../type/TypeMap';
 import * as Type from '../Type';
 import SqlTypeMetadata from './SqlTypeMetadata';
 import QueryAttribute from '../relation/QueryAttribute';
+import SchemaMigration from '../SchemaMigration';
 
 class Version {}
 
@@ -451,8 +452,30 @@ export default class AbstractAdapter {
     throw new Error('renameColumn is not implemented');
   }
 
-  addIndex(tableName, columnName, options = {}) {}
-  removeIndex(tableName, options = {}) {}
+  async addIndex(tableName, columnName, options = {}) {
+    const [
+      indexName,
+      indexType,
+      indexColumns,
+      indexOptions
+    ] = this.addIndexOptions(tableName, columnName, options);
+
+    await this.execute(
+      `CREATE ${indexType} INDEX ${this.quoteColumnName(
+        indexName
+      )} ON ${this.quoteTableName(tableName)} (${indexColumns}${indexOptions})`
+    );
+  }
+
+  async removeIndex(tableName, options = {}) {
+    const indexName = this.indexNameforRemove(tableName, options);
+    await this.execute(
+      `DROP INDEX ${this.quoteColumnName(indexName)} ON ${this.quoteTableName(
+        tableName
+      )}`
+    );
+  }
+
   renameIndex(tableName, oldName, newName) {}
   indexName(tableName, options) {}
   indexNameExists(tableName, indexName, _default = null) {}
@@ -472,6 +495,8 @@ export default class AbstractAdapter {
     await this.removeColumn(tableName, 'createdAt');
   }
 
+  addIndexOptions(tableName, columnName, options = {}) {}
+
   foreignKeys(tableName) {
     throw new Error('foreignKeys is not implemented');
   }
@@ -482,7 +507,25 @@ export default class AbstractAdapter {
   foreignKeyColumnFor(tableName) {}
   foreignKeyOptions(fromTable, toTable) {}
 
-  dumpSchemaInformatin() {}
+  async dumpSchemaInformatin() {
+    const versions = await SchemaMigration.allVersions();
+    if (!_.isEmpty(versions)) {
+      await this.insertVersionsSql(versions);
+    }
+  }
+
+  async insertVersionsSql(versions) {
+    const smTable = this.quoteTableName(SchemaMigration.tableName);
+    if (_.isArray(versions)) {
+      sql = `INSERT INTO ${smTable} (version) VALUES\n${versions
+        .map(v => `(${this.quote(v)})`)
+        .join(',\n')};\n\n`;
+      return sql;
+    }
+
+    return `INSERT INTO ${smTable} (version) VALUES (${this.quote(versions)});`;
+  }
+
   initializeSchemaMigrationsTable() {}
   initializeInternalMetadataTable() {}
 

@@ -8,6 +8,11 @@ beforeAll(() => {
   });
 });
 
+test('SchemaMigration', () => {
+  expect(SchemaMigration.primaryKey).toBe('version');
+  expect(SchemaMigration.tableName).toBe('schema_migrations');
+});
+
 test('createTable', async () => {
   await SchemaMigration.createTable();
 });
