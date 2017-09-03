@@ -111,7 +111,7 @@ class LazyAttributeHash {
   assignDefaultValue(name) {
     const type = this.additionalTypes[name] || this.types[name];
 
-    if (this.values[name]) {
+    if (!_.isUndefined(this.values[name])) {
       const value = this.values[name];
       this.delegateHash[name] = Attribute.fromDatabase(name, value, type);
     } else if (this.types[name]) {

@@ -259,16 +259,29 @@ export default class Mysql2Adapter extends AbstractAdapter {
   }
 
   newColumnFromField(tableName, field) {
-    let _default = null; // todo
+    let _default = null;
+    let _defaultFunction = null;
 
-    const typeMetadata = this.fetchTypeMetadata(field.type);
+    const typeMetadata = this.fetchTypeMetadata(field.Type, field.Extra);
+
+    if (
+      typeMetadata.type === 'datetime' &&
+      field.Default === 'CURRENT_TIMESTAMP'
+    ) {
+      _default = null;
+      _defaultFunction = field.Default;
+    } else {
+      _default = field.Default;
+      _defaultFunction = null;
+    }
+
     return new Mysql2Column(
       field.Field,
       _default,
       typeMetadata,
       field.Null === 'YES',
       tableName,
-      null,
+      _defaultFunction,
       field.Collation,
       { comment: !_.isEmpty(field.Comment) }
     );

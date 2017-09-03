@@ -14,9 +14,8 @@ export default obj => {
     'timestamp',
     'virtual'
   ].forEach(columnType => {
-    obj[columnType] = (...args) => {
-      // const options = args[args.length - 1]; todo: options
-      args.forEach(name => obj.column(name, columnType));
+    obj[columnType] = (name, options) => {
+      obj.column(name, columnType, options);
     };
   });
 

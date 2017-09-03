@@ -15,7 +15,7 @@ process.on('unhandledRejection', err => {
   console.error(err);
 });
 
-// todo
+// todo: symbol()
 const NO_DEFAULT_PROVIDED = {};
 
 export default class Base {

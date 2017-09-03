@@ -2,6 +2,11 @@
 
 exports[`attributeTypes 1`] = `
 Object {
+  "age": Integer {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
   "createdAt": DateTime {
     "limit": null,
     "precision": null,
@@ -83,6 +88,22 @@ Array [
   Column {
     "collation": null,
     "comment": null,
+    "default": "0",
+    "defaultFunction": null,
+    "name": "age",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "integer",
+      "type": "integer",
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
     "default": null,
     "defaultFunction": null,
     "name": "createdAt",
@@ -129,6 +150,16 @@ Integer {
 
 exports[`new 1`] = `
 Object {
+  "age": FromDatabase {
+    "name": "age",
+    "originalAttribute": Object {},
+    "type": Integer {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": "0",
+  },
   "createdAt": FromDatabase {
     "name": "createdAt",
     "originalAttribute": Object {},
@@ -147,7 +178,7 @@ Object {
       "precision": null,
       "scale": null,
     },
-    "valueBeforeTypeCast": "test@example.com",
+    "valueBeforeTypeCast": "new@example.com",
   },
   "id": FromDatabase {
     "name": "id",
@@ -167,7 +198,7 @@ Object {
       "precision": null,
       "scale": null,
     },
-    "valueBeforeTypeCast": "test",
+    "valueBeforeTypeCast": "new",
   },
   "updatedAt": FromDatabase {
     "name": "updatedAt",
@@ -184,10 +215,11 @@ Object {
 
 exports[`new 2`] = `
 Object {
+  "age": 0,
   "createdAt": undefined,
-  "email": "test@example.com",
+  "email": "new@example.com",
   "id": undefined,
-  "name": "test",
+  "name": "new",
   "updatedAt": undefined,
 }
 `;
@@ -262,6 +294,14 @@ Array [
   },
   Object {
     "cid": 3,
+    "dflt_value": "0",
+    "name": "age",
+    "notnull": 0,
+    "pk": 0,
+    "type": "integer",
+  },
+  Object {
+    "cid": 4,
     "dflt_value": null,
     "name": "createdAt",
     "notnull": 1,
@@ -269,7 +309,7 @@ Array [
     "type": "datetime",
   },
   Object {
-    "cid": 4,
+    "cid": 5,
     "dflt_value": null,
     "name": "updatedAt",
     "notnull": 1,

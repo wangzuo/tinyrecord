@@ -29,9 +29,15 @@ export function testAdapter(Base) {
   });
 
   test('new', async () => {
-    const user = await User.new({ name: 'test', email: 'test@example.com' });
+    const attrs = { name: 'new', email: 'new@example.com' };
+    const user = await User.new(attrs);
+
     expect(user.attributes.attributes).toMatchSnapshot();
     expect(user.attributes).toMatchSnapshot();
+
+    expect(user.name).toBe(attrs.name);
+    expect(user.email).toBe(attrs.email);
+    expect(user.age).toBe(0);
   });
 
   test('create', async () => {
@@ -43,6 +49,7 @@ export function testAdapter(Base) {
     expect(user.id).not.toBeNull();
     expect(user.name).toBe(attrs.name);
     expect(user.email).toBe(attrs.email);
+    expect(user.age).toBe(0);
     expect(user.createdAt).not.toBeNull();
     expect(user.updatedAt).not.toBeNull();
   });
@@ -54,6 +61,7 @@ export function testAdapter(Base) {
     expect(user.id).not.toBeNull();
     expect(user.name).toBe(attrs.name);
     expect(user.email).toBe(attrs.email);
+    expect(user.age).toBe(0);
     expect(user.createdAt).not.toBeNull();
     expect(user.updatedAt).not.toBeNull();
   });
@@ -65,6 +73,7 @@ export function testAdapter(Base) {
     expect(data.id).toBe(user.id);
     expect(data.name).toBe(user.name);
     expect(data.email).toBe(user.email);
+    expect(data.age).toBe(0);
     expect(data.createdAt).not.toBeNull();
     expect(data.updatedAt).not.toBeNull();
   });

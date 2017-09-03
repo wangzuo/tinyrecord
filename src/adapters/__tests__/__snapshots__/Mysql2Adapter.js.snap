@@ -12,11 +12,11 @@ Array [
     "name": "id",
     "nil": false,
     "sqlTypeMetaData": Mysql2SqlTypeMetadata {
-      "limit": null,
+      "limit": 8,
       "precision": null,
       "scale": null,
-      "sqlType": null,
-      "type": null,
+      "sqlType": "bigint(20)",
+      "type": "integer",
     },
     "tableName": "users",
   },
@@ -30,10 +30,10 @@ Array [
     "name": "name",
     "nil": true,
     "sqlTypeMetaData": Mysql2SqlTypeMetadata {
-      "limit": null,
+      "limit": "255",
       "precision": null,
       "scale": null,
-      "sqlType": null,
+      "sqlType": "varchar(255)",
       "type": null,
     },
     "tableName": "users",
@@ -48,11 +48,29 @@ Array [
     "name": "email",
     "nil": true,
     "sqlTypeMetaData": Mysql2SqlTypeMetadata {
-      "limit": null,
+      "limit": "255",
       "precision": null,
       "scale": null,
-      "sqlType": null,
+      "sqlType": "varchar(255)",
       "type": null,
+    },
+    "tableName": "users",
+  },
+  Mysql2Column {
+    "collation": null,
+    "comment": Object {
+      "comment": false,
+    },
+    "default": "0",
+    "defaultFunction": null,
+    "name": "age",
+    "nil": true,
+    "sqlTypeMetaData": Mysql2SqlTypeMetadata {
+      "limit": "11",
+      "precision": null,
+      "scale": null,
+      "sqlType": "int(11)",
+      "type": "integer",
     },
     "tableName": "users",
   },
@@ -69,7 +87,7 @@ Array [
       "limit": null,
       "precision": null,
       "scale": null,
-      "sqlType": null,
+      "sqlType": "datetime",
       "type": null,
     },
     "tableName": "users",
@@ -87,7 +105,7 @@ Array [
       "limit": null,
       "precision": null,
       "scale": null,
-      "sqlType": null,
+      "sqlType": "datetime",
       "type": null,
     },
     "tableName": "users",
@@ -101,10 +119,20 @@ exports[`limit 1`] = `"SELECT  \`users\`.* FROM \`users\` WHERE \`users\`.\`name
 
 exports[`new 1`] = `
 Object {
+  "age": FromDatabase {
+    "name": "age",
+    "originalAttribute": Object {},
+    "type": Integer {
+      "limit": "11",
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": "0",
+  },
   "createdAt": FromDatabase {
     "name": "createdAt",
     "originalAttribute": Object {},
-    "type": Value {
+    "type": DateTime {
       "limit": null,
       "precision": null,
       "scale": null,
@@ -114,18 +142,18 @@ Object {
   "email": FromUser {
     "name": "email",
     "originalAttribute": Object {},
-    "type": Value {
-      "limit": null,
+    "type": String {
+      "limit": "255",
       "precision": null,
       "scale": null,
     },
-    "valueBeforeTypeCast": "test@example.com",
+    "valueBeforeTypeCast": "new@example.com",
   },
   "id": FromDatabase {
     "name": "id",
     "originalAttribute": Object {},
-    "type": Value {
-      "limit": null,
+    "type": Integer {
+      "limit": 8,
       "precision": null,
       "scale": null,
     },
@@ -134,17 +162,17 @@ Object {
   "name": FromUser {
     "name": "name",
     "originalAttribute": Object {},
-    "type": Value {
-      "limit": null,
+    "type": String {
+      "limit": "255",
       "precision": null,
       "scale": null,
     },
-    "valueBeforeTypeCast": "test",
+    "valueBeforeTypeCast": "new",
   },
   "updatedAt": FromDatabase {
     "name": "updatedAt",
     "originalAttribute": Object {},
-    "type": Value {
+    "type": DateTime {
       "limit": null,
       "precision": null,
       "scale": null,
@@ -156,10 +184,11 @@ Object {
 
 exports[`new 2`] = `
 Object {
+  "age": 0,
   "createdAt": undefined,
-  "email": "test@example.com",
+  "email": "new@example.com",
   "id": undefined,
-  "name": "test",
+  "name": "new",
   "updatedAt": undefined,
 }
 `;
@@ -181,16 +210,16 @@ exports[`order 6`] = `"SELECT \`users\`.* FROM \`users\` ORDER BY name DESC, ema
 exports[`select 1`] = `"SELECT \`users\`.\`name\`, \`users\`.\`email\`, email as user_email FROM \`users\`"`;
 
 exports[`table.type 1`] = `
-Value {
-  "limit": null,
+String {
+  "limit": "255",
   "precision": null,
   "scale": null,
 }
 `;
 
 exports[`table.type 2`] = `
-Value {
-  "limit": null,
+String {
+  "limit": "255",
   "precision": null,
   "scale": null,
 }

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class Value {
   constructor(options = {}) {
     this.precision = options.precision || null;
@@ -12,7 +14,7 @@ export default class Value {
   }
 
   cast(value) {
-    if (value) return this.castValue(value);
+    if (!_.isNull(value)) return this.castValue(value);
   }
 
   serialize(value) {

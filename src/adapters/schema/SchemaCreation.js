@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class SchemaCreation {
   constructor(conn) {
     this.conn = conn;
@@ -31,7 +33,7 @@ export default class SchemaCreation {
     o.sqlType = this.typeToSql(o.type, o.options);
     let columnSql = `${this.quoteColumnName(o.name)} ${o.sqlType}`;
     if (o.type !== 'primaryKey') {
-      columnSql = this.addColumnOptions(columnSql, o.options);
+      columnSql = this.addColumnOptions(columnSql, { ...o.options, column: o });
     }
 
     return columnSql;
@@ -86,7 +88,13 @@ export default class SchemaCreation {
   }
 
   addColumnOptions(sql, options) {
-    // TODO: default
+    // TODO: conn.options_include_default?
+    if (!_.isUndefined(options.default)) {
+      sql += ` DEFAULT ${this.quoteDefaultExpression(
+        options.default,
+        options.column
+      )}`;
+    }
 
     if (options.null === false) {
       sql += ' NOT NULL';

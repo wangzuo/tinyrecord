@@ -506,7 +506,7 @@ export default class AbstractAdapter {
       return `'${this.quoteString(value)}'`;
     } else if (value === true) {
       return this.quotedTrue;
-    } else if (value == false) {
+    } else if (value === false) {
       return this.quotedFalse;
     } else if (_.isNull(value)) {
       return 'NULL';
@@ -556,7 +556,14 @@ export default class AbstractAdapter {
     return `"${columnName}"`;
   }
 
-  quoteDefaultExpression() {}
+  quoteDefaultExpression(value, column) {
+    if (_.isFunction(value)) {
+      return value();
+    }
+
+    const type = this.lookupCastType(column.sqlType);
+    return this.quote(type.serialize(value));
+  }
 
   createTableDefinition(...args) {
     return new TableDefinition(...args);

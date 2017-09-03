@@ -48,7 +48,8 @@ const schema = new GraphQLSchema({
 
 test('resolve', async () => {
   await TinyRecord.Base.connection.createTable('users', { force: true }, t => {
-    t.string('name', 'email');
+    t.string('name');
+    t.string('email');
     t.timestamps();
   });
 

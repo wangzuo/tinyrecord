@@ -16,7 +16,9 @@ beforeAll(() => {
   });
 
   return Base.connection.createTable('users', { force: true }, t => {
-    t.string('name', 'email');
+    t.string('name');
+    t.string('email');
+    t.integer('age', { default: 0 });
     t.timestamps();
   });
 });

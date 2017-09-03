@@ -24,7 +24,7 @@ export default class Integer extends Value {
   castValue(value) {
     if (value === true) return 1;
     else if (value === false) return 0;
-    return value;
+    return _.toNumber(value);
   }
 
   ensureInRange(value) {}
