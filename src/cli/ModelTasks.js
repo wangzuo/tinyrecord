@@ -13,11 +13,19 @@ export default class ModelTasks {
     fs.writeFileSync(filepath, module);
   }
 
+  static modelName(name) {
+    return _.upperFirst(_.camelCase(name));
+  }
+
+  static tableName(name) {
+    return _.toLower(plural(_.snakeCase(name)));
+  }
+
   static create(name, attributes) {
-    MigrationTasks.create(`Create${_.capitalize(plural(name))}`, attributes);
+    const modelName = this.modelName(name);
+    MigrationTasks.create(`Create${plural(modelName)}`, attributes);
 
     const module = this.createModel(name, attributes);
-    const modelName = _.capitalize(name);
     const filename = `${modelName}.js`;
     const filepath = path.join(process.cwd(), 'models', filename);
 
@@ -27,8 +35,8 @@ export default class ModelTasks {
   }
 
   static createModel(name, attributes) {
-    const modelName = _.capitalize(name);
-    const tableName = _.toLower(plural(name));
+    const modelName = this.modelName(name);
+    const tableName = this.tableName(name);
     const module = `const { Base } = require('tinyrecord');
 
 class ${modelName} extends Base {}
