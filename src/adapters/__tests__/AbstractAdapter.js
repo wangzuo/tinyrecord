@@ -202,4 +202,12 @@ export function testAdapter(Base) {
   test('offset', async () => {
     expect(await User.offset(10).order('name ASC').toSql()).toMatchSnapshot();
   });
+
+  test('joins', async () => {
+    expect(
+      await User.joins(
+        'LEFT JOIN bookmarks ON bookmarks.user_id = users.id'
+      ).toSql()
+    ).toMatchSnapshot();
+  });
 }

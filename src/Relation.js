@@ -532,8 +532,13 @@ export default class Relation {
   unscope(...args) {}
   unscope_(...args) {}
 
-  joins(...args) {}
-  joins_(...args) {}
+  joins(...args) {
+    return this.joins_(...args);
+  }
+  joins_(...args) {
+    this.joinsValues = [...this.joinsValues, args];
+    return this;
+  }
 
   leftOuterJoins(...args) {}
   leftOuterJoins_(...args) {}
@@ -670,9 +675,9 @@ export default class Relation {
   buildArel() {
     const arel = new Arel.SelectManager(this.table);
 
-    // if (!isEmpty(this.joinsValues)) {
-    //   this.buildJoin(arel, flatten(this.joinsValues));
-    // }
+    if (!_.isEmpty(this.joinsValues)) {
+      this.buildJoins(arel, _.flatten(this.joinsValues));
+    }
 
     if (!this.whereClause.empty()) {
       arel.where(this.whereClause.ast);
@@ -728,11 +733,34 @@ export default class Relation {
     return this.buildJoinQuery(manager, buckets, new Arel.nodes.OuterJoin());
   }
 
-  buildJoins() {}
+  buildJoins(manager, joins) {
+    const buckets = _.groupBy(joins, join => {
+      if (_.isString(join)) {
+        return 'stringJoin';
+      } // TODO: else
+    });
 
-  buildJoinQuery(manager, buckets, joinType) {}
+    return this.buildJoinQuery(manager, buckets, Arel.nodes.InnerJoin);
+  }
 
-  convertJoinStringsToAst(table, joins) {}
+  buildJoinQuery(manager, buckets, joinType) {
+    buckets.default = [];
+    // TODO: more join type
+    // const associationJoins = buckets.associationJoin;
+    // const stashedAssociationJoins = buckets.stashedJoin;
+    // const joinNodes = buckets.joinNode;
+    const stringJoins = _.uniq(buckets.stringJoin.map(_.trim));
+    const joinList = this.convertJoinStringsToAst(manager, stringJoins);
+
+    manager.joinSources.push(...joinList);
+
+    return manager;
+  }
+
+  convertJoinStringsToAst(table, joins) {
+    // todo: flattern & reject
+    return joins.map(join => table.createStringJoin(Arel.sql(join)));
+  }
 
   buildSelect(arel) {
     if (_.isEmpty(this.selectValues)) {

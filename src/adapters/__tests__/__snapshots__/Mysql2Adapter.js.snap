@@ -115,6 +115,8 @@ Array [
 
 exports[`group 1`] = `"SELECT \`users\`.* FROM \`users\` GROUP BY name"`;
 
+exports[`joins 1`] = `"SELECT \`users\`.* FROM \`users\` LEFT JOIN bookmarks ON bookmarks.user_id = users.id"`;
+
 exports[`limit 1`] = `"SELECT  \`users\`.* FROM \`users\` WHERE \`users\`.\`name\` = 'test' LIMIT 1"`;
 
 exports[`new 1`] = `
