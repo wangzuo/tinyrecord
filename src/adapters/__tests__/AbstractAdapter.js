@@ -64,8 +64,8 @@ export function testAdapter(Base) {
     expect(user.name).toBe(attrs.name);
     expect(user.email).toBe(attrs.email);
     expect(user.age).toBe(0);
-    expect(user.createdAt).not.toBeNull();
-    expect(user.updatedAt).not.toBeNull();
+    expect(user.created_at).not.toBeNull();
+    expect(user.updated_at).not.toBeNull();
   });
 
   test('create with empty attribute', async () => {
@@ -76,8 +76,8 @@ export function testAdapter(Base) {
     expect(user.name).toBe(attrs.name);
     expect(user.email).toBe(attrs.email);
     expect(user.age).toBe(0);
-    expect(user.createdAt).not.toBeNull();
-    expect(user.updatedAt).not.toBeNull();
+    expect(user.created_at).not.toBeNull();
+    expect(user.updated_at).not.toBeNull();
   });
 
   test('find', async () => {
@@ -88,8 +88,8 @@ export function testAdapter(Base) {
     expect(data.name).toBe(user.name);
     expect(data.email).toBe(user.email);
     expect(data.age).toBe(0);
-    expect(data.createdAt).not.toBeNull();
-    expect(data.updatedAt).not.toBeNull();
+    expect(data.created_at).not.toBeNull();
+    expect(data.updated_at).not.toBeNull();
   });
 
   test('findBy', async () => {
@@ -108,8 +108,8 @@ export function testAdapter(Base) {
     expect(data.id).toBe(user.id);
     expect(data.name).toBe(attrs.name);
     expect(data.email).toBe(attrs.email);
-    expect(data.createdAt).not.toBeNull();
-    expect(data.updatedAt).not.toBeNull();
+    expect(data.created_at).not.toBeNull();
+    expect(data.updated_at).not.toBeNull();
   });
 
   test('findOrCreateBy', async () => {
@@ -124,8 +124,8 @@ export function testAdapter(Base) {
     expect(user1.id).not.toBeNull();
     expect(user1.name).toBe(attrs.name);
     expect(user1.email).toBe(attrs.email);
-    expect(user1.createdAt).not.toBeNull();
-    expect(user1.updatedAt).not.toBeNull();
+    expect(user1.created_at).not.toBeNull();
+    expect(user1.updated_at).not.toBeNull();
     expect(user2.id).toBe(user1.id);
   });
 

@@ -486,13 +486,13 @@ export default class AbstractAdapter {
   async addTimestamps(tableName, options = {}) {
     options.null = options.null || false;
 
-    await this.addColumn(tableName, 'createdAt', 'datetime', options);
-    await this.addColumn(tableName, 'updatedAt', 'datetime', options);
+    await this.addColumn(tableName, 'created_at', 'datetime', options);
+    await this.addColumn(tableName, 'updated_at', 'datetime', options);
   }
 
   async removeTimestamps(tableName, options = {}) {
-    await this.removeColumn(tableName, 'updatedAt');
-    await this.removeColumn(tableName, 'createdAt');
+    await this.removeColumn(tableName, 'updated_at');
+    await this.removeColumn(tableName, 'created_at');
   }
 
   addIndexOptions(tableName, columnName, options = {}) {}

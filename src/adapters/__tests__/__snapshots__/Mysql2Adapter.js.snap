@@ -81,7 +81,7 @@ Array [
     },
     "default": null,
     "defaultFunction": null,
-    "name": "createdAt",
+    "name": "created_at",
     "nil": false,
     "sqlTypeMetaData": Mysql2SqlTypeMetadata {
       "limit": null,
@@ -99,7 +99,7 @@ Array [
     },
     "default": null,
     "defaultFunction": null,
-    "name": "updatedAt",
+    "name": "updated_at",
     "nil": false,
     "sqlTypeMetaData": Mysql2SqlTypeMetadata {
       "limit": null,
@@ -129,8 +129,8 @@ Object {
     },
     "valueBeforeTypeCast": "0",
   },
-  "createdAt": FromDatabase {
-    "name": "createdAt",
+  "created_at": FromDatabase {
+    "name": "created_at",
     "originalAttribute": Object {},
     "type": DateTime {
       "limit": null,
@@ -169,8 +169,8 @@ Object {
     },
     "valueBeforeTypeCast": "new",
   },
-  "updatedAt": FromDatabase {
-    "name": "updatedAt",
+  "updated_at": FromDatabase {
+    "name": "updated_at",
     "originalAttribute": Object {},
     "type": DateTime {
       "limit": null,
@@ -185,11 +185,11 @@ Object {
 exports[`new 2`] = `
 Object {
   "age": 0,
-  "createdAt": undefined,
+  "created_at": undefined,
   "email": "new@example.com",
   "id": undefined,
   "name": "new",
-  "updatedAt": undefined,
+  "updated_at": undefined,
 }
 `;
 

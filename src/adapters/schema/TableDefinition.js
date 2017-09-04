@@ -55,8 +55,8 @@ export default class TableDefinition {
       options.null = false;
     }
 
-    this.column('createdAt', 'datetime', options);
-    this.column('updatedAt', 'datetime', options);
+    this.column('created_at', 'datetime', options);
+    this.column('updated_at', 'datetime', options);
     return this;
   }
 

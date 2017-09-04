@@ -7,7 +7,7 @@ Object {
     "precision": null,
     "scale": null,
   },
-  "createdAt": DateTime {
+  "created_at": DateTime {
     "limit": null,
     "precision": null,
     "scale": null,
@@ -27,7 +27,7 @@ Object {
     "precision": null,
     "scale": null,
   },
-  "updatedAt": DateTime {
+  "updated_at": DateTime {
     "limit": null,
     "precision": null,
     "scale": null,
@@ -106,7 +106,7 @@ Array [
     "comment": null,
     "default": null,
     "defaultFunction": null,
-    "name": "createdAt",
+    "name": "created_at",
     "nil": false,
     "sqlTypeMetaData": SqlTypeMetadata {
       "limit": null,
@@ -122,7 +122,7 @@ Array [
     "comment": null,
     "default": null,
     "defaultFunction": null,
-    "name": "updatedAt",
+    "name": "updated_at",
     "nil": false,
     "sqlTypeMetaData": SqlTypeMetadata {
       "limit": null,
@@ -160,8 +160,8 @@ Object {
     },
     "valueBeforeTypeCast": "0",
   },
-  "createdAt": FromDatabase {
-    "name": "createdAt",
+  "created_at": FromDatabase {
+    "name": "created_at",
     "originalAttribute": Object {},
     "type": DateTime {
       "limit": null,
@@ -200,8 +200,8 @@ Object {
     },
     "valueBeforeTypeCast": "new",
   },
-  "updatedAt": FromDatabase {
-    "name": "updatedAt",
+  "updated_at": FromDatabase {
+    "name": "updated_at",
     "originalAttribute": Object {},
     "type": DateTime {
       "limit": null,
@@ -216,11 +216,11 @@ Object {
 exports[`new 2`] = `
 Object {
   "age": 0,
-  "createdAt": undefined,
+  "created_at": undefined,
   "email": "new@example.com",
   "id": undefined,
   "name": "new",
-  "updatedAt": undefined,
+  "updated_at": undefined,
 }
 `;
 
@@ -303,7 +303,7 @@ Array [
   Object {
     "cid": 4,
     "dflt_value": null,
-    "name": "createdAt",
+    "name": "created_at",
     "notnull": 1,
     "pk": 0,
     "type": "datetime",
@@ -311,7 +311,7 @@ Array [
   Object {
     "cid": 5,
     "dflt_value": null,
-    "name": "updatedAt",
+    "name": "updated_at",
     "notnull": 1,
     "pk": 0,
     "type": "datetime",

@@ -49,8 +49,8 @@ test('attributeNames', async () => {
     'name',
     'email',
     'age',
-    'createdAt',
-    'updatedAt'
+    'created_at',
+    'updated_at'
   ]);
 });
 

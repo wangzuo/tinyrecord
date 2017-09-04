@@ -466,7 +466,7 @@ export default class Base {
     // todo: timestamps
     if (this.constructor.recordTimestamps) {
       const currentTime = new Date();
-      ['createdAt', 'updatedAt'].forEach(column => {
+      ['created_at', 'updated_at'].forEach(column => {
         this[column] = currentTime;
       });
     }
