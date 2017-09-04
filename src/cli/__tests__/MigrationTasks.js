@@ -5,11 +5,18 @@ test('parseName', () => {
     template: 'createTable',
     tableName: 'posts'
   });
+
+  expect(MigrationTasks.parseName('CreateSearchHistories')).toEqual({
+    template: 'createTable',
+    tableName: 'search_histories'
+  });
+
   expect(MigrationTasks.parseName('AddTitleToPosts')).toEqual({
     template: 'migration',
     tableName: 'posts',
     action: 'add'
   });
+
   expect(MigrationTasks.parseName('RemoveTitleFromPosts')).toEqual({
     template: 'migration',
     tableName: 'posts',

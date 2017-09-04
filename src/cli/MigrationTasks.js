@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import { plural } from 'pluralize';
 import fs from 'fs';
 import path from 'path';
 import moment from 'moment';
@@ -68,7 +70,10 @@ ${attributes
   static parseName(name) {
     const m1 = name.match(/^create(.+)/i);
     if (m1) {
-      return { template: 'createTable', tableName: m1[1].toLowerCase() };
+      return {
+        template: 'createTable',
+        tableName: _.toLower(plural(_.snakeCase(m1[1])))
+      };
     }
 
     const m2 = name.match(/^(add|remove).*(?:to|from)(.*)/i);

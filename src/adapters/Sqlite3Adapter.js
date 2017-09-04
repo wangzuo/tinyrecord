@@ -11,7 +11,7 @@ const NATIVE_DATABASE_TYPES = {
   integer: { name: 'integer' },
   float: { name: 'float' },
   decimal: { name: 'decimal' },
-  datetime: { name: 'datetime' }, // todo: datetime not null
+  datetime: { name: 'datetime' },
   time: { name: 'time' },
   date: { name: 'date' },
   binary: { name: 'blob' },
