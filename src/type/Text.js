@@ -1,3 +1,7 @@
-import Value from './Value';
+import String from './String';
 
-export default class Text extends Value {}
+export default class Text extends String {
+  get type() {
+    return 'text';
+  }
+}
