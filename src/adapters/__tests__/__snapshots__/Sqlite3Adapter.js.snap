@@ -56,7 +56,7 @@ Array [
   Column {
     "collation": null,
     "comment": null,
-    "default": null,
+    "default": "untitled",
     "defaultFunction": null,
     "name": "name",
     "nil": true,
@@ -278,7 +278,7 @@ Array [
   },
   Object {
     "cid": 1,
-    "dflt_value": null,
+    "dflt_value": "'untitled'",
     "name": "name",
     "notnull": 0,
     "pk": 0,

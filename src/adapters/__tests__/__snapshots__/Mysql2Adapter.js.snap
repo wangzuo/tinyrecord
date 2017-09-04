@@ -25,7 +25,7 @@ Array [
     "comment": Object {
       "comment": false,
     },
-    "default": null,
+    "default": "untitled",
     "defaultFunction": null,
     "name": "name",
     "nil": true,

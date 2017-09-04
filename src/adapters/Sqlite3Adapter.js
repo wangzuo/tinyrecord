@@ -167,18 +167,20 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   }
 
   newColumnFromField(tableName, field) {
-    let _default = null;
+    const _default = (() => {
+      if (_.isNull(field.dflt_value)) return null;
 
-    if (_.isNull(field.dflt_value)) {
-      _default = null;
-    } else if (field.dflt_value.match(/^null$/i)) {
-      _default = null;
-    } else if (field.dflt_value.match(/^'(.*)'$/m)) {
-      // todo
-    } else if (field.dflt_value.match(/^"(.*)"$/m)) {
-    } else {
-      _default = field.dflt_value;
-    }
+      const m1 = field.dflt_value.match(/^null$/i);
+      if (m1) return null;
+
+      const m2 = field.dflt_value.match(/^'(.*)'$/m);
+      if (m2) return m2[1];
+
+      const m3 = field.dflt_value.match(/^"(.*)"$/m);
+      if (m3) return m3[1];
+
+      return field.dflt_value;
+    })();
 
     const typeMetadata = this.fetchTypeMetadata(field.type);
     return new Column(

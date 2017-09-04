@@ -40,6 +40,20 @@ export function testAdapter(Base) {
     expect(user.age).toBe(0);
   });
 
+  test('default columns', async () => {
+    const attrs = { email: 'default@example.com' };
+    const user = await User.new(attrs);
+    expect(user.name).toBe('untitled');
+    expect(user.age).toBe(0);
+    expect(user.email).toBe(attrs.email);
+
+    await user.save();
+    const data = await User.find(user.id);
+    expect(data.name).toBe('untitled');
+    expect(data.age).toBe(0);
+    expect(data.email).toBe(attrs.email);
+  });
+
   test('create', async () => {
     expect(User.recordTimestamps).toBe(true);
 
