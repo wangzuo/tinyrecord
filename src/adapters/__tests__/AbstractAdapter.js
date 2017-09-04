@@ -129,6 +129,19 @@ export function testAdapter(Base) {
     expect(data.email).toBe('update1@example.com');
   });
 
+  test('increment', async () => {
+    const user1 = await User.new();
+    user1.increment('age');
+    expect(user1.age).toBe(1);
+
+    const user2 = await User.new({ name: 'increment', age: 10 });
+    user2.increment('age');
+    expect(user2.age).toBe(11);
+    await user2.save();
+    const data = await User.find(user2.id);
+    expect(data.age).toBe(11);
+  });
+
   test('where', async () => {
     expect(await User.all.toSql()).toMatchSnapshot();
 
