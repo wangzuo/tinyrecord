@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as Arel from 'arel';
+import util from 'util';
 import Logger from './Logger';
 import * as TypeCaster from './TypeCaster';
 import AttributeSet, { Builder } from './AttributeSet';
@@ -672,18 +673,26 @@ export default class Base {
   static sanitizeSqlArray(ary) {
     const [statement, ...values] = ary;
 
-    if (statement.includes('?')) {
+    if (_.isObject(values[0]) && statement.match(/:\w+/)) {
+      return this.replaceNamedBindVariables(statement, values[0]);
+    } else if (statement.includes('?')) {
       return this.replaceBindVariables(statement, values);
+    } else if (_.isEmpty(statement)) {
+      return statement;
     } else {
+      return util.format(
+        statement,
+        ...values.map(value => this.connection.quoteString(_.toString(value)))
+      );
+      return statement;
     }
   }
 
   static replaceBindVariables(statement, values) {
     const bound = _.clone(values);
-    const c = this.connection;
 
     return statement.replace(/\?/g, () =>
-      this.replaceBindVariable(bound.shift(), c)
+      this.replaceBindVariable(bound.shift())
     );
   }
 
@@ -692,7 +701,17 @@ export default class Base {
     return this.quoteBoundValue(value, c);
   }
 
-  static replaceNamedBindVariables() {}
+  static replaceNamedBindVariables(statement, bindVars) {
+    return statement.replace(/(:?):([a-zA-Z]\w*)/g, (match, p1, p2) => {
+      if (p1 === ':') {
+        return match; // todo: postgresql casts
+      } else if (_.has(bindVars, p2)) {
+        return this.replaceBindVariable(bindVars[p2]);
+      } else {
+        throw new Error(`missing value for :${match} in ${statement}`);
+      }
+    });
+  }
 
   static quoteBoundValue(value, c) {
     return c.quote(value);

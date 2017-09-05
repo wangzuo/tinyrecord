@@ -540,8 +540,9 @@ export default class AbstractAdapter {
     return this._quote(value);
   }
 
+  // todo: escaping any ' (single quote) and \ (backslash)
   quoteString(s) {
-    return s;
+    return s.replace(/\\/, '\\\\').replace(/'/, "''");
   }
 
   _quote(value) {
