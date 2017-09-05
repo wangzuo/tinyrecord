@@ -92,6 +92,7 @@ export function testAdapter(Base) {
     const user = await User.create({ name: 'find', email: 'find@example.com' });
     const data = await User.find(user.id);
 
+    expect(data.newRecord()).toBe(false);
     expect(data.id).toBe(user.id);
     expect(data.name).toBe(user.name);
     expect(data.email).toBe(user.email);
@@ -128,6 +129,10 @@ export function testAdapter(Base) {
 
     const user1 = await User.findOrCreateBy(attrs);
     const user2 = await User.findOrCreateBy(attrs);
+
+    // todo: isNewRecord()
+    expect(user1.newRecord()).toBe(false);
+    expect(user2.newRecord()).toBe(false);
 
     expect(user1.id).not.toBeNull();
     expect(user1.name).toBe(attrs.name);

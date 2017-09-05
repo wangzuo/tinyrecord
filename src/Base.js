@@ -379,6 +379,7 @@ export default class Base {
 
   initWith(coder) {
     this.attributes = coder.attributes;
+    this._newRecord = coder.newRecord;
     return this;
   }
 
