@@ -13,6 +13,9 @@ export default class WhereClauseFactory {
     let binds = [];
 
     if (_.isString(opts) || _.isArray(opts)) {
+      parts = [
+        this.klass.sanitizeSql(_.isEmpty(other) ? opts : [opts, ...other])
+      ];
     } else if (_.isPlainObject(opts)) {
       // const attributes = this.predicateBuilder.resolveColumnAliases(opts);
 

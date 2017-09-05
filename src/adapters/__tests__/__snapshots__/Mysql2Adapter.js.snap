@@ -244,3 +244,7 @@ exports[`where 2`] = `"SELECT \`users\`.* FROM \`users\` WHERE \`users\`.\`name\
 exports[`where 3`] = `"SELECT \`users\`.* FROM \`users\` WHERE \`users\`.\`name\` = 'test' AND \`users\`.\`email\` = 'test@example.com'"`;
 
 exports[`where 4`] = `"SELECT \`users\`.* FROM \`users\` WHERE \`users\`.\`name\` = 'test' AND \`users\`.\`email\` = 'test@example.com'"`;
+
+exports[`where 5`] = `"SELECT \`users\`.* FROM \`users\` WHERE (name = 'test') AND (age = 10)"`;
+
+exports[`where 6`] = `"SELECT \`users\`.* FROM \`users\` WHERE (id = 1)"`;

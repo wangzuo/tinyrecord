@@ -178,6 +178,12 @@ export function testAdapter(Base) {
     expect(
       await User.where({ name: 'test', email: 'test@example.com' }).toSql()
     ).toMatchSnapshot();
+
+    expect(
+      await User.where('name = ?', 'test').where('age = ?', 10).toSql()
+    ).toMatchSnapshot();
+
+    expect(await User.where('id = 1').toSql()).toMatchSnapshot();
   });
 
   test('limit', async () => {

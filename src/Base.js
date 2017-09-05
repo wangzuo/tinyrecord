@@ -652,6 +652,9 @@ export default class Base {
   // sanitization
 
   static sanitizeSqlForConditions(condition) {
+    if (_.isArray(condition)) {
+      return this.sanitizeSqlArray(condition);
+    }
     return condition;
   }
 
@@ -665,11 +668,36 @@ export default class Base {
   static expandHashConditionsForAggregates() {}
   static sanitizeSqlHashForAssignment() {}
   static sanitizeSqlLike() {}
-  static sanitizeSqlArray() {}
-  static replaceBindVariables() {}
-  static replaceBindVariable() {}
+
+  static sanitizeSqlArray(ary) {
+    const [statement, ...values] = ary;
+
+    if (statement.includes('?')) {
+      return this.replaceBindVariables(statement, values);
+    } else {
+    }
+  }
+
+  static replaceBindVariables(statement, values) {
+    const bound = _.clone(values);
+    const c = this.connection;
+
+    return statement.replace(/\?/g, () =>
+      this.replaceBindVariable(bound.shift(), c)
+    );
+  }
+
+  static replaceBindVariable(value, c) {
+    c = c || this.connection;
+    return this.quoteBoundValue(value, c);
+  }
+
   static replaceNamedBindVariables() {}
-  static quoteBoundValue() {}
+
+  static quoteBoundValue(value, c) {
+    return c.quote(value);
+  }
+
   static raiseIfBindArityMismatch() {}
 
   // quering
