@@ -6,16 +6,23 @@ class User extends Base {
   static tableName = 'users';
 }
 
-beforeAll(() => {
+beforeAll(async () => {
   Base.establishConnection({
     adapter: 'sqlite3',
     database: ':memory:'
   });
 
-  return Base.connection.createTable('users', { force: true }, t => {
+  await Base.connection.createTable('users', { force: true }, t => {
     t.string('name', { default: 'untitled' });
     t.string('email');
     t.integer('age', { default: 0 });
+    t.timestamps();
+  });
+
+  await Base.connection.createTable('posts', { force: true }, t => {
+    t.string('title');
+    t.text('content');
+    t.integer('user_id');
     t.timestamps();
   });
 });

@@ -138,7 +138,7 @@ Array [
 
 exports[`group 1`] = `"SELECT \\"users\\".* FROM \\"users\\" GROUP BY name"`;
 
-exports[`joins 1`] = `"SELECT \\"users\\".* FROM \\"users\\" LEFT JOIN bookmarks ON bookmarks.user_id = users.id"`;
+exports[`joins string 1`] = `"SELECT \\"users\\".* FROM \\"users\\" LEFT JOIN bookmarks ON bookmarks.user_id = users.id"`;
 
 exports[`limit 1`] = `"SELECT  \\"users\\".* FROM \\"users\\" WHERE \\"users\\".\\"name\\" = 'test' LIMIT 1"`;
 
@@ -153,6 +153,7 @@ Integer {
 exports[`new 1`] = `
 Object {
   "age": FromDatabase {
+    "_value": 0,
     "name": "age",
     "originalAttribute": Object {},
     "type": Integer {
@@ -173,6 +174,7 @@ Object {
     "valueBeforeTypeCast": null,
   },
   "email": FromUser {
+    "_value": "new@example.com",
     "name": "email",
     "originalAttribute": Object {},
     "type": String {
@@ -193,6 +195,7 @@ Object {
     "valueBeforeTypeCast": null,
   },
   "name": FromUser {
+    "_value": "new",
     "name": "name",
     "originalAttribute": Object {},
     "type": String {
@@ -245,7 +248,15 @@ exports[`records 1`] = `Array []`;
 exports[`records 2`] = `
 Array [
   User {
+    "_newRecord": true,
+    "_startTransactionState": Object {},
     "attributes": Object {},
+    "destroyed": false,
+    "destroyedByAssociation": null,
+    "markedForDestruction": false,
+    "proxy": [Circular],
+    "readonly": false,
+    "transactionState": null,
   },
 ]
 `;
@@ -318,6 +329,13 @@ Array [
     "pk": 0,
     "type": "datetime",
   },
+]
+`;
+
+exports[`tables 1`] = `
+Array [
+  "users",
+  "posts",
 ]
 `;
 

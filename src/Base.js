@@ -29,7 +29,9 @@ export default class Base {
   }
 
   // TODO: output attributeSet
-  inspect() {}
+  inspect() {
+    return this.attributes;
+  }
 
   static establishConnection(config) {
     const resolver = new Resolver({});
@@ -316,6 +318,7 @@ export default class Base {
     await this.defineAttributeMethods();
 
     const object = new this();
+    object.proxy = new Proxy(object, this.proxyHandlers);
     object.attributes = _.cloneDeep(this._defaultAttributes);
 
     object.initInternals();
@@ -328,8 +331,7 @@ export default class Base {
     if (block) block(object);
 
     // object._runInitializeCallbacks();
-
-    return object;
+    return object.proxy;
   }
 
   initInternals() {
@@ -345,7 +347,7 @@ export default class Base {
   initializeInternalsCallback() {}
 
   assignAttributes(attributes) {
-    Object.assign(this, attributes);
+    Object.assign(this.proxy, attributes);
   }
 
   static async create(attributes = null, block) {
@@ -370,7 +372,7 @@ export default class Base {
     const klass = this;
     const attributesBuilder = await klass.attributesBuilder();
     attributes = attributesBuilder.buildFromDatabase(attributes, columnTypes);
-    const object = new this();
+    const object = await this.new();
     return object.initWith({ attributes, newRecord: false }, block);
   }
 
@@ -516,28 +518,48 @@ export default class Base {
     if (this._attributeMethodsGenerated) return false;
 
     const attributeNames = await this.attributeNames();
-    for (const attrName of attributeNames) {
-      this.defineAttributeMethod(attrName);
-    }
+    // for (const attrName of attributeNames) {
+    //   this.defineAttributeMethod(attrName);
+    // }
+
+    this.proxyHandlers = {
+      get(record, attrName) {
+        if (Reflect.has(record, attrName)) {
+          return Reflect.get(record, attrName);
+        }
+
+        return record._readAttribute(attrName);
+      },
+      set(record, attrName, value) {
+        if (_.includes(attributeNames, attrName)) {
+          // todo: write
+          record.attributes.writeFromUser(attrName, value);
+        } else {
+          record[attrName] = value;
+        }
+
+        return true;
+      }
+    };
 
     this._attributeMethodsGenerated = true;
   }
 
-  static defineAttributeMethod(attrName) {
-    this.defineMethodAttribute(attrName);
-  }
+  // static defineAttributeMethod(attrName) {
+  //   this.defineMethodAttribute(attrName);
+  // }
 
-  static defineMethodAttribute(attrName) {
-    Object.defineProperty(this.prototype, attrName, {
-      get() {
-        return this.attributes.fetchValue(attrName);
-      },
-      set(value) {
-        // todo
-        this.attributes.writeFromUser(attrName, value);
-      }
-    });
-  }
+  // static defineMethodAttribute(attrName) {
+  //   Object.defineProperty(this.prototype, attrName, {
+  //     get() {
+  //       return this.attributes.fetchValue(attrName);
+  //     },
+  //     set(value) {
+  //       // todo
+  //       this.attributes.writeFromUser(attrName, value);
+  //     }
+  //   });
+  // }
 
   static undefineAttributeMethods() {}
   static instanceMethodAlreadyImplemented(methodName) {}
@@ -614,8 +636,13 @@ export default class Base {
     return this._readAttribute(name);
   }
 
-  _readAttribute(name) {
-    return this[name];
+  readAttribute(attrName, block) {
+    const name = attrName;
+    return this._readAttribute(name, block);
+  }
+
+  _readAttribute(attrName, block) {
+    return this.attributes.fetchValue(attrName, block);
   }
 
   static abstractClass() {

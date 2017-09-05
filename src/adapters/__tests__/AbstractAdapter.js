@@ -9,6 +9,10 @@ export function testAdapter(Base) {
     static tableName = 'users';
   }
 
+  class Post extends Base {
+    static tableName = 'posts';
+  }
+
   test('table.type', async () => {
     const table = User.tableMetadata;
     const name = table.type('name');
@@ -20,7 +24,8 @@ export function testAdapter(Base) {
 
   test('tables', async () => {
     const tables = await Base.connection.tables();
-    expect(tables).toEqual(['users']);
+    expect(tables).toMatchSnapshot();
+    // expect(tables).toEqual(['posts', 'users']); // TODO: order
   });
 
   test('columns', async () => {
@@ -32,12 +37,15 @@ export function testAdapter(Base) {
     const attrs = { name: 'new', email: 'new@example.com' };
     const user = await User.new(attrs);
 
-    expect(user.attributes.attributes).toMatchSnapshot();
-    expect(user.attributes).toMatchSnapshot();
-
     expect(user.name).toBe(attrs.name);
     expect(user.email).toBe(attrs.email);
     expect(user.age).toBe(0);
+
+    expect(user.attributes.attributes).toMatchSnapshot();
+    expect(user.attributes).toMatchSnapshot();
+
+    expect(user.readAttribute('name')).toBe(attrs.name);
+    expect(user.readAttribute('email')).toBe(attrs.email);
   });
 
   test('default columns', async () => {
@@ -203,11 +211,30 @@ export function testAdapter(Base) {
     expect(await User.offset(10).order('name ASC').toSql()).toMatchSnapshot();
   });
 
-  test('joins', async () => {
+  test('joins string', async () => {
     expect(
       await User.joins(
         'LEFT JOIN bookmarks ON bookmarks.user_id = users.id'
       ).toSql()
     ).toMatchSnapshot();
+  });
+
+  test('joins', async () => {
+    const user = await User.create({ name: 'joins_user' });
+    const post = await Post.create({ title: 'joins_post', user_id: user.id });
+
+    const posts = await Post.joins(
+      'inner join users on users.id = posts.user_id'
+    )
+      .select('posts.*, users.name as user_name')
+      .where({ id: post.id })
+      .records();
+
+    expect(posts.length).toBe(1);
+
+    const data = posts[0];
+    expect(data.title).toBe('joins_post');
+    expect(data.user_id).toBe(user.id);
+    expect(data.user_name).toBe('joins_user');
   });
 }

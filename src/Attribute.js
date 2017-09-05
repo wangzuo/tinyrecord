@@ -147,7 +147,7 @@ class Null extends Attribute {
   }
 
   withValueFromDatabase(value) {
-    throw new Error(`can't write unknown attribe ${this.name}`);
+    throw new Error(`can't write unknown attribute ${this.name}`);
   }
 }
 

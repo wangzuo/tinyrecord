@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import Attribute from './Attribute';
+import Type from './Type';
 
+// todo: Proxy implementation
 export default class AttributeSet {
   constructor(attributes) {
     this.attributes = attributes;
@@ -97,6 +99,7 @@ class LazyAttributeHash {
   key(key) {}
 
   get(key) {
+    // todo: get then
     return this.delegateHash[key] || this.assignDefaultValue(key);
   }
 
@@ -109,7 +112,8 @@ class LazyAttributeHash {
   // private
 
   assignDefaultValue(name) {
-    const type = this.additionalTypes[name] || this.types[name];
+    const type =
+      this.additionalTypes[name] || this.types[name] || Type.defaultValue;
 
     if (!_.isUndefined(this.values[name])) {
       const value = this.values[name];

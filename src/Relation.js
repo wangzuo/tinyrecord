@@ -314,9 +314,8 @@ export default class Relation {
     if (!this.loaded) {
       // todo
       // resolve whereClause.binds type
-      for (let i = 0, l = this.whereClause.binds.length; i < l; i++) {
-        const type = this.whereClause.binds[i].type;
-        this.whereClause.binds[i].type = await type;
+      for (const bind of this.whereClause.binds) {
+        bind.type = _.isFunction(bind.type) ? await bind.type() : bind.type;
       }
 
       await this.execQueries(block);
