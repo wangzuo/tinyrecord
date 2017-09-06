@@ -1,4 +1,4 @@
-import isString from 'lodash/isString';
+import _ from 'lodash';
 import Value from './Value';
 
 export default class String extends Value {
@@ -13,9 +13,9 @@ export default class String extends Value {
   // private
 
   castValue(value) {
-    if (isString(value)) return value;
+    if (_.isString(value)) return value;
     else if (value === true) return 't';
     else if (value === false) return 'f';
-    return value.toString();
+    return _.toString(value); // todo: test null
   }
 }
