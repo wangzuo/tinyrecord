@@ -60,7 +60,7 @@ test('resolve', async () => {
     schema,
     `query {
       allUsers {
-        id
+        id name email
       }
       user(id: 1) {
         id name email
@@ -76,4 +76,9 @@ test('resolve', async () => {
 
   expect(users.length).toBe(2);
   expect(users.map(x => x.id)).toEqual([1, 2]);
+  expect(users.map(x => x.name)).toEqual(['test1', 'test2']);
+  expect(users.map(x => x.email)).toEqual([
+    'test1@example.com',
+    'test2@example.com'
+  ]);
 });
