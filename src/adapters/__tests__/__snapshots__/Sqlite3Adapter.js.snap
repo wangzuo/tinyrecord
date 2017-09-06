@@ -248,7 +248,7 @@ exports[`records 1`] = `Array []`;
 exports[`records 2`] = `
 Array [
   User {
-    "_newRecord": true,
+    "_newRecord": false,
     "_startTransactionState": Object {},
     "attributes": Object {},
     "destroyed": false,
