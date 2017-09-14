@@ -46,7 +46,7 @@ const sql = await Post.order({ id: 'asc' }).toSql();
 const posts = await Post.limit(10).records();
 ```
 
-#### Command
+#### Commands
 ``` sh
 tiny db:create
 tiny db:drop
