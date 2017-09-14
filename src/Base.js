@@ -765,6 +765,10 @@ export default class Base {
     return this.all.joins(...args);
   }
 
+  static limit(...args) {
+    return this.all.limit(...args);
+  }
+
   static async findOrCreateBy(...args) {
     return await this.all.findOrCreateBy(...args);
   }

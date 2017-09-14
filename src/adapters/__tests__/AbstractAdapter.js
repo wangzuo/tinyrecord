@@ -185,15 +185,21 @@ export function testAdapter(Base) {
     ).toMatchSnapshot();
 
     expect(
-      await User.where('name = ?', 'test').where('age = ?', 10).toSql()
+      await User.where('name = ?', 'test')
+        .where('age = ?', 10)
+        .toSql()
     ).toMatchSnapshot();
 
     expect(await User.where('id = 1').toSql()).toMatchSnapshot();
   });
 
   test('limit', async () => {
+    expect(await User.limit(1).toSql()).toMatchSnapshot();
+
     expect(
-      await User.where({ name: 'test' }).limit(1).toSql()
+      await User.where({ name: 'test' })
+        .limit(1)
+        .toSql()
     ).toMatchSnapshot();
   });
 
@@ -219,7 +225,11 @@ export function testAdapter(Base) {
   });
 
   test('offset', async () => {
-    expect(await User.offset(10).order('name ASC').toSql()).toMatchSnapshot();
+    expect(
+      await User.offset(10)
+        .order('name ASC')
+        .toSql()
+    ).toMatchSnapshot();
   });
 
   test('joins string', async () => {
