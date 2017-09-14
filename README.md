@@ -8,17 +8,27 @@
 
 #### Installation
 ``` sh
-npm i tinyrecord --save
-# yarn add tinyrecord
+yarn add tinyrecord
+# npm i tinyrecord --save
 ```
 
 #### Establish connection
 ``` javascript
 const { Base } = require('tinyrecord');
 
+// yarn add sqlite3
 Base.establishConnection({
   adapter: 'sqlite3',
   database: ':memory:'
+});
+
+// yarn add mysql2
+Base.establishConnection({
+  adapter: 'mysql2',
+  host: '127.0.0.1',
+  user: 'root',
+  password: '',
+  database: 'tinyrecord'
 });
 ```
 
