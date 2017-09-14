@@ -42,6 +42,7 @@ await post.update({ title: 'world' });
 
 #### Query
 ``` javascript
+const sql = await Post.order({ id: 'asc' }).toSql();
 const posts = await Post.limit(10).records();
 ```
 
