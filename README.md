@@ -46,6 +46,7 @@ module.exports = Post;
 ``` javascript
 const post = await Post.new({ title: 'hello' });
 await post.save();
+
 const post = await Post.create({ title: 'hello' });
 await post.update({ title: 'world' });
 ```
