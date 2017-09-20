@@ -5,6 +5,7 @@ import Result from '../Result';
 import Mysql2TableDefinition from './Mysql2TableDefinition';
 import Mysql2Column from './Mysql2Column';
 import Mysql2TypeMetadata from './Mysql2TypeMetadata';
+import * as Type from '../Type';
 
 const NATIVE_DATABASE_TYPES = {
   primaryKey: 'bigint auto_increment PRIMARY KEY',
@@ -135,13 +136,35 @@ export default class Mysql2Adapter extends AbstractAdapter {
     return result.insertId;
   }
 
-  quoteTableName(tableName) {
-    return `\`${tableName}\``;
-  }
+  // quoting
 
   quoteColumnName(columnName) {
     return `\`${columnName}\``;
   }
+
+  quoteTableName(tableName) {
+    return `\`${tableName}\``;
+  }
+
+  get quotedTrue() {
+    return '1';
+  }
+
+  get unquotedTrue() {
+    return 1;
+  }
+
+  get quotedFalse() {
+    return '0';
+  }
+
+  get unquotedFalse() {
+    return 0;
+  }
+
+  // todo
+  quotedDate(value) {}
+  quotedBinary(value) {}
 
   async createTable(tableName, options = {}, block) {
     return await super.createTable(
@@ -289,5 +312,27 @@ export default class Mysql2Adapter extends AbstractAdapter {
 
   fetchTypeMetadata(sqlType, extra = '') {
     return new Mysql2TypeMetadata(super.fetchTypeMetadata(sqlType), { extra });
+  }
+
+  // private
+
+  initializeTypeMap(m) {
+    super.initializeTypeMap(m);
+
+    // todo: more types
+    // this.registerClassWithLimit(m, /char/i, MysqlString);
+
+    m.registerType(/tinytext/i, new Type.Text({ limit: 2 ** 8 - 1 }));
+    // m.registerType(/tinyblob/i, new Type.Binary({ limit: 2 ** 8 - 1 }));
+    m.registerType(/text/i, new Type.Text({ limit: 2 ** 16 - 1 }));
+    // m.registerType(/blob/i, new Type.Binary({ limit: 2 ** 16 - 1 }));
+    m.registerType(/mediumtext/i, new Type.Text({ limit: 2 ** 24 - 1 }));
+    // m.registerType(/mediumblob/i, new Type.Binary({ limit: 2 ** 24 - 1 }));
+    m.registerType(/longtext/i, new Type.Text({ limit: 2 ** 32 - 1 }));
+    // m.registerType(/longblob/i, new Type.Binary({ limit: 2 ** 32 - 1 }));
+    m.registerType(/^float/i, new Type.Float({ limit: 24 }));
+    m.registerType(/^double/i, new Type.Float({ limit: 53 }));
+
+    m.registerType(/^tinyint\(1\)/i, new Type.Boolean());
   }
 }

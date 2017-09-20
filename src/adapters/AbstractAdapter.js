@@ -560,6 +560,22 @@ export default class AbstractAdapter {
     // return `'${value}'`;
   }
 
+  get quotedTrue() {
+    return "'t'";
+  }
+
+  get unquotedTrue() {
+    return 't';
+  }
+
+  get quotedFalse() {
+    return "'f'";
+  }
+
+  get unquotedFalse() {
+    return 'f';
+  }
+
   typeCastedBinds(binds) {
     if (_.isArray(binds[0])) {
       return binds.map(([column, value]) => this.typeCast(value, column));
@@ -675,6 +691,7 @@ export default class AbstractAdapter {
     return this.lookupCastType(column.sqlType);
   }
 
+  // TODO: tests
   lookupCastType(sqlType) {
     return this.typeMap.lookup(sqlType);
   }
