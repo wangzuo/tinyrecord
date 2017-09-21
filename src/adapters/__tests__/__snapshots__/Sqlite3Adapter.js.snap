@@ -1,7 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`attributeNames 1`] = `
+Array [
+  "id",
+  "name",
+  "email",
+  "age",
+  "active",
+  "created_at",
+  "updated_at",
+]
+`;
+
 exports[`attributeTypes 1`] = `
 Object {
+  "active": Boolean {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
   "age": Integer {
     "limit": null,
     "precision": null,
@@ -104,6 +121,22 @@ Array [
   Column {
     "collation": null,
     "comment": null,
+    "default": "t",
+    "defaultFunction": null,
+    "name": "active",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "boolean",
+      "type": "boolean",
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
     "default": null,
     "defaultFunction": null,
     "name": "created_at",
@@ -154,6 +187,16 @@ Integer {
 
 exports[`new 1`] = `
 Object {
+  "active": FromDatabase {
+    "name": "active",
+    "originalAttribute": Object {},
+    "type": Boolean {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": "t",
+  },
   "age": FromDatabase {
     "_value": 0,
     "name": "age",
@@ -222,6 +265,7 @@ Object {
 
 exports[`new 2`] = `
 Object {
+  "active": true,
   "age": 0,
   "created_at": undefined,
   "email": "new@example.com",
@@ -317,6 +361,14 @@ Array [
   },
   Object {
     "cid": 4,
+    "dflt_value": "'t'",
+    "name": "active",
+    "notnull": 0,
+    "pk": 0,
+    "type": "boolean",
+  },
+  Object {
+    "cid": 5,
     "dflt_value": null,
     "name": "created_at",
     "notnull": 1,
@@ -324,7 +376,7 @@ Array [
     "type": "datetime",
   },
   Object {
-    "cid": 5,
+    "cid": 6,
     "dflt_value": null,
     "name": "updated_at",
     "notnull": 1,

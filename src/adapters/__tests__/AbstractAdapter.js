@@ -72,28 +72,36 @@ export function testAdapter(Base) {
 
   test('default columns', async () => {
     const attrs = { email: 'default@example.com' };
+
     const user = await User.new(attrs);
     expect(user.name).toBe('untitled');
     expect(user.age).toBe(0);
     expect(user.email).toBe(attrs.email);
+    expect(user.active).toBe(true);
 
     await user.save();
     const data = await User.find(user.id);
     expect(data.name).toBe('untitled');
     expect(data.age).toBe(0);
     expect(data.email).toBe(attrs.email);
+    expect(user.active).toBe(true);
   });
 
   test('create', async () => {
     expect(User.recordTimestamps).toBe(true);
 
-    const attrs = { name: 'create', email: 'create@example.com' };
-    const user = await User.create(attrs);
+    const attrs = {
+      name: 'create',
+      email: 'create@example.com',
+      active: false
+    };
 
+    const user = await User.create(attrs);
     expect(user.id).not.toBeNull();
     expect(user.name).toBe(attrs.name);
     expect(user.email).toBe(attrs.email);
     expect(user.age).toBe(0);
+    expect(user.active).toBe(false);
     expect(user.created_at).not.toBeNull();
     expect(user.updated_at).not.toBeNull();
   });

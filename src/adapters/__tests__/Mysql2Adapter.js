@@ -19,6 +19,7 @@ beforeAll(async () => {
     t.string('name', { default: 'untitled' });
     t.string('email');
     t.integer('age', { default: 0 });
+    t.boolean('active', { default: true });
     t.timestamps();
   });
 

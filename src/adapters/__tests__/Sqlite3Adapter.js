@@ -16,6 +16,7 @@ beforeAll(async () => {
     t.string('name', { default: 'untitled' });
     t.string('email');
     t.integer('age', { default: 0 });
+    t.boolean('active', { default: true });
     t.timestamps();
   });
 
@@ -51,14 +52,7 @@ test('tableExists', async () => {
 });
 
 test('attributeNames', async () => {
-  expect(await User.attributeNames()).toEqual([
-    'id',
-    'name',
-    'email',
-    'age',
-    'created_at',
-    'updated_at'
-  ]);
+  expect(await User.attributeNames()).toMatchSnapshot();
 });
 
 test('attributeTypes', async () => {
