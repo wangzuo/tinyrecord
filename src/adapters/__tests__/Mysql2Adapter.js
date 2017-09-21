@@ -36,4 +36,19 @@ test('ADAPTER_NAME', () => {
   expect(Mysql2Adapter.ADAPTER_NAME).toBe('Mysql2');
 });
 
+test('typeToSql binary types', () => {
+  const adapter = User.connection;
+
+  expect(adapter.typeToSql('binary', { limit: 64 })).toBe('varbinary(64)');
+  expect(adapter.typeToSql('binary', { limit: 4095 })).toBe('varbinary(4095)');
+  expect(adapter.typeToSql('binary', { limit: 4096 })).toBe('blob');
+  expect(adapter.typeToSql('binary')).toBe('blob');
+});
+
+test('lookupCastType', () => {
+  const adapter = User.connection;
+
+  expect(adapter.lookupCastType('tinyint(1)')).toMatchSnapshot();
+});
+
 testAdapter(Base);

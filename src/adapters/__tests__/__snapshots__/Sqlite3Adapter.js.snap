@@ -341,6 +341,32 @@ Array [
 ]
 `;
 
+exports[`typeToSql 1`] = `"INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"`;
+
+exports[`typeToSql 2`] = `"varchar"`;
+
+exports[`typeToSql 3`] = `"text"`;
+
+exports[`typeToSql 4`] = `"integer"`;
+
+exports[`typeToSql 5`] = `"bigint"`;
+
+exports[`typeToSql 6`] = `"float"`;
+
+exports[`typeToSql 7`] = `"decimal"`;
+
+exports[`typeToSql 8`] = `"numeric"`;
+
+exports[`typeToSql 9`] = `"datetime"`;
+
+exports[`typeToSql 10`] = `"time"`;
+
+exports[`typeToSql 11`] = `"date"`;
+
+exports[`typeToSql 12`] = `"blob"`;
+
+exports[`typeToSql 13`] = `"boolean"`;
+
 exports[`where 1`] = `"SELECT \\"users\\".* FROM \\"users\\""`;
 
 exports[`where 2`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE \\"users\\".\\"name\\" = 'test'"`;

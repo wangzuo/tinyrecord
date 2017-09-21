@@ -33,6 +33,28 @@ export function testAdapter(Base) {
     expect(columns).toMatchSnapshot();
   });
 
+  test('typeToSql', () => {
+    const adapter = User.connection;
+
+    [
+      'primaryKey',
+      'string',
+      'text',
+      'integer',
+      'bigint',
+      'float',
+      'decimal',
+      'numeric',
+      'datetime',
+      'time',
+      'date',
+      'binary',
+      'boolean'
+    ].forEach(type => {
+      expect(adapter.typeToSql(type)).toMatchSnapshot();
+    });
+  });
+
   test('new', async () => {
     const attrs = { name: 'new', email: 'new@example.com' };
     const user = await User.new(attrs);

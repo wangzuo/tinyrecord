@@ -202,7 +202,11 @@ export default class Mysql2Adapter extends AbstractAdapter {
       } else if (type === 'blob') {
         this.binaryToSql(limit);
       } else if (type === 'binary') {
-        // todo
+        _.isNull(limit)
+          ? 'blob'
+          : limit >= 0 && limit <= 0xfff
+            ? `varbinary(${limit})`
+            : this.binaryToSql(limit);
       } else {
         super.typeToSql(type, options);
       }
@@ -231,13 +235,23 @@ export default class Mysql2Adapter extends AbstractAdapter {
     );
   }
 
-  // todo
   textToSql(limit) {
-    if (_.isNull(limit)) {
-      return 'text';
-    }
+    if (_.isNull(limit)) return 'text';
+    if (limit >= 0 && limit <= 0xff) return 'tinytext';
+    if (limit >= 0x100 && limit <= 0xffff) return 'text';
+    if (limit >= 0x10000 && limit <= 0xffffff) return 'mediumtext';
+    if (limit >= 0x1000000 && limit <= 0xffffffff) return 'longtext';
 
-    throw new Error(`No text type has btye length ${limit}`);
+    throw new Error(`No text type has byte length ${limit}`);
+  }
+
+  binaryToSql(limit) {
+    if (limit >= 0 && limit <= 0xff) return 'tinyblob';
+    if (limit >= 0x100 && limit <= 0xffff) return 'blob';
+    if (limit >= 0x10000 && limit <= 0xffffff) return 'mediumblob';
+    if (limit >= 0x1000000 && limit <= 0xffffffff) return 'longblob';
+
+    throw new Error(`No binary type has byte length ${limit}`);
   }
 
   dataSourceSql(name = null, options = {}) {

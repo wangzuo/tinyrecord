@@ -121,6 +121,14 @@ exports[`limit 1`] = `"SELECT  \`users\`.* FROM \`users\` LIMIT 1"`;
 
 exports[`limit 2`] = `"SELECT  \`users\`.* FROM \`users\` WHERE \`users\`.\`name\` = 'test' LIMIT 1"`;
 
+exports[`lookupCastType 1`] = `
+Boolean {
+  "limit": null,
+  "precision": null,
+  "scale": null,
+}
+`;
+
 exports[`new 1`] = `
 Object {
   "age": FromDatabase {
@@ -238,6 +246,32 @@ Array [
   "users",
 ]
 `;
+
+exports[`typeToSql 1`] = `"bigint auto_increment PRIMARY KEY"`;
+
+exports[`typeToSql 2`] = `"varchar(255)"`;
+
+exports[`typeToSql 3`] = `"text"`;
+
+exports[`typeToSql 4`] = `"int"`;
+
+exports[`typeToSql 5`] = `"bigint"`;
+
+exports[`typeToSql 6`] = `"float"`;
+
+exports[`typeToSql 7`] = `"decimal"`;
+
+exports[`typeToSql 8`] = `"numeric"`;
+
+exports[`typeToSql 9`] = `"datetime"`;
+
+exports[`typeToSql 10`] = `"time"`;
+
+exports[`typeToSql 11`] = `"date"`;
+
+exports[`typeToSql 12`] = `"blob"`;
+
+exports[`typeToSql 13`] = `"tinyint(1)"`;
 
 exports[`where 1`] = `"SELECT \`users\`.* FROM \`users\`"`;
 
