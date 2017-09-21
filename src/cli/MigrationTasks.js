@@ -46,7 +46,7 @@ class ${name} extends Migration {`;
 ${attributes
         .map(
           ({ name, type }) =>
-            `    await this.addColumn('${tableName}', '${name}', '${type}')`
+            `    await this.addColumn('${tableName}', '${name}', '${type}');`
         )
         .join('\n')}
   }`;

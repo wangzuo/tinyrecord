@@ -14,10 +14,10 @@ export default class Date extends Value {
   // private
 
   castValue(value) {
-    if (_.isString(value)) {
-      return moment(value).toDate();
-    } else if (_.isDate(value)) {
+    if (_.isDate(value)) {
       return value;
     }
+
+    return moment(value).toDate();
   }
 }

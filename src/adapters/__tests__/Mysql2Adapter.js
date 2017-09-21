@@ -40,15 +40,34 @@ test('lookupCastType', () => {
 });
 
 // todo: sqlite3 fix
-test('date type', async () => {
-  const user = await User.new({ birthday: '2012-01-18' });
-  expect(user.birthday.toDateString()).toBe('Wed Jan 18 2012');
+describe('date type', () => {
+  const moment = require('moment');
 
-  await user.save();
-  expect(user.birthday.toDateString()).toBe('Wed Jan 18 2012');
-  const record = await User.find(user.id);
+  it('handles string', async () => {
+    const user = await User.new({ birthday: '2012-01-18' });
+    expect(user.birthday.toDateString()).toBe('Wed Jan 18 2012');
 
-  expect(record.birthday.toDateString()).toBe('Wed Jan 18 2012');
+    await user.save();
+    expect(user.birthday.toDateString()).toBe('Wed Jan 18 2012');
+    const record = await User.find(user.id);
+    expect(record.birthday.toDateString()).toBe('Wed Jan 18 2012');
+  });
+
+  it('handles integer', async () => {
+    const user = await User.new({ birthday: 1504454400007 });
+    expect(user.birthday.toDateString()).toBe('Mon Sep 04 2017');
+  });
+
+  it('handles Date', async () => {
+    const user = await User.new({ birthday: moment('2012-01-18').toDate() });
+    expect(user.birthday.toDateString()).toBe('Wed Jan 18 2012');
+  });
+
+  // TODO
+  // it('handles null', async () => {
+  //   const user = await User.new({ birthday: null });
+  //   expect(user.birthday).toBeNull();
+  // });
 });
 
 testAdapter(Base);

@@ -21,7 +21,7 @@ exports[`migration 1`] = `
 
 class AddTitleToPosts extends Migration {
   async change() {
-    await this.addColumn('posts', 'title', 'string')
+    await this.addColumn('posts', 'title', 'string');
   }
 }
 
