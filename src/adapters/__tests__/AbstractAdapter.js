@@ -4,6 +4,24 @@ test('ADAPTER_NAME', () => {
   expect(AbstractAdapter.ADAPTER_NAME).toBe('Abstract');
 });
 
+export async function createTables(connection) {
+  await connection.createTable('users', { force: true }, t => {
+    t.string('name', { default: 'untitled' });
+    t.string('email');
+    t.integer('age', { default: 0 });
+    t.boolean('active', { default: true });
+    t.date('birthday');
+    t.timestamps();
+  });
+
+  await connection.createTable('posts', { force: true }, t => {
+    t.string('title');
+    t.text('content');
+    t.integer('user_id');
+    t.timestamps();
+  });
+}
+
 export function testAdapter(Base) {
   class User extends Base {
     static tableName = 'users';
@@ -85,6 +103,16 @@ export function testAdapter(Base) {
     expect(data.age).toBe(0);
     expect(data.email).toBe(attrs.email);
     expect(user.active).toBe(true);
+  });
+
+  test('boolean type', async () => {
+    const user = await User.new({ active: false });
+    expect(user.active).toBe(false);
+
+    await user.save();
+    expect(user.active).toBe(false);
+    const record = await User.find(user.id);
+    expect(record.active).toBe(false);
   });
 
   test('create', async () => {

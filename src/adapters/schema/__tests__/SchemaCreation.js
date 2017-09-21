@@ -9,6 +9,7 @@ function createTable(td) {
   td.integer('age', { default: 0 });
   td.text('bio');
   td.boolean('active', { default: true });
+  td.date('birthday');
   td.timestamps();
 }
 
@@ -20,7 +21,7 @@ describe('Sqlite3Adapter', () => {
     createTable(td);
 
     expect(conn.schemaCreation.accept(td)).toBe(
-      `CREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT 'Untitled', "email" varchar, "age" integer DEFAULT 0, "bio" text, "active" boolean DEFAULT 't', "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)`
+      `CREATE TABLE "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT 'Untitled', "email" varchar, "age" integer DEFAULT 0, "bio" text, "active" boolean DEFAULT 't', "birthday" date, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL)`
     );
   });
 });
@@ -33,7 +34,7 @@ describe('Mysql2Adapter', () => {
     createTable(td);
 
     expect(conn.schemaCreation.accept(td)).toBe(
-      "CREATE TABLE `users` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT 'Untitled', `email` varchar(255), `age` int DEFAULT 0, `bio` text, `active` tinyint(1) DEFAULT 1, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB"
+      "CREATE TABLE `users` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT 'Untitled', `email` varchar(255), `age` int DEFAULT 0, `bio` text, `active` tinyint(1) DEFAULT 1, `birthday` date, `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB"
     );
   });
 });

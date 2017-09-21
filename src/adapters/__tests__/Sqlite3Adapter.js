@@ -1,5 +1,5 @@
 import Base from '../../Base';
-import { testAdapter } from './AbstractAdapter';
+import { testAdapter, createTables } from './AbstractAdapter';
 import Sqlite3Adapter from '../Sqlite3Adapter';
 
 class User extends Base {
@@ -12,20 +12,7 @@ beforeAll(async () => {
     database: ':memory:'
   });
 
-  await Base.connection.createTable('users', { force: true }, t => {
-    t.string('name', { default: 'untitled' });
-    t.string('email');
-    t.integer('age', { default: 0 });
-    t.boolean('active', { default: true });
-    t.timestamps();
-  });
-
-  await Base.connection.createTable('posts', { force: true }, t => {
-    t.string('title');
-    t.text('content');
-    t.integer('user_id');
-    t.timestamps();
-  });
+  await createTables(Base.connection);
 });
 
 test('ADAPTER_NAME', () => {

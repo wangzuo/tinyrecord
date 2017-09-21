@@ -99,6 +99,24 @@ Array [
     },
     "default": null,
     "defaultFunction": null,
+    "name": "birthday",
+    "nil": true,
+    "sqlTypeMetaData": Mysql2SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "date",
+      "type": "date",
+    },
+    "tableName": "users",
+  },
+  Mysql2Column {
+    "collation": null,
+    "comment": Object {
+      "comment": false,
+    },
+    "default": null,
+    "defaultFunction": null,
     "name": "created_at",
     "nil": false,
     "sqlTypeMetaData": Mysql2SqlTypeMetadata {
@@ -170,6 +188,16 @@ Object {
     },
     "valueBeforeTypeCast": "0",
   },
+  "birthday": FromDatabase {
+    "name": "birthday",
+    "originalAttribute": Object {},
+    "type": Date {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
   "created_at": FromDatabase {
     "name": "created_at",
     "originalAttribute": Object {},
@@ -229,6 +257,7 @@ exports[`new 2`] = `
 Object {
   "active": true,
   "age": 0,
+  "birthday": undefined,
   "created_at": undefined,
   "email": "new@example.com",
   "id": undefined,

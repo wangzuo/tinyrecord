@@ -7,6 +7,7 @@ Array [
   "email",
   "age",
   "active",
+  "birthday",
   "created_at",
   "updated_at",
 ]
@@ -20,6 +21,11 @@ Object {
     "scale": null,
   },
   "age": Integer {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
+  "birthday": Date {
     "limit": null,
     "precision": null,
     "scale": null,
@@ -139,6 +145,22 @@ Array [
     "comment": null,
     "default": null,
     "defaultFunction": null,
+    "name": "birthday",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "date",
+      "type": "date",
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
+    "default": null,
+    "defaultFunction": null,
     "name": "created_at",
     "nil": false,
     "sqlTypeMetaData": SqlTypeMetadata {
@@ -208,6 +230,16 @@ Object {
     },
     "valueBeforeTypeCast": "0",
   },
+  "birthday": FromDatabase {
+    "name": "birthday",
+    "originalAttribute": Object {},
+    "type": Date {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
   "created_at": FromDatabase {
     "name": "created_at",
     "originalAttribute": Object {},
@@ -267,6 +299,7 @@ exports[`new 2`] = `
 Object {
   "active": true,
   "age": 0,
+  "birthday": undefined,
   "created_at": undefined,
   "email": "new@example.com",
   "id": undefined,
@@ -370,13 +403,21 @@ Array [
   Object {
     "cid": 5,
     "dflt_value": null,
+    "name": "birthday",
+    "notnull": 0,
+    "pk": 0,
+    "type": "date",
+  },
+  Object {
+    "cid": 6,
+    "dflt_value": null,
     "name": "created_at",
     "notnull": 1,
     "pk": 0,
     "type": "datetime",
   },
   Object {
-    "cid": 6,
+    "cid": 7,
     "dflt_value": null,
     "name": "updated_at",
     "notnull": 1,

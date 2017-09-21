@@ -1,5 +1,5 @@
 import Base from '../../Base';
-import { testAdapter } from './AbstractAdapter';
+import { testAdapter, createTables } from './AbstractAdapter';
 import Mysql2Adapter from '../Mysql2Adapter';
 
 class User extends Base {
@@ -15,20 +15,7 @@ beforeAll(async () => {
     database: 'tinyrecord'
   });
 
-  await Base.connection.createTable('users', { force: true }, t => {
-    t.string('name', { default: 'untitled' });
-    t.string('email');
-    t.integer('age', { default: 0 });
-    t.boolean('active', { default: true });
-    t.timestamps();
-  });
-
-  await Base.connection.createTable('posts', { force: true }, t => {
-    t.string('title');
-    t.text('content');
-    t.integer('user_id');
-    t.timestamps();
-  });
+  await createTables(Base.connection);
 });
 
 afterAll(() => Base.connection.disconnect());
@@ -50,6 +37,18 @@ test('lookupCastType', () => {
   const adapter = User.connection;
 
   expect(adapter.lookupCastType('tinyint(1)')).toMatchSnapshot();
+});
+
+// todo: sqlite3 fix
+test('date type', async () => {
+  const user = await User.new({ birthday: '2012-01-18' });
+  expect(user.birthday.toDateString()).toBe('Wed Jan 18 2012');
+
+  await user.save();
+  expect(user.birthday.toDateString()).toBe('Wed Jan 18 2012');
+  const record = await User.find(user.id);
+
+  expect(record.birthday.toDateString()).toBe('Wed Jan 18 2012');
 });
 
 testAdapter(Base);
