@@ -41,9 +41,9 @@ export default class Mysql2Adapter extends AbstractAdapter {
     });
   }
 
-  // get arelVisitor() {
-  //   return new Arel.visitors.MySQL(this);
-  // }
+  get arelVisitor() {
+    return new Arel.visitors.MySQL(this);
+  }
 
   async createDatabase(name, options = {}) {
     if (options.collation) {
