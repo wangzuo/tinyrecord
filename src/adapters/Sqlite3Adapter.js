@@ -24,13 +24,16 @@ export default class Sqlite3Adapter extends AbstractAdapter {
   constructor(connection, logger, connectionOptions, config) {
     super(connection, logger, config);
 
-    this.nativeDatabaseTypes = NATIVE_DATABASE_TYPES;
     this.supportsDdlTransactions = true;
     this.supportSavepoints = true;
 
     // alias
     this.columnDefinitions = this.tableStructure;
     this.addBelongsTo = this.addReference;
+  }
+
+  get nativeDatabaseTypes() {
+    return NATIVE_DATABASE_TYPES;
   }
 
   get arelVisitor() {

@@ -35,7 +35,6 @@ export default class AbstractAdapter {
     this.logger = logger;
     this.config = config;
     this.schemaCreation = new SchemaCreation(this);
-    this.nativeDatabaseTypes = {};
     this.schemaCache = new SchemaCache(this);
 
     this.typeMap = new TypeMap();
@@ -304,6 +303,20 @@ export default class AbstractAdapter {
     throw new Error('Not implemented error');
   }
 
+  // schema statements
+
+  get nativeDatabaseTypes() {
+    return {};
+  }
+
+  tableOptions(tableName) {
+    return null;
+  }
+
+  tableComment(tableName) {
+    return null;
+  }
+
   async dataSources() {
     try {
       return await this.selectValues(this.dataSourceSql(), 'SCHEMA');
@@ -495,7 +508,10 @@ export default class AbstractAdapter {
     await this.removeColumn(tableName, 'created_at');
   }
 
-  addIndexOptions(tableName, columnName, options = {}) {}
+  addIndexOptions(tableName, columnName, options = {}) {
+    const columnNames = this.indexColumnNames(columnName);
+    // valid keys
+  }
 
   foreignKeys(tableName) {
     throw new Error('foreignKeys is not implemented');
@@ -686,6 +702,9 @@ export default class AbstractAdapter {
       scale: castType.scale
     });
   }
+
+  indexColumnNames(columnNames) {}
+  indexNameOptions(columnNames) {}
 
   lookupCastTypeFromColumn(column) {
     return this.lookupCastType(column.sqlType);

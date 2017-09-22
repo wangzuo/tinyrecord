@@ -28,7 +28,10 @@ export default class Mysql2Adapter extends AbstractAdapter {
 
   constructor(connection, logger, connectionOptions, config) {
     super(connection, logger, config);
-    this.nativeDatabaseTypes = NATIVE_DATABASE_TYPES;
+  }
+
+  get nativeDatabaseTypes() {
+    return NATIVE_DATABASE_TYPES;
   }
 
   // todo
