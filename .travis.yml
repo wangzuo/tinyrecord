@@ -7,4 +7,5 @@ after_success:
 services:
   - mysql
 before_install:
+  - export TZ=Asia/Hong_Kong
   - mysql -e 'CREATE DATABASE `tinyrecord` DEFAULT CHARACTER SET `utf8`'
