@@ -70,4 +70,20 @@ describe('date type', () => {
   // });
 });
 
+describe('datetime type', () => {
+  const moment = require('moment');
+
+  it('handles Date', async () => {
+    const user = await User.new({
+      last_active_at: moment('2012-01-18')
+        .hour(10)
+        .toDate()
+    });
+
+    expect(moment(user.last_active_at).format()).toBe(
+      '2012-01-18T10:00:00+08:00'
+    );
+  });
+});
+
 testAdapter(Base);

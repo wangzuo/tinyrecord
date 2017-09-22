@@ -11,6 +11,7 @@ export async function createTables(connection) {
     t.integer('age', { default: 0 });
     t.boolean('active', { default: true });
     t.date('birthday');
+    t.datetime('last_active_at');
     t.timestamps();
   });
 

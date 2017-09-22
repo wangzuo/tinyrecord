@@ -117,6 +117,24 @@ Array [
     },
     "default": null,
     "defaultFunction": null,
+    "name": "last_active_at",
+    "nil": true,
+    "sqlTypeMetaData": Mysql2SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "datetime",
+      "type": "datetime",
+    },
+    "tableName": "users",
+  },
+  Mysql2Column {
+    "collation": null,
+    "comment": Object {
+      "comment": false,
+    },
+    "default": null,
+    "defaultFunction": null,
     "name": "created_at",
     "nil": false,
     "sqlTypeMetaData": Mysql2SqlTypeMetadata {
@@ -124,7 +142,7 @@ Array [
       "precision": null,
       "scale": null,
       "sqlType": "datetime",
-      "type": null,
+      "type": "datetime",
     },
     "tableName": "users",
   },
@@ -142,7 +160,7 @@ Array [
       "precision": null,
       "scale": null,
       "sqlType": "datetime",
-      "type": null,
+      "type": "datetime",
     },
     "tableName": "users",
   },
@@ -229,6 +247,16 @@ Object {
     },
     "valueBeforeTypeCast": null,
   },
+  "last_active_at": FromDatabase {
+    "name": "last_active_at",
+    "originalAttribute": Object {},
+    "type": DateTime {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
   "name": FromUser {
     "_value": "new",
     "name": "name",
@@ -261,6 +289,7 @@ Object {
   "created_at": undefined,
   "email": "new@example.com",
   "id": undefined,
+  "last_active_at": undefined,
   "name": "new",
   "updated_at": undefined,
 }

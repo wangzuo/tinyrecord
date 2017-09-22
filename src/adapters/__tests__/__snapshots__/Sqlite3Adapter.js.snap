@@ -8,6 +8,7 @@ Array [
   "age",
   "active",
   "birthday",
+  "last_active_at",
   "created_at",
   "updated_at",
 ]
@@ -41,6 +42,11 @@ Object {
     "scale": null,
   },
   "id": Integer {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
+  "last_active_at": DateTime {
     "limit": null,
     "precision": null,
     "scale": null,
@@ -161,6 +167,22 @@ Array [
     "comment": null,
     "default": null,
     "defaultFunction": null,
+    "name": "last_active_at",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "datetime",
+      "type": "datetime",
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
+    "default": null,
+    "defaultFunction": null,
     "name": "created_at",
     "nil": false,
     "sqlTypeMetaData": SqlTypeMetadata {
@@ -168,7 +190,7 @@ Array [
       "precision": null,
       "scale": null,
       "sqlType": "datetime",
-      "type": null,
+      "type": "datetime",
     },
     "tableName": "users",
   },
@@ -184,7 +206,7 @@ Array [
       "precision": null,
       "scale": null,
       "sqlType": "datetime",
-      "type": null,
+      "type": "datetime",
     },
     "tableName": "users",
   },
@@ -271,6 +293,16 @@ Object {
     },
     "valueBeforeTypeCast": null,
   },
+  "last_active_at": FromDatabase {
+    "name": "last_active_at",
+    "originalAttribute": Object {},
+    "type": DateTime {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
   "name": FromUser {
     "_value": "new",
     "name": "name",
@@ -303,6 +335,7 @@ Object {
   "created_at": undefined,
   "email": "new@example.com",
   "id": undefined,
+  "last_active_at": undefined,
   "name": "new",
   "updated_at": undefined,
 }
@@ -411,13 +444,21 @@ Array [
   Object {
     "cid": 6,
     "dflt_value": null,
+    "name": "last_active_at",
+    "notnull": 0,
+    "pk": 0,
+    "type": "datetime",
+  },
+  Object {
+    "cid": 7,
+    "dflt_value": null,
     "name": "created_at",
     "notnull": 1,
     "pk": 0,
     "type": "datetime",
   },
   Object {
-    "cid": 7,
+    "cid": 8,
     "dflt_value": null,
     "name": "updated_at",
     "notnull": 1,
