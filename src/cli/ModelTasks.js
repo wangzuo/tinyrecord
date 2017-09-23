@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
+import mkdirp from 'mkdirp';
 import { plural } from 'pluralize';
 import MigrationTasks from './MigrationTasks';
 
@@ -27,8 +28,10 @@ export default class ModelTasks {
 
     const module = this.createModel(name, attributes);
     const filename = `${modelName}.js`;
-    const filepath = path.join(process.cwd(), 'models', filename);
+    const modelDir = path.join(process.cwd(), 'models');
+    const filepath = path.join(modelDir, filename);
 
+    mkdirp.sync(modelDir);
     fs.writeFileSync(filepath, module);
 
     this.index();

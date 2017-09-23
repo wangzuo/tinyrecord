@@ -3,6 +3,7 @@ import { plural } from 'pluralize';
 import fs from 'fs';
 import path from 'path';
 import moment from 'moment';
+import mkdirp from 'mkdirp';
 
 export default class MigrationTasks {
   static create(name, attributes) {
@@ -12,8 +13,10 @@ export default class MigrationTasks {
     const filename = `${ts}-${name}.js`;
 
     const module = this[options.template](name, attrs, options);
-    const filepath = path.join(process.cwd(), './db/migrate', filename);
+    const migrateDir = path.join(process.cwd(), './db/migrate');
+    const filepath = path.join(migrateDir, filename);
 
+    mkdirp.sync(migrateDir);
     fs.writeFileSync(filepath, module);
   }
 

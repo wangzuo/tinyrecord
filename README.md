@@ -62,6 +62,7 @@ const posts = await Post.limit(10).records();
 tiny db:create
 tiny db:drop
 tiny db:migrate
+tiny db:migrate:reset
 tiny migration:create AddTitleToPosts title:string
 tiny model:create Post title:string
 ```
