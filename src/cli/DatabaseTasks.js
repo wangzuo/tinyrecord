@@ -25,9 +25,9 @@ export default class DatabaseTasks {
     );
 
     try {
-      await connection.createDatabase(this.config.database);
+      await connection.createDatabase(this.config.database, this.config);
     } catch (e) {
-      console.log('Database exists');
+      console.log(`Database ${this.config.database} already exists`);
     }
 
     await connection.disconnect();

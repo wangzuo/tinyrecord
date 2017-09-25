@@ -48,24 +48,21 @@ export default class Mysql2Adapter extends AbstractAdapter {
     return new Arel.visitors.MySQL(this);
   }
 
+  // todo: sql
   async createDatabase(name, options = {}) {
-    if (options.collation) {
-      await this.execute(
-        `CREATE DATABASE ${this.quoteTableName(
+    const sql = options.collation
+      ? `CREATE DATABASE ${this.quoteTableName(
           name
         )} DEFAULT CHARACTER SET ${this.quoteTableName(
           options.charset || 'utf8'
-        )} COLLATE #{quoteTableName(options.collation)}`
-      );
-    } else {
-      await this.execute(
-        `CREATE DATABASE ${this.quoteTableName(
+        )} COLLATE ${this.quoteTableName(options.collation)}`
+      : `CREATE DATABASE ${this.quoteTableName(
           name
         )} DEFAULT CHARACTER SET ${this.quoteTableName(
           options.charset || 'utf8'
-        )}`
-      );
-    }
+        )}`;
+
+    await this.execute(sql);
   }
 
   async dropDatabase(name) {

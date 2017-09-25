@@ -116,6 +116,33 @@ export function testAdapter(Base) {
     expect(record.active).toBe(false);
   });
 
+  describe('integer type', () => {
+    it('default value', async () => {
+      const user = await User.new();
+      expect(user.age).toBe(0);
+
+      await user.save();
+      expect(user.age).toBe(0);
+      const record = await User.find(user.id);
+      expect(record.age).toBe(0);
+    });
+
+    it('handles integer', async () => {
+      const user = await User.new({ age: 10 });
+      expect(user.age).toBe(10);
+    });
+
+    // todo
+    // it('handles string', async () => {
+    //   const user = await User.new({ age: '10test' });
+    //   expect(user.age).toBe(10);
+    // });
+    // it('handles null', async () => {
+    //   const user = await User.new({ age: null });
+    //   expect(user.age).toBe(null);
+    // });
+  });
+
   test('create', async () => {
     expect(User.recordTimestamps).toBe(true);
 
