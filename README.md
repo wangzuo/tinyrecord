@@ -51,6 +51,13 @@ const post = await Post.create({ title: 'hello' });
 await post.update({ title: 'world' });
 ```
 
+#### Find
+``` javascript
+const post = await Post.find(1);
+const post = await Post.findBy({ title: 'hello' });
+const post = await Post.findOrCreateBy({ title: 'hello' });
+```
+
 #### Query
 ``` javascript
 const sql = await Post.order({ id: 'asc' }).toSql();
