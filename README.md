@@ -64,6 +64,21 @@ const sql = await Post.order({ id: 'asc' }).toSql();
 const posts = await Post.limit(10).records();
 ```
 
+#### Migration
+``` javascript
+const { Migration } = require('tinyrecord');
+
+class CreatePosts extends Migration {
+  async change() {
+    await this.createTable('posts', {}, t => {
+      t.string('title');
+      t.text('content');
+      t.timestamps();
+    });
+  }
+}
+```
+
 #### Commands
 ``` sh
 tiny db:create
