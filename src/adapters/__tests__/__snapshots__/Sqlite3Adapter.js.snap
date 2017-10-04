@@ -6,6 +6,7 @@ Array [
   "name",
   "email",
   "age",
+  "age2",
   "active",
   "birthday",
   "last_active_at",
@@ -22,6 +23,11 @@ Object {
     "scale": null,
   },
   "age": Integer {
+    "limit": null,
+    "precision": null,
+    "scale": null,
+  },
+  "age2": Integer {
     "limit": null,
     "precision": null,
     "scale": null,
@@ -120,6 +126,22 @@ Array [
     "default": "0",
     "defaultFunction": null,
     "name": "age",
+    "nil": true,
+    "sqlTypeMetaData": SqlTypeMetadata {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+      "sqlType": "integer",
+      "type": "integer",
+    },
+    "tableName": "users",
+  },
+  Column {
+    "collation": null,
+    "comment": null,
+    "default": null,
+    "defaultFunction": null,
+    "name": "age2",
     "nil": true,
     "sqlTypeMetaData": SqlTypeMetadata {
       "limit": null,
@@ -252,6 +274,16 @@ Object {
     },
     "valueBeforeTypeCast": "0",
   },
+  "age2": FromDatabase {
+    "name": "age2",
+    "originalAttribute": Object {},
+    "type": Integer {
+      "limit": null,
+      "precision": null,
+      "scale": null,
+    },
+    "valueBeforeTypeCast": null,
+  },
   "birthday": FromDatabase {
     "name": "birthday",
     "originalAttribute": Object {},
@@ -331,6 +363,7 @@ exports[`new 2`] = `
 Object {
   "active": true,
   "age": 0,
+  "age2": undefined,
   "birthday": undefined,
   "created_at": undefined,
   "email": "new@example.com",
@@ -427,6 +460,14 @@ Array [
   },
   Object {
     "cid": 4,
+    "dflt_value": null,
+    "name": "age2",
+    "notnull": 0,
+    "pk": 0,
+    "type": "integer",
+  },
+  Object {
+    "cid": 5,
     "dflt_value": "'t'",
     "name": "active",
     "notnull": 0,
@@ -434,7 +475,7 @@ Array [
     "type": "boolean",
   },
   Object {
-    "cid": 5,
+    "cid": 6,
     "dflt_value": null,
     "name": "birthday",
     "notnull": 0,
@@ -442,7 +483,7 @@ Array [
     "type": "date",
   },
   Object {
-    "cid": 6,
+    "cid": 7,
     "dflt_value": null,
     "name": "last_active_at",
     "notnull": 0,
@@ -450,7 +491,7 @@ Array [
     "type": "datetime",
   },
   Object {
-    "cid": 7,
+    "cid": 8,
     "dflt_value": null,
     "name": "created_at",
     "notnull": 1,
@@ -458,7 +499,7 @@ Array [
     "type": "datetime",
   },
   Object {
-    "cid": 8,
+    "cid": 9,
     "dflt_value": null,
     "name": "updated_at",
     "notnull": 1,

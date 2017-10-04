@@ -619,6 +619,8 @@ export default class AbstractAdapter {
       return value;
     } else if (_.isDate(value)) {
       return value;
+    } else if (_.isNull(value)) {
+      return null; // todo
     }
 
     throw new Error('Typecast type error');

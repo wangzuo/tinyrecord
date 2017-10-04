@@ -9,6 +9,7 @@ export async function createTables(connection) {
     t.string('name', { default: 'untitled' });
     t.string('email');
     t.integer('age', { default: 0 });
+    t.integer('age2');
     t.boolean('active', { default: true });
     t.date('birthday');
     t.datetime('last_active_at');
@@ -137,6 +138,7 @@ export function testAdapter(Base) {
     //   const user = await User.new({ age: '10test' });
     //   expect(user.age).toBe(10);
     // });
+
     // it('handles null', async () => {
     //   const user = await User.new({ age: null });
     //   expect(user.age).toBe(null);
