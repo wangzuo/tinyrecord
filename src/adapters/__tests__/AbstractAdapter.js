@@ -176,17 +176,31 @@ export function testAdapter(Base) {
     expect(user.updated_at).not.toBeNull();
   });
 
-  test('find', async () => {
-    const user = await User.create({ name: 'find', email: 'find@example.com' });
-    const data = await User.find(user.id);
+  describe('find', () => {
+    it('find', async () => {
+      const user = await User.create({
+        name: 'find',
+        email: 'find@example.com'
+      });
+      const data = await User.find(user.id);
 
-    expect(data.newRecord()).toBe(false);
-    expect(data.id).toBe(user.id);
-    expect(data.name).toBe(user.name);
-    expect(data.email).toBe(user.email);
-    expect(data.age).toBe(0);
-    expect(data.created_at).not.toBeNull();
-    expect(data.updated_at).not.toBeNull();
+      expect(data.newRecord()).toBe(false);
+      expect(data.id).toBe(user.id);
+      expect(data.name).toBe(user.name);
+      expect(data.email).toBe(user.email);
+      expect(data.age).toBe(0);
+      expect(data.created_at).not.toBeNull();
+      expect(data.updated_at).not.toBeNull();
+    });
+
+    it('find with string', async () => {
+      const user = await User.create({
+        name: 'find',
+        email: 'find@example.com'
+      });
+      const data = await User.find(user.id + 'xxx');
+      expect(data.id).toBe(user.id);
+    });
   });
 
   test('findBy', async () => {

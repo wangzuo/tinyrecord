@@ -25,6 +25,7 @@ export default class Integer extends Value {
     if (value === true) return 1;
     else if (value === false) return 0;
     else if (_.isNumber(value)) return value;
+    else if (_.isString(value)) return parseInt(value, 10);
     return null; // todo
   }
 
