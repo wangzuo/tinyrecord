@@ -1,4 +1,5 @@
 # tinyrecord
+
 [![npm](https://img.shields.io/npm/v/tinyrecord.svg)](https://www.npmjs.com/package/tinyrecord)
 [![Build Status](https://travis-ci.org/wangzuo/tinyrecord.svg?branch=master)](https://travis-ci.org/wangzuo/tinyrecord)
 [![codecov](https://codecov.io/gh/wangzuo/tinyrecord/branch/master/graph/badge.svg)](https://codecov.io/gh/wangzuo/tinyrecord)
@@ -7,13 +8,15 @@
 **[wip]** ActiveRecord in node
 
 #### Installation
-``` sh
+
+```sh
 yarn add tinyrecord
 # npm i tinyrecord --save
 ```
 
 #### Establish connection
-``` javascript
+
+```javascript
 const { Base } = require('tinyrecord');
 
 // yarn add sqlite3
@@ -33,7 +36,8 @@ Base.establishConnection({
 ```
 
 #### Model
-``` javascript
+
+```javascript
 const { Base } = require('tinyrecord');
 
 class Post extends Base {}
@@ -43,7 +47,8 @@ module.exports = Post;
 ```
 
 #### Crud
-``` javascript
+
+```javascript
 const post = await Post.new({ title: 'hello' });
 await post.save();
 
@@ -52,20 +57,23 @@ await post.update({ title: 'world' });
 ```
 
 #### Find
-``` javascript
+
+```javascript
 const post = await Post.find(1);
 const post = await Post.findBy({ title: 'hello' });
 const post = await Post.findOrCreateBy({ title: 'hello' });
 ```
 
 #### Query
-``` javascript
+
+```javascript
 const sql = await Post.order({ id: 'asc' }).toSql();
 const posts = await Post.limit(10).records();
 ```
 
 #### Migration
-``` javascript
+
+```javascript
 const { Migration } = require('tinyrecord');
 
 class CreatePosts extends Migration {
@@ -80,7 +88,8 @@ class CreatePosts extends Migration {
 ```
 
 #### Commands
-``` sh
+
+```sh
 tiny db:create
 tiny db:drop
 tiny db:migrate
@@ -90,4 +99,5 @@ tiny model:create Post title:string
 ```
 
 #### License
+
 MIT
