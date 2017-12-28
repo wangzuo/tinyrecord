@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default class RelationFromClause {
   constructor(value, name) {
     this.value = value;
@@ -17,7 +19,7 @@ export default class RelationFromClause {
   }
 
   empty() {
-    return value;
+    return _.isNull(this.value);
   }
 
   static get empty() {

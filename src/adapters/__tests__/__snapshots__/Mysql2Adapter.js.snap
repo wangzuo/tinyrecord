@@ -185,6 +185,8 @@ Array [
 ]
 `;
 
+exports[`from 1`] = `"SELECT name FROM posts"`;
+
 exports[`group 1`] = `"SELECT \`users\`.* FROM \`users\` GROUP BY name"`;
 
 exports[`joins string 1`] = `"SELECT \`users\`.* FROM \`users\` LEFT JOIN bookmarks ON bookmarks.user_id = users.id"`;

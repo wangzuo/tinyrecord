@@ -360,4 +360,13 @@ export function testAdapter(Base) {
     expect(data.user_id).toBe(user.id);
     expect(data.user_name).toBe('joins_user');
   });
+
+  // TODO: http://api.rubyonrails.org/v5.0/classes/ActiveRecord/QueryMethods.html#method-i-from
+  test('from', async () => {
+    expect(
+      await User.select('name')
+        .from('posts')
+        .toSql()
+    ).toMatchSnapshot();
+  });
 }

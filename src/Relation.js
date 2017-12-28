@@ -571,8 +571,9 @@ export default class Relation {
   or(other) {
     if (!other instanceof Relation) {
       throw new Error(
-        `You have passed ${other.constructor
-          .name} object to #or. Pass an ActiveRecord::Relation object instead.`
+        `You have passed ${
+          other.constructor.name
+        } object to #or. Pass an ActiveRecord::Relation object instead.`
       );
     }
 
@@ -703,9 +704,9 @@ export default class Relation {
 
     arel.distinct(this.distinctValue);
 
-    // if (!_.isEmpty(this.fromClause)) {
-    //   arel.from(this.buildFrom);
-    // }
+    if (!this.fromClause.empty()) {
+      arel.from(this.buildFrom());
+    }
 
     // if (this.lockValue) {
     //   arel.lock(this.lockValue);
@@ -720,7 +721,7 @@ export default class Relation {
 
     if (opts instanceof Relation) {
       name = name || 'subquery';
-      opts.arel.as(name);
+      return opts.arel.as(name);
     }
 
     return opts;
