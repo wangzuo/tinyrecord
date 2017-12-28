@@ -25,7 +25,7 @@
   },
   "name": "tinyrecord",
   "description": "tinyrecord",
-  "version": "0.1.1-10",
+  "version": "0.1.1-11",
   "main": "dist/TinyRecord.js",
   "bin": {
     "tiny": "dist/cli/index.js"
