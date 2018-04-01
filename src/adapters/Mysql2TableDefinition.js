@@ -18,7 +18,11 @@ export default class Mysql2TableDefinition extends TableDefinition {
   tinytext() {}
   mediumtext() {}
   longtext() {}
-  json() {}
+
+  json(name, options) {
+    return this.column(name, 'json', options);
+  }
+
   unsignedInteger() {}
   unsignedBigint() {}
   unsignedFloat() {}

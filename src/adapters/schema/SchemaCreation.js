@@ -44,9 +44,9 @@ export default class SchemaCreation {
   }
 
   visitTableDefinition(o) {
-    let createSql = `CREATE${o.temporary
-      ? ' TEMPORARY'
-      : ''} TABLE ${this.quoteTableName(o.name)} `;
+    let createSql = `CREATE${
+      o.temporary ? ' TEMPORARY' : ''
+    } TABLE ${this.quoteTableName(o.name)} `;
 
     const statements = o.columns.map(c => this.accept(c));
 

@@ -1,3 +1,4 @@
+// todo: move to table definition
 export default obj => {
   [
     'bigint',
