@@ -418,9 +418,9 @@ export default class AbstractAdapter {
   }
 
   async dropTable(tableName, options = {}) {
-    const sql = `DROP TABLE${options.ifExists
-      ? ' IF EXISTS'
-      : ''} ${this.quoteTableName(tableName)}`;
+    const sql = `DROP TABLE${
+      options.ifExists ? ' IF EXISTS' : ''
+    } ${this.quoteTableName(tableName)}`;
     await this.execute(sql);
   }
 
@@ -618,12 +618,16 @@ export default class AbstractAdapter {
     } else if (_.isNumber(value)) {
       return value;
     } else if (_.isDate(value)) {
-      return value;
+      return this.quotedDate(value);
     } else if (_.isNull(value)) {
       return null; // todo
     }
 
     throw new Error('Typecast type error');
+  }
+
+  quotedDate(value) {
+    return value;
   }
 
   quoteTableName(tableName) {
@@ -680,7 +684,9 @@ export default class AbstractAdapter {
           columnTypeSql += `(${precision})`;
         } else {
           throw new Error(
-            `No ${native.name} type has precision of ${precision}. The allowed range of precision is from 0 to 6`
+            `No ${
+              native.name
+            } type has precision of ${precision}. The allowed range of precision is from 0 to 6`
           );
         }
       } else if (type !== 'primaryKey' && limit) {

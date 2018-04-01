@@ -47,10 +47,12 @@ export default class Base {
     }
 
     const { default: Sqlite3Adapter } = require('./adapters/Sqlite3Adapter');
-    const sqlite3 = require('sqlite3');
-    sqlite3.verbose();
+    const Database = require('better-sqlite3');
 
-    const db = new sqlite3.Database(config.database);
+    const db =
+      config.database === ':memory:'
+        ? new Database('tiny', { memory: true })
+        : new Database(config.database);
 
     // todo
     if (config.timeout) {
