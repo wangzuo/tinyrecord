@@ -1,9 +1,13 @@
 import Base from '../../Base';
-import { testAdapter, createTables } from './AbstractAdapter';
+import { testAdapter, createTables, dropTables } from './AbstractAdapter';
 import Mysql2Adapter from '../Mysql2Adapter';
 
 class User extends Base {
   static tableName = 'users';
+}
+
+class Event extends Base {
+  static tableName = 'events';
 }
 
 beforeAll(async () => {
@@ -14,11 +18,18 @@ beforeAll(async () => {
     password: '',
     database: 'tinyrecord'
   });
-
   await createTables(Base.connection);
+
+  await Base.connection.createTable('events', { force: true }, t => {
+    t.json('payload');
+    t.timestamps();
+  });
 });
 
-afterAll(() => Base.connection.disconnect());
+afterAll(async () => {
+  await dropTables(Base.connection);
+  Base.connection.disconnect();
+});
 
 test('ADAPTER_NAME', () => {
   expect(Mysql2Adapter.ADAPTER_NAME).toBe('Mysql2');
@@ -84,6 +95,18 @@ describe('datetime type', () => {
       '2012-01-18T10:00:00+08:00'
     );
   });
+});
+
+test('json type', async () => {
+  const payload = { a: 1, b: '2' };
+  const event = await Event.create({ payload });
+  expect(event.payload).toEqual(payload);
+
+  const events = await Event.select(
+    'payload->>"$.a" as a, payload->>"$.b" as b'
+  ).records();
+  expect(events[0].a).toBe('1'); // todo: integer
+  expect(events[0].b).toBe('2');
 });
 
 testAdapter(Base);

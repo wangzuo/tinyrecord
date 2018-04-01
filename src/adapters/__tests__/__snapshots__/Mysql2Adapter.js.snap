@@ -360,6 +360,7 @@ String {
 
 exports[`tables 1`] = `
 Array [
+  "events",
   "posts",
   "users",
 ]

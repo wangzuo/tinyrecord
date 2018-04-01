@@ -9,6 +9,10 @@ import {
 import TinyRecord from '../dist/TinyRecord';
 import User from './models/User';
 
+afterAll(async () => {
+  await TinyRecord.Base.connection.dropTable('users');
+});
+
 TinyRecord.Base.establishConnection({
   adapter: 'sqlite3',
   database: ':memory:'
@@ -58,14 +62,20 @@ test('resolve', async () => {
 
   const result = await graphql(
     schema,
-    `query {
-      allUsers {
-        id name email
+    `
+      query {
+        allUsers {
+          id
+          name
+          email
+        }
+        user(id: 1) {
+          id
+          name
+          email
+        }
       }
-      user(id: 1) {
-        id name email
-      }
-    }`
+    `
   );
 
   const { user, allUsers: users } = result.data;

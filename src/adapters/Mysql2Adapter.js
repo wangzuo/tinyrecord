@@ -186,7 +186,7 @@ export default class Mysql2Adapter extends AbstractAdapter {
       options.force === 'cascade' ? ' CASCADE' : ''
     }`;
 
-    await this.execute(sql);
+    return await this.execute(sql);
   }
 
   typeToSql(type, options = {}) {
@@ -347,6 +347,7 @@ export default class Mysql2Adapter extends AbstractAdapter {
     // m.registerType(/longblob/i, new Type.Binary({ limit: 2 ** 32 - 1 }));
     m.registerType(/^float/i, new Type.Float({ limit: 24 }));
     m.registerType(/^double/i, new Type.Float({ limit: 53 }));
+    m.registerType(/^json/i, new Type.Json());
 
     m.registerType(/^tinyint\(1\)/i, new Type.Boolean());
   }

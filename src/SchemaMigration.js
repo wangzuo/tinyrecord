@@ -19,7 +19,7 @@ export default class SchemaMigration extends Base {
   }
 
   static async dropTable() {
-    await this.connection.dropTable(this.tableName, { ifExists: true });
+    return await this.connection.dropTable(this.tableName, { ifExists: true });
   }
 
   static async allVersions() {

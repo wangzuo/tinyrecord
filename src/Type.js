@@ -23,3 +23,4 @@ export Time from './type/Time';
 export DateTime from './type/DateTime';
 export Float from './type/Float';
 export Integer from './type/Integer';
+export Json from './type/json';

@@ -15,13 +15,13 @@ class Post extends Base {
   static tableName = 'posts';
 }
 
-beforeAll(() => {
+beforeAll(async () => {
   Base.establishConnection({
     adapter: 'sqlite3',
     database: ':memory:'
   });
 
-  return SchemaMigration.createTable();
+  await SchemaMigration.createTable();
 });
 
 afterAll(async () => {

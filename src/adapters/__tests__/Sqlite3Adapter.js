@@ -1,5 +1,5 @@
 import Base from '../../Base';
-import { testAdapter, createTables } from './AbstractAdapter';
+import { testAdapter, createTables, dropTables } from './AbstractAdapter';
 import Sqlite3Adapter from '../Sqlite3Adapter';
 
 class User extends Base {
@@ -11,8 +11,12 @@ beforeAll(async () => {
     adapter: 'sqlite3',
     database: ':memory:'
   });
-
   await createTables(Base.connection);
+});
+
+afterAll(async () => {
+  await dropTables(Base.connection);
+  Base.connection.disconnect();
 });
 
 test('ADAPTER_NAME', () => {

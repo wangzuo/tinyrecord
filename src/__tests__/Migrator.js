@@ -10,6 +10,12 @@ beforeAll(() => {
   });
 });
 
+afterAll(async () => {
+  await Base.connection.dropTable('users');
+  await Base.connection.dropTable('posts');
+  await Base.connection.dropTable('schema_migrations');
+});
+
 test('loadMigrations', async () => {
   const migrations = await Migrator.loadMigrations([
     path.join(__dirname, '../../db/migrate')

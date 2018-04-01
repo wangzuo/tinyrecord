@@ -421,7 +421,7 @@ export default class AbstractAdapter {
     const sql = `DROP TABLE${
       options.ifExists ? ' IF EXISTS' : ''
     } ${this.quoteTableName(tableName)}`;
-    await this.execute(sql);
+    return await this.execute(sql);
   }
 
   async addColumn(tableName, columnName, type, options = {}) {

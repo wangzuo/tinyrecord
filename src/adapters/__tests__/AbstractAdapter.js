@@ -24,6 +24,11 @@ export async function createTables(connection) {
   });
 }
 
+export async function dropTables(connection) {
+  await connection.dropTable('users');
+  await connection.dropTable('posts');
+}
+
 export function testAdapter(Base) {
   class User extends Base {
     static tableName = 'users';
