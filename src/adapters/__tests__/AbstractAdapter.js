@@ -98,6 +98,8 @@ export function testAdapter(Base) {
     expect(user.age).toBe(0);
     expect(user.email).toBe(attrs.email);
     expect(user.active).toBe(true);
+    // expect(user.last_active_at).toBeNull();
+    // expect(user.birthday).toBeNull();
 
     await user.save();
     const data = await User.find(user.id);
@@ -105,6 +107,8 @@ export function testAdapter(Base) {
     expect(data.age).toBe(0);
     expect(data.email).toBe(attrs.email);
     expect(user.active).toBe(true);
+    // expect(user.last_active_at).toBeNull();
+    // expect(user.birthday).toBeNull();
   });
 
   test('boolean type', async () => {

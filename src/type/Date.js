@@ -14,6 +14,8 @@ export default class Date extends Value {
   // private
 
   castValue(value) {
+    if (!value) return null;
+
     if (_.isDate(value)) {
       return value;
     }

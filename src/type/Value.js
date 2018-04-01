@@ -49,6 +49,7 @@ export default class Value {
   assertValidValue() {}
 
   // private
+
   castValue(value) {
     return value;
   }

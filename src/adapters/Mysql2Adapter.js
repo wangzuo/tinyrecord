@@ -108,6 +108,7 @@ export default class Mysql2Adapter extends AbstractAdapter {
             (err, results, fields) => {
               if (err) return reject(err);
               if (!fields) return resolve(results);
+
               const result = new Result(
                 fields.map(x => x.name),
                 results.map(x => _.values(x))
@@ -163,8 +164,8 @@ export default class Mysql2Adapter extends AbstractAdapter {
   }
 
   // todo
-  quotedDate(value) {}
-  quotedBinary(value) {}
+  // quotedDate(value) {}
+  // quotedBinary(value) {}
 
   async createTable(tableName, options = {}, block) {
     return await super.createTable(
@@ -179,11 +180,11 @@ export default class Mysql2Adapter extends AbstractAdapter {
   }
 
   async dropTable(tableName, options = {}) {
-    const sql = `DROP${options.temporary
-      ? ' TEMPORARY'
-      : ''} TABLE${options.ifExists ? ' IF EXISTS' : ''} ${this.quoteTableName(
-      tableName
-    )}${options.force === 'cascade' ? ' CASCADE' : ''}`;
+    const sql = `DROP${options.temporary ? ' TEMPORARY' : ''} TABLE${
+      options.ifExists ? ' IF EXISTS' : ''
+    } ${this.quoteTableName(tableName)}${
+      options.force === 'cascade' ? ' CASCADE' : ''
+    }`;
 
     await this.execute(sql);
   }

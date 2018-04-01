@@ -24,6 +24,11 @@ beforeAll(() => {
   return SchemaMigration.createTable();
 });
 
+afterAll(async () => {
+  await Base.connection.dropTable('posts');
+  await Base.connection.dropTable('schema_migrations');
+});
+
 test('migrate', async () => {
   const migration = new CreatePosts();
   expect(migration.name).toBe('CreatePosts');
