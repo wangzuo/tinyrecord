@@ -4,8 +4,16 @@ node_js:
 cache: yarn
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-services:
-  - mysql
 before_install:
   - export TZ=Asia/Hong_Kong
+  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+  - sudo mysql_upgrade
+  - sudo service mysql restart
   - mysql -e 'CREATE DATABASE `tinyrecord` DEFAULT CHARACTER SET `utf8`'
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+      - mysql-client
