@@ -12,6 +12,12 @@
 ```sh
 yarn add tinyrecord
 # npm i tinyrecord --save
+
+# sqlite
+yarn add better-sqlite3
+
+# mysql
+yarn add mysql2
 ```
 
 #### Establish connection
