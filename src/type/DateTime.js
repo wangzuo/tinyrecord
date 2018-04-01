@@ -7,9 +7,15 @@ export default class DateTime extends Value {
     return 'datetime';
   }
 
+  serialize(value) {
+    return this.cast(value);
+  }
+
   // private
 
   castValue(value) {
+    if (!value) return null;
+
     if (_.isDate(value)) {
       return value;
     }
