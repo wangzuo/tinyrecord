@@ -5,3 +5,4 @@ db
 yarn.lock
 __tests__
 *.test.js
+yarn.lock
