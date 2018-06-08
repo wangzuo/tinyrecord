@@ -1,5 +1,3 @@
-// @flow
-
 import Type from '../Type';
 
 export default class TypeMap {

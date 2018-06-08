@@ -17,8 +17,10 @@
     "babel-jest": "^22.4.3",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-0": "^6.24.1",
     "better-sqlite3": "^4.1.0",
+    "flow-bin": "^0.74.0",
     "graphql": "^0.10.5",
     "jest": "^22.4.3",
     "mysql2": "^1.5.3",
@@ -33,7 +35,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && babel src --out-dir dist --ignore '__tests__/*.js'",
-    "test": "jest --coverage",
+    "test": "flow && jest --coverage",
     "pretest": "npm run build",
     "prepublish": "npm test"
   },
