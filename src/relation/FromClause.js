@@ -1,7 +1,8 @@
+// @flow
 import _ from 'lodash';
 
 export default class RelationFromClause {
-  constructor(value, name) {
+  constructor(value: any, name: string) {
     this.value = value;
     this.name = name;
   }
