@@ -1,3 +1,4 @@
+// @flow
 import Value from './type/Value';
 // import AdapterSpecificRegistry from './type/AdapterSpecificRegistry';
 

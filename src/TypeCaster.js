@@ -1,3 +1,4 @@
+// @flow
 export class Connection {
   constructor(klass, tableName) {
     this.klass = klass;

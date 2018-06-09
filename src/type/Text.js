@@ -1,3 +1,4 @@
+// @flow
 import String from './String';
 
 export default class Text extends String {

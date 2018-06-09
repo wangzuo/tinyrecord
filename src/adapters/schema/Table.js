@@ -1,25 +1,28 @@
+// @flow
 export default class Table {
-  constructor(tableName, base) {
+  tableName: string;
+
+  constructor(tableName: string, base) {
     this.name = tableName;
     this.base = base;
   }
 
-  column(columnName, type, options = {}) {
+  column(columnName: string, type, options = {}) {
     this.base.addColumn(this.name, columnName, type, options);
   }
 
-  columnExists(columnName, type = null, options = {}) {
+  columnExists(columnName: string, type = null, options = {}) {
     this.base.columnExists(this.name, columnName, type, options);
   }
 
-  index(columnName, options = {}) {
+  index(columnName: string, options = {}) {
     this.base.addIndex(this.name, columnName, options);
   }
 
-  indexExists(columnName, options = {}) {
+  indexExists(columnName: string, options = {}) {
     this.base.indexExists(this.name, columnName, options);
   }
-  renameIndex(indexName, newIndexName) {
+  renameIndex(indexName: string, newIndexName) {
     this.base.renameIndex(this.name, indexName, newIndexName);
   }
 
@@ -27,15 +30,15 @@ export default class Table {
     this.base.addTimestamps(this.name, options);
   }
 
-  change(columnName, type, options = {}) {
+  change(columnName: string, type, options = {}) {
     this.base.changeColumn(this.name, columnName, type, options);
   }
 
-  changeDefault(columnName, defaultOrChanges) {
+  changeDefault(columnName: string, defaultOrChanges) {
     this.base.changeColumnDefault(this.name, columnName, defaultOrChanges);
   }
 
-  remove(...columnNames) {
+  remove(...columnNames: Array<string>) {
     this.base.removeColumns(this.name, ...columnNames);
   }
 
@@ -47,7 +50,7 @@ export default class Table {
     this.base.removeTimestamps(this.name, options);
   }
 
-  rename(columnName, newColumnName) {
+  rename(columnName: string, newColumnName) {
     this.base.renameColumn(this.name, columnName, newColumnName);
   }
 

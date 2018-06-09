@@ -1,5 +1,10 @@
+// @flow
 export default class ColumnDefinition {
-  constructor(name, type, options, sqlType) {
+  name: string;
+  type: string;
+  sqlType: string;
+
+  constructor(name: string, type: string, options, sqlType: string) {
     this.name = name;
     this.type = type;
     this.options = options;

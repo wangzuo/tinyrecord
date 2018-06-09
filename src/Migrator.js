@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import path from 'path';
 import glob from 'glob-async';
@@ -5,7 +6,7 @@ import Base from './Base';
 import SchemaMigration from './SchemaMigration';
 
 class MigrationProxy {
-  constructor(name, version, filepath, scope) {
+  constructor(name: string, version, filepath, scope) {
     this.name = name;
     this.version = version;
     this.filepath = filepath;

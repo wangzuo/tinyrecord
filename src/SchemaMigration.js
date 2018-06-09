@@ -1,11 +1,12 @@
+// @flow
 import Base from './Base';
 
 export default class SchemaMigration extends Base {
   static primaryKey = 'version'; // TOOD
   static tableName = 'schema_migrations';
 
-  static async tableExists() {
-    return await this.connection.tableExists(this.tableName);
+  static tableExists() {
+    return this.connection.tableExists(this.tableName);
   }
 
   static async createTable() {
@@ -18,8 +19,8 @@ export default class SchemaMigration extends Base {
     }
   }
 
-  static async dropTable() {
-    return await this.connection.dropTable(this.tableName, { ifExists: true });
+  static dropTable() {
+    return this.connection.dropTable(this.tableName, { ifExists: true });
   }
 
   static async allVersions() {

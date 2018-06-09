@@ -1,3 +1,4 @@
+// @flow
 export default class ConnectionPool {
   constructor(spec) {
     this.spec = spec;

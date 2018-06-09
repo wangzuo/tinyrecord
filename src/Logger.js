@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import winston from 'winston';
 import colors from 'colors/safe';
@@ -51,7 +52,7 @@ export default class Logger {
     );
   }
 
-  sqlColor(sql) {
+  sqlColor(sql: string): string {
     if (sql.match(/rollback/im)) {
       return 'red';
     } else if (sql.match(/^\s*select/i)) {

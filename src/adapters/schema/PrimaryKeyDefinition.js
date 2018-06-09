@@ -1,5 +1,8 @@
+// @flow
 export default class PrimaryKeyDefinition {
-  constructor(name) {
+  name: string;
+
+  constructor(name: string) {
     this.name = name;
   }
 }

@@ -1,7 +1,11 @@
+// @flow
 import _ from 'lodash';
 
-export default class RelationFromClause {
-  constructor(value, name) {
+export default class FromClause {
+  value: any;
+  name: string;
+
+  constructor(value: any, name: string) {
     this.value = value;
     this.name = name;
   }
@@ -14,7 +18,7 @@ export default class RelationFromClause {
     return [];
   }
 
-  merge(other) {
+  merge(other: FromClause) {
     return this;
   }
 

@@ -1,3 +1,4 @@
+// @flow
 import Base from './Base';
 import SchemaMigration from './SchemaMigration';
 
@@ -14,7 +15,7 @@ export default class Migration {
 
   down() {}
 
-  async migrate(direction) {
+  async migrate(direction: 'up' | 'down') {
     // if (direction === 'up') console.log('migrating');
     // else if (direction === 'down') console.log('reverting');
 

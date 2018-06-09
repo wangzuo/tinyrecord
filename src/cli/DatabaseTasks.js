@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import path from 'path';
 import Base from '../Base';
