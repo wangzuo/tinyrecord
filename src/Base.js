@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import * as Arel from 'arel';
 import util from 'util';
@@ -79,7 +80,7 @@ export default class Base {
     return relation;
   }
 
-  static async find(...ids) {
+  static async find(...ids: Array<number>) {
     const id = ids[0];
 
     // todo: this.primaryKey

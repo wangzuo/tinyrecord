@@ -2,27 +2,29 @@
 import Type from './Type';
 
 export default class Attribute {
-  static fromDatabase(name, value, type) {
+  static fromDatabase(name: string, value, type) {
     return new FromDatabase(name, value, type);
   }
 
-  static fromUser(name, value, type, originalAttribute = null) {
+  static fromUser(name: string, value, type, originalAttribute = null) {
     return new FromUser(name, value, type, originalAttribute);
   }
 
-  static withCastValue(name, value, type) {
+  static withCastValue(name: string, value, type) {
     return new WithCastValue(name, value, type);
   }
 
-  static null(name) {
+  static null(name: string) {
     return new Null(name);
   }
 
-  static uninitialized(name, type) {
+  static uninitialized(name: string, type) {
     return new Uninitialized(name, type);
   }
 
-  constructor(name, valueBeforeTypeCast, type, options = {}) {
+  name: string;
+
+  constructor(name: string, valueBeforeTypeCast, type, options = {}) {
     const originalAttribute = options.originalAttribute || {};
 
     this.name = name;
@@ -86,7 +88,7 @@ export default class Attribute {
     return true;
   }
 
-  cameFromUser() {
+  get cameFromUser() {
     return false;
   }
 
@@ -132,7 +134,7 @@ class WithCastValue extends Attribute {
 }
 
 class Null extends Attribute {
-  constructor(name) {
+  constructor(name: string) {
     super(name, null, Type.defaultValue);
 
     // alias
@@ -143,7 +145,7 @@ class Null extends Attribute {
     return null;
   }
 
-  withType(type) {
+  withType(type: string) {
     return this.constructor.withCastValue(name, null, type);
   }
 

@@ -1,9 +1,16 @@
 // @flow
-import ForeignKeyDefinition from './ForeignKeyDefinition';
+import TableDefinition from './TableDefinition';
 import AddColumnDefinition from './AddColumnDefinition';
+import ForeignKeyDefinition from './ForeignKeyDefinition';
 
 export default class AlterTable {
-  constructor(td) {
+  name: string;
+  adds: Array<AddColumnDefinition>;
+  foreignKeyAdds: Array<ForeignKeyDefinition>;
+  foreignKeyDrops: Array<string>;
+  td: TableDefinition;
+
+  constructor(td: TableDefinition) {
     this.td = td;
     this.adds = [];
     this.foreignKeyAdds = [];
@@ -15,11 +22,11 @@ export default class AlterTable {
     this.foreignKeyAdds.push(new ForeignKeyDefinition(name, toTable, options));
   }
 
-  dropForeignKey(name) {
+  dropForeignKey(name: string) {
     this.foreignKeyDrops.push(name);
   }
 
-  addColumn(name, type, options) {
+  addColumn(name: string, type, options) {
     this.adds.push(
       new AddColumnDefinition(this.td.newColumnDefinition(name, type, options))
     );

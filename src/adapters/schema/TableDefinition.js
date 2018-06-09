@@ -2,8 +2,13 @@
 import _ from 'lodash';
 import ColumnMethods from './ColumnMethods';
 import ColumnDefinition from './ColumnDefinition';
+import PrimaryKeyDefinition from './PrimaryKeyDefinition';
 
 export default class TableDefinition {
+  name: string;
+  as: string;
+  comment: string;
+
   constructor(
     name: string,
     temporary: boolean = false,
@@ -29,7 +34,7 @@ export default class TableDefinition {
     ColumnMethods(this);
   }
 
-  primaryKeys(name = null) {
+  primaryKeys(name: string = null) {
     if (name) {
       this._primaryKeys = new PrimaryKeyDefinition(name);
     }
@@ -82,7 +87,7 @@ export default class TableDefinition {
     return new ColumnDefinition(name, type, options);
   }
 
-  aliasedTypes(name, fallback) {
+  aliasedTypes(name: string, fallback: string): string {
     return name === 'timestamp' ? 'datetime' : fallback;
   }
 }

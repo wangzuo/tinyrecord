@@ -1,6 +1,6 @@
 // @flow
 export default class Table {
-  tableName: string;
+  name: string;
 
   constructor(tableName: string, base) {
     this.name = tableName;
@@ -55,11 +55,13 @@ export default class Table {
   }
 
   references(args, options) {}
+
   belongsTo(...args) {
     return this.references(...args);
   }
 
   removeReferences() {}
+
   removeBelongsTo(...args) {
     return this.removeBelongsTo(...args);
   }

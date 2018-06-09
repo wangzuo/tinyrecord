@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import { plural } from 'pluralize';
 import fs from 'fs';
@@ -6,7 +7,7 @@ import moment from 'moment';
 import mkdirp from 'mkdirp';
 
 export default class MigrationTasks {
-  static create(name, attributes) {
+  static create(name: string, attributes) {
     const options = this.parseName(name);
     const attrs = this.parseAttributes(attributes);
     const ts = moment().format('YYYYMMDDHHmmss');
@@ -20,7 +21,7 @@ export default class MigrationTasks {
     fs.writeFileSync(filepath, module);
   }
 
-  static createTable(name, attributes, { tableName }) {
+  static createTable(name: string, attributes, { tableName }) {
     const module = `const { Migration } = require('tinyrecord');
 
 class ${name} extends Migration {
@@ -38,7 +39,7 @@ module.exports = ${name};
     return module;
   }
 
-  static migration(name, attributes, { action, tableName }) {
+  static migration(name: string, attributes, { action, tableName }) {
     let module = `const { Migration } = require('tinyrecord');
 
 class ${name} extends Migration {`;
@@ -70,7 +71,7 @@ ${attributes
     return module;
   }
 
-  static parseName(name) {
+  static parseName(name: string) {
     const m1 = name.match(/^create(.+)/i);
     if (m1) {
       return {

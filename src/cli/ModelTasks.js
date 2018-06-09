@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
@@ -14,15 +15,15 @@ export default class ModelTasks {
     fs.writeFileSync(filepath, module);
   }
 
-  static modelName(name) {
+  static modelName(name: string) {
     return _.upperFirst(_.camelCase(name));
   }
 
-  static tableName(name) {
+  static tableName(name: string) {
     return _.toLower(plural(_.snakeCase(name)));
   }
 
-  static create(name, attributes) {
+  static create(name: string, attributes) {
     const modelName = this.modelName(name);
     MigrationTasks.create(`Create${plural(modelName)}`, attributes);
 
@@ -37,7 +38,7 @@ export default class ModelTasks {
     this.index();
   }
 
-  static createModel(name, attributes) {
+  static createModel(name: string, attributes) {
     const modelName = this.modelName(name);
     const tableName = this.tableName(name);
     const module = `const { Base } = require('tinyrecord');
@@ -51,7 +52,7 @@ module.exports = ${modelName};
     return module;
   }
 
-  static createIndex(files) {
+  static createIndex(files: Array<string>) {
     return files
       .filter(x => x !== 'index.js')
       .sort()

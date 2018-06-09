@@ -66,7 +66,10 @@ program
   .description('Generates a model and its migration')
   .action((name, attributes) => ModelTasks.create(name, attributes));
 
-program.command('repl').description('Tiny repl').action(() => repl());
+program
+  .command('repl')
+  .description('Tiny repl')
+  .action(() => repl());
 
 program.parse(process.argv);
 
