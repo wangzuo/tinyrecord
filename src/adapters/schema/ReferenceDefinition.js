@@ -1,5 +1,8 @@
+// @flow
 export default class ReferenceDefinition {
-  constructor(name, options = {}) {
+  name: string;
+
+  constructor(name: string, options = {}) {
     this.name = name;
   }
 }

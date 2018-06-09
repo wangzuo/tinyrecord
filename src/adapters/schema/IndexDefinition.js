@@ -1,3 +1,4 @@
+// @flow
 export default class IndexDefinition {
   constructor(table, name, unique = false, columns = [], options) {
     const lengths = options.lengths || {};

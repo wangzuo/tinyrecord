@@ -87,7 +87,9 @@ export default class Relation {
         ? `${name}Values`
         : _.includes(SINGLE_VALUE_METHODS, name)
           ? `${name}Value`
-          : _.includes(CLAUSE_METHODS, name) ? `${name}Clause` : '';
+          : _.includes(CLAUSE_METHODS, name)
+            ? `${name}Clause`
+            : '';
 
       if (methodName) {
         Object.defineProperty(this, methodName, {

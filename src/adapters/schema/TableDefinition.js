@@ -1,9 +1,16 @@
+// @flow
 import _ from 'lodash';
 import ColumnMethods from './ColumnMethods';
 import ColumnDefinition from './ColumnDefinition';
 
 export default class TableDefinition {
-  constructor(name, temporary = false, options = null, as = null, extra = {}) {
+  constructor(
+    name: string,
+    temporary: boolean = false,
+    options = null,
+    as = null,
+    extra = {}
+  ) {
     const comment = extra.comment || null;
 
     this.columnsHash = {};
@@ -33,7 +40,7 @@ export default class TableDefinition {
     return _.values(this.columnsHash);
   }
 
-  column(name, type, options = {}) {
+  column(name: string, type, options = {}) {
     if (this.columnsHash[name] && this.columnsHash[name].primaryKey()) {
       throw new Error(
         `you can't redefine the primary key column '${name}'. To define a custom primary key, pass { id: false } to create_table.`
@@ -44,11 +51,11 @@ export default class TableDefinition {
     return this;
   }
 
-  removeColumn(name) {}
+  removeColumn(name: string) {}
 
-  index(columnName, options = {}) {}
+  index(columnName: string, options = {}) {}
 
-  foreignKey(tableName, options = {}) {}
+  foreignKey(tableName: string, options = {}) {}
 
   timestamps(options = {}) {
     if (_.isUndefined(options.null)) {
@@ -62,7 +69,7 @@ export default class TableDefinition {
 
   references(...args) {}
 
-  newColumnDefinition(name, type, options) {
+  newColumnDefinition(name: string, type, options) {
     type = this.aliasedTypes(type, type);
     options.primaryKey = options.primaryKey || type === 'primaryKey';
     if (options.primaryKey) options.null = false;

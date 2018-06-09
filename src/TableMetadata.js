@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 
 export default class TableMetadata {
@@ -25,14 +26,14 @@ export default class TableMetadata {
     return newHash;
   }
 
-  arelAttribute(columnName) {
+  arelAttribute(columnName: string) {
     if (this.klass) {
       return this.klass.arelAttribute(columnName, this.arelTable);
     }
     return this.arelTable.columnName(columnName);
   }
 
-  type(columnName) {
+  type(columnName: string) {
     return () => {
       if (this.klass) {
         return this.klass.typeForAttribute(columnName);
@@ -42,7 +43,7 @@ export default class TableMetadata {
     };
   }
 
-  hasColumn(columnName) {
+  hasColumn(columnName: string) {
     return this.klass && this.klass.columnsHash[columnName];
   }
 

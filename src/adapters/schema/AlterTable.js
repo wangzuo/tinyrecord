@@ -1,3 +1,4 @@
+// @flow
 import ForeignKeyDefinition from './ForeignKeyDefinition';
 import AddColumnDefinition from './AddColumnDefinition';
 

@@ -1,3 +1,5 @@
+// @flow
+
 import _ from 'lodash';
 import * as Arel from 'arel';
 
@@ -15,14 +17,14 @@ export default class WhereClause {
     return !this.empty();
   }
 
-  add(other) {
+  add(other: WhereClause) {
     return new WhereClause(
       [...this.predicates, ...other.predicates],
       [...this.binds, ...other.binds]
     );
   }
 
-  merge(other) {
+  merge(other: WhereClause) {
     return new WhereClause(
       [...this.predicatesUnreferencedBy(other), ...other.predicates],
       [...this.nonConflictingBinds(other), ...other.binds]
@@ -83,7 +85,7 @@ export default class WhereClause {
   }
 
   // todo
-  eq(other) {
+  eq(other: WhereClause) {
     return (
       other instanceof WhereClause &&
       _.isEqual(this.predicates, other.predicates) &&

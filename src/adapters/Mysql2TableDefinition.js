@@ -1,8 +1,9 @@
+// @flow
 import _ from 'lodash';
 import TableDefinition from './schema/TableDefinition';
 
 export default class Mysql2TableDefinition extends TableDefinition {
-  primaryKey(name, type = 'primaryKey', options = {}) {
+  primaryKey(name: string, type: string = 'primaryKey', options = {}) {
     if (_.includes(['integer', 'bigint'], type) && !options.default) {
       options.autoIncrement = true;
     }
@@ -19,7 +20,7 @@ export default class Mysql2TableDefinition extends TableDefinition {
   mediumtext() {}
   longtext() {}
 
-  json(name, options) {
+  json(name: string, options) {
     return this.column(name, 'json', options);
   }
 
@@ -28,7 +29,7 @@ export default class Mysql2TableDefinition extends TableDefinition {
   unsignedFloat() {}
   unsignedDecimal() {}
 
-  newColumnDefinition(name, type, options = {}) {
+  newColumnDefinition(name: string, type, options = {}) {
     if (type === 'virtual') {
       type = options.type;
     } else if (type === 'primaryKey') {

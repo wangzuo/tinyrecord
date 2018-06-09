@@ -1,3 +1,4 @@
+// @flow
 export default class SqlTypeMetadata {
   constructor(options = {}) {
     const sqlType = options.sqlType || null;
