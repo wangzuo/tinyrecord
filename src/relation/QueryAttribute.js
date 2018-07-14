@@ -1,3 +1,4 @@
+// @flow
 import Attribute from '../Attribute';
 
 export default class QueryAttribute extends Attribute {

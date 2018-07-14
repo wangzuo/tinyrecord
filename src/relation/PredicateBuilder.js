@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import * as Arel from 'arel';
 import QueryAttribute from './QueryAttribute';
@@ -7,7 +8,7 @@ export default class PredicateBuilder {
     this.table = table;
     this.handlers = [];
 
-    // delegate;
+    // todo: delegate
     this.resolveColumnAliases = ::this.table.resolveColumnAliases;
   }
 

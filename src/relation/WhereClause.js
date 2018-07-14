@@ -1,5 +1,4 @@
 // @flow
-
 import _ from 'lodash';
 import * as Arel from 'arel';
 

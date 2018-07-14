@@ -555,3 +555,7 @@ exports[`where 4`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE \\"users\\".\
 exports[`where 5`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE (name = 'test') AND (age = 10)"`;
 
 exports[`where 6`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE (id = 1)"`;
+
+exports[`where 7`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE (id in (1,2,3))"`;
+
+exports[`where 8`] = `"SELECT \\"users\\".* FROM \\"users\\" WHERE (name in ('hello','world'))"`;

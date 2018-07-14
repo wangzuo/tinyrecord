@@ -267,7 +267,7 @@ export default class Relation {
   }
 
   async update(id = 'all', attributes) {
-    if (isArray(id)) {
+    if (_.isArray(id)) {
       // return id.map
     } else if (id === 'all') {
       this.records.forEach(record => record.update(attributes));

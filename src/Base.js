@@ -656,28 +656,31 @@ export default class Base {
 
   // sanitization
 
-  static sanitizeSqlForConditions(condition) {
+  static sanitizeSqlForConditions(condition: Array<string | number> | string) {
     if (_.isArray(condition)) {
       return this.sanitizeSqlArray(condition);
     }
     return condition;
   }
 
-  static sanitizeSqlForAssignment() {}
-  static sanitizeSqlForOrder() {}
-
   static sanitizeSql(...args) {
     return this.sanitizeSqlForConditions(...args);
   }
 
+  static sanitizeSqlForAssignment() {}
+
+  static sanitizeSqlForOrder() {}
+
   static expandHashConditionsForAggregates() {}
+
   static sanitizeSqlHashForAssignment() {}
+
   static sanitizeSqlLike() {}
 
   static sanitizeSqlArray(ary) {
     const [statement, ...values] = ary;
 
-    if (_.isObject(values[0]) && statement.match(/:\w+/)) {
+    if (_.isPlainObject(values[0]) && statement.match(/:\w+/)) {
       return this.replaceNamedBindVariables(statement, values[0]);
     } else if (statement.includes('?')) {
       return this.replaceBindVariables(statement, values);
@@ -688,10 +691,10 @@ export default class Base {
         statement,
         ...values.map(value => this.connection.quoteString(_.toString(value)))
       );
-      return statement;
     }
   }
 
+  // private
   static replaceBindVariables(statement, values) {
     const bound = _.clone(values);
 
@@ -700,8 +703,8 @@ export default class Base {
     );
   }
 
-  static replaceBindVariable(value, c) {
-    c = c || this.connection;
+  // private
+  static replaceBindVariable(value, c = this.connection) {
     return this.quoteBoundValue(value, c);
   }
 
@@ -717,8 +720,13 @@ export default class Base {
     });
   }
 
-  static quoteBoundValue(value, c) {
-    return c.quote(value);
+  // private
+  static quoteBoundValue(value, c = this.connection) {
+    if (value.map) {
+      return value.map(v => c.quote(v)).join(',');
+    } else {
+      return c.quote(value);
+    }
   }
 
   static raiseIfBindArityMismatch() {}

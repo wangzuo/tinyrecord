@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import * as Arel from 'arel';
 import WhereClause from './WhereClause';
@@ -17,6 +18,7 @@ export default class WhereClauseFactory {
         this.klass.sanitizeSql(_.isEmpty(other) ? opts : [opts, ...other])
       ];
     } else if (_.isPlainObject(opts)) {
+      // todo
       // const attributes = this.predicateBuilder.resolveColumnAliases(opts);
 
       const result = this.predicateBuilder.createBinds(opts);

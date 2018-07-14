@@ -302,6 +302,11 @@ export function testAdapter(Base) {
     ).toMatchSnapshot();
 
     expect(await User.where('id = 1').toSql()).toMatchSnapshot();
+
+    expect(await User.where('id in (?)', [1, 2, 3]).toSql()).toMatchSnapshot();
+    expect(
+      await User.where('name in (?)', ['hello', 'world']).toSql()
+    ).toMatchSnapshot();
   });
 
   test('limit', async () => {
