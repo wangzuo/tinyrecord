@@ -6,3 +6,8 @@ yarn.lock
 __tests__
 *.test.js
 yarn.lock
+flow-typed
+.flowconfig
+.eslintrc.js
+.babelrc
+.travis.yml
