@@ -1,4 +1,18 @@
 {
+  "name": "tinyrecord",
+  "description": "tinyrecord",
+  "version": "0.1.1-13",
+  "main": "dist/TinyRecord.js",
+  "author": "Wang Zuo <wzuoadjusted@gmail.com>",
+  "bin": {
+    "tiny": "dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "rm -rf dist && babel src --out-dir dist --ignore '__tests__/*.js'",
+    "test": "jest --coverage",
+    "pretest": "npm run build",
+    "prepublishOnly": "npm test"
+  },
   "dependencies": {
     "arel": "^0.3.1",
     "babel-runtime": "^6.25.0",
@@ -29,19 +43,6 @@
     "mysql2": "^1.5.3",
     "pg": "^7.1.0"
   },
-  "name": "tinyrecord",
-  "description": "tinyrecord",
-  "version": "0.1.1-13",
-  "main": "dist/TinyRecord.js",
-  "bin": {
-    "tiny": "dist/cli/index.js"
-  },
-  "scripts": {
-    "build": "rm -rf dist && babel src --out-dir dist --ignore '__tests__/*.js'",
-    "test": "jest --coverage",
-    "pretest": "npm run build",
-    "prepublishOnly": "npm test"
-  },
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.js"
@@ -51,7 +52,6 @@
     "type": "git",
     "url": "git+https://github.com/wangzuo/tinyrecord.git"
   },
-  "author": "Wang Zuo <wzuoadjusted@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/wangzuo/tinyrecord/issues"
